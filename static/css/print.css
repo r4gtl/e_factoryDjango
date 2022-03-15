@@ -1,0 +1,99 @@
+
+body {
+    width: 230mm;
+    height: 100% ;
+    margin: 10px auto;
+    padding: 0;
+    font-size: 12pt;
+    background: rgb(204, 204, 204);
+    }
+
+*{
+box-sizing: border-box; -moz-box-sizing: border-box;
+}
+.main-page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 10mm auto;    
+    background: white;
+    box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+}
+.sub-page {
+    padding: 1cm;
+    height: 297mm;
+}
+
+.logo_img {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: 10px;
+}
+.order_text{
+    font-weight: bold;
+    font-size:18pt;
+}
+
+@page {
+size: A4;
+margin: 0;
+}
+@media print {
+html,
+body {
+    width: 210mm;
+    height: 297mm;
+}
+.main-page {
+    margin: 5;
+    border: initial;
+    /* border-radius: initial; */
+    width: initial;
+    min-height: initial;
+    box-shadow: initial;
+    background: initial;  
+    /* box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5); */
+    
+}
+.col-md-3{
+    width: 33%;
+}
+.col-md-1{
+    width: 10%;
+}
+
+.col-sm-9{
+    width: 66%;
+}
+
+.col-md-2{
+    width: 20%;
+}
+
+.col-md-4{
+    width: 40%;
+}
+
+.col-md-5{
+    width:33%;
+}
+
+.logo_img {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: 10px;
+}
+
+.noprint {
+    visibility: hidden;
+}
+
+
+}
