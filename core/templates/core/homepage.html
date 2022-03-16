@@ -1,372 +1,144 @@
+
+{% extends 'base.html' %} 
 {% load static %}
-<!doctype html>
-<html lang="en">
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% block content %}
+<!--Container Main start-->
+<div class="bg-white pt-3">
+    <!-- chart -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card shadow p-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Utilizzo Solventi</h5>
+<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+<script>
+var xValues = [];
+var yValues = [];
+generateData("x * 2 + 7", 0, 10, 0.5);
+
+new Chart("myChart", {
+    type: "bar",
+    data: {
+        labels: xValues,
+            datasets: [{
+            fill: false,
+            pointRadius: 1,
+            borderColor: "rgba(255,0,0,0.5)",
+            data: yValues
+        }]
+    },    
+        options: {
+        legend: {display: false},
+        title: {
+        display: true,
+        text: "Utilizzo Solventi",
+        fontSize: 16
+    }
+    }
+});
+function generateData(value, i1, i2, step = 1) {
+for (let x = i1; x <= i2; x += step) {
+yValues.push(eval(value));
+xValues.push(x);
+}
+}
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<br>
+<hr>
+
+    <!-- fine chart -->
+    <h4>Ordini In Sospeso</h4>
+
+    <div class="container">
 
 
-    <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/b8dde9afa7.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-    
-
-    
-    <link href="{% static '/css/colors.css' %}" rel="stylesheet">
-    <link href="{% static '/css/base.css' %}" rel="stylesheet">
-    
-    <title>{% block head_title %}E_factory - Homepage {% endblock head_title %}</title>
-</head>
-
-<body>
-    <body id="body-pd">
-        <header class="header" id="header">
-            <!-- <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div> -->
-            <div class="header_toggle"> <i class='fas fa-toggle-off' id="header-toggle"></i> </div>
-            
-            <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-<!--                     
-                    <a class="header_img" href="#"><img src="./static/images/r4gtl.png" alt=""></a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button> -->
-                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#"> Home |</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fas fa-cog"></i> Impostazioni |</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"> Ordini |</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-user-tie"></i>
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <li><a class="dropdown-item" href="#">Stefano</a></li>
-                                    <li><a class="dropdown-item" href="#">Logout</a></li>
-                                    <li><a class="dropdown-item" href="#">Chiudi</a></li>
-                                </ul>
-                            </li>
-                        </ul>
+        <!-- Tabella ordini in sospeso -->
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="col">
+                <div class="card shadow p-3">
+                <!-- <img src="..." class="card-img-top" alt="..."> -->
+                <div class="card-body">
+                    <h5 class="card-title">Chem Bros.</h5>
+                    <p class="card-text">Order 124 - Date 01/01/2021</p>
+                    <hr>
+                    <p class="date" id="dataordine">2021/12/17</p>                            
+                    <p>Ordine inviato <span id='date-time'></span> giorni fa.</p>
+                    
+                    <div class="text-end">
+                        <a href="#" class="btn btn-success">Conforme</a>
+                        <a href="order.html" class="btn btn-primary">Go somewhere</a>
                     </div>
                 </div>
-            </nav>
-            <!-- Fine Navbar -->
-            <!-- <div class="header_img"> <img src="./static/images/r4gtl.png" alt=""> </div> -->
-        </header>
-        <!-- sidebar -->
-        <div class="l-navbar" id="nav-bar">
-            <nav class="nav">
-                <div> 
-                    <!-- <a href="#" class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span
-                            class="nav_logo-name">Chem Tracking</span> </a> -->
-                            <a href="#" class="header_img" style="margin-left: 10px; margin-bottom: 30px;"> <img src="./static/images/r4gtl.png" alt=""></i> </a>
-                            
-                            <li class="mb-1">
-                                <a class="btn btn-toggle align-items-center rounded collapsed nav_link" data-bs-toggle="collapse"
-                                    data-bs-target="#dashboard-collapse" aria-expanded="false" id="demo"> <i class="fa fa-address-book-o" aria-hidden="true"></i>
-                                    Anagrafiche
-                            </a>
-                                <div class="collapse nav_list" id="dashboard-collapse" style="margin-left:60px"  >
-                                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small" >
-                                        <li><a href="fornitori.html" target="_blank" rel="noopener noreferrer" class="link-light rounded nav_link">Fornitori</a></li>
-                                        <li><a href="#" class="link-light rounded nav_link">Clienti</a></li>
-                                        <li><a href="#" class="link-light rounded nav_link">Operatori</a></li>                                            
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="mb-1">
-                                <a class="btn btn-toggle align-items-center rounded collapsed nav_link" data-bs-toggle="collapse"
-                                    data-bs-target="#tabelle-collapse" aria-expanded="false" id="demo"> <i class='far fa-hdd nav_icon'></i>
-                                    Tabelle
-                            </a>
-                                <div class="collapse nav_list" id="tabelle-collapse" style="margin-left:60px"  >
-                                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small" >                                        
-                                        <li><a href="#" class="link-light  nav_link">Sostanze</a></li>
-                                        <li><a href="#" class="link-light  nav_link">SVHC</a></li>                                            
-                                        <li><a href="#" class="link-light  nav_link">Frasi di rischio</a></li>
-                                        <li><a href="#" class="link-light  nav_link">Etichette CLP</a></li>
-                                        <li><a href="#" class="link-light  nav_link">Imballaggi</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="mb-1">
-                                <a class="btn btn-toggle align-items-center rounded collapsed nav_link" data-bs-toggle="collapse"
-                                    data-bs-target="#acquisti-collapse" aria-expanded="false" id="demo"> <i class='far fa-clipboard nav_icon'></i>
-                                    Acquisti
-                            </a>
-                                <div class="collapse nav_list" id="acquisti-collapse" style="margin-left:60px"  >
-                                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small" >
-                                        <li><a href="fornitori.html" target="_blank" rel="noopener noreferrer" class="link-light rounded nav_link">Ordini</a></li>
-                                        <li><a href="#" class="link-light rounded nav_link">Acquisti</a></li>                                                                       
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- inizio lista ricette -->
-                            <li class="mb-1">
-                                <a class="btn btn-toggle align-items-center rounded collapsed nav_link" data-bs-toggle="collapse"
-                                    data-bs-target="#ricette-collapse" aria-expanded="false" id="demo"> <i class='far fa-list-alt nav_icon'></i>
-                                    Ricette
-                            </a>
-                                <div class="collapse nav_list" id="ricette-collapse" style="margin-left:60px"  >
-                                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small" >
-                                        <!-- Inizio lista bagnato -->
-                                        <li class="mb-1">
-                                            <a class="btn btn-toggle align-items-center rounded collapsed nav_link" data-bs-toggle="collapse"
-                                                data-bs-target="#bagnato-collapse" aria-expanded="false">
-                                                Bagnato
-                                        </a>
-                                            <div class="collapse nav_list" id="bagnato-collapse" style="margin-left:60px"  >
-                                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small" >
-                                                    <li><a href="fornitori.html" target="_blank" rel="noopener noreferrer" class="link-light rounded nav_link">Articoli</a></li>
-                                                    <li><a href="#" class="link-light rounded nav_link">Colori</a></li>                                                                       
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <!-- fine lista bagnato -->
-                                        <!-- Inizio lista rifinizione -->
-                                        <li class="mb-1">
-                                            <a class="btn btn-toggle align-items-center rounded collapsed nav_link" data-bs-toggle="collapse"
-                                                data-bs-target="#rifinizione-collapse" aria-expanded="false">
-                                                Rifinizione
-                                        </a>
-                                            <div class="collapse nav_list" id="rifinizione-collapse" style="margin-left:60px"  >
-                                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small" >
-                                                    <li><a href="fornitori.html" target="_blank" rel="noopener noreferrer" class="link-light rounded nav_link">Articoli</a></li>
-                                                    <li><a href="#" class="link-light rounded nav_link">Colori</a></li>                                                                       
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <!-- fine lista rifinizione -->
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- fine lista ricette -->
-                    <div class="nav_list"> 
-                        <!-- <a href="#" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Users</span> </a> 
-                        <a href="#" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Messages</span> </a> 
-                        <a href="#" class="nav_link"> <i class='bx bx-bookmark nav_icon'></i> <span class="nav_name">Bookmark</span> </a> 
-                        <a href="#" class="nav_link"> <i class='bx bx-folder nav_icon'></i> <span class="nav_name">Files</span> </a> -->
-                        <a href="#" class="nav_link"> <i class='far fa-chart-bar nav_icon'></i> <span class="nav_name">Stats</span> </a> 
+                
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow p-3">
+                
+                <div class="card-body">
+                    <h5 class="card-title">Your Chemicals Inc</h5>
+                    <p class="card-text">Order 123 - Date 02/01/2021</p>
+                    <hr>
+                    <p class="date" id="dataordine">2021/12/17</p>                            
+                    <p>Ordine inviato <span id='date-time'></span> giorni fa.</p>
+                    <div class="text-end">
+                        <a href="#" class="btn btn-success">Conforme</a>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>
-                            
-                </div> <a href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span
-                        class="nav_name">SignOut</span> </a>
-            </nav>
-        </div>
-        <!-- fine sidebar -->
+                </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow p-3">
+                
+                <div class="card-body">
+                    <h5 class="card-title">How Are you Spa</h5>
+                    <p class="card-text">Order 125 - Date 05/01/2021</p>
+                    <hr>
+                    <p class="date" id="dataordine">2021/12/17</p>                            
+                    <p>Ordine inviato <span id='date-time'></span> giorni fa.</p>
+                    <div class="text-end">
+                        <a href="#" class="btn btn-success">Conforme</a>                                
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow p-3">
+                
+                <div class="card-body">
+                    <h5 class="card-title">Hello World Inc.</h5>
+                    <p class="card-text">Order 121 - Date 04/01/2021</p>
+                    <hr>
+                    <p class="date" id="dataordine">2021/12/17</p>                            
+                    <p>Ordine inviato <span id='date-time'></span> giorni fa.</p>
+                    <div class="text-end">
+                        <a href="#" class="btn btn-success">Conforme</a>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
 
-        <!--Container Main start-->
-        <div class="bg-white pt-3">
-            <!-- chart -->
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <div class="card shadow p-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Utilizzo Solventi</h5>
-        <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+            <br>
+            <br>
 
-        <script>
-        var xValues = [];
-        var yValues = [];
-        generateData("x * 2 + 7", 0, 10, 0.5);
 
-        new Chart("myChart", {
-            type: "bar",
-            data: {
-                labels: xValues,
-                    datasets: [{
-                    fill: false,
-                    pointRadius: 1,
-                    borderColor: "rgba(255,0,0,0.5)",
-                    data: yValues
-                }]
-            },    
-                options: {
-                legend: {display: false},
-                title: {
-                display: true,
-                text: "Utilizzo Solventi",
-                fontSize: 16
-            }
-            }
-        });
-        function generateData(value, i1, i2, step = 1) {
-        for (let x = i1; x <= i2; x += step) {
-        yValues.push(eval(value));
-        xValues.push(x);
-        }
-        }
-        </script>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    <br>
-    <hr>
     
-            <!-- fine chart -->
-            <h4>Ordini In Sospeso</h4>
-
-            <div class="container">
-
-
-                <!-- Tabella ordini in sospeso -->
-                <div class="row row-cols-1 row-cols-md-2 g-4">
-                    <div class="col">
-                        <div class="card shadow p-3">
-                        <!-- <img src="..." class="card-img-top" alt="..."> -->
-                        <div class="card-body">
-                            <h5 class="card-title">Chem Bros.</h5>
-                            <p class="card-text">Order 124 - Date 01/01/2021</p>
-                            <hr>
-                            <p class="date" id="dataordine">2021/12/17</p>                            
-                            <p>Ordine inviato <span id='date-time'></span> giorni fa.</p>
-                            
-                            <div class="text-end">
-                                <a href="#" class="btn btn-success">Conforme</a>
-                                <a href="order.html" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                        
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card shadow p-3">
-                        
-                        <div class="card-body">
-                            <h5 class="card-title">Your Chemicals Inc</h5>
-                            <p class="card-text">Order 123 - Date 02/01/2021</p>
-                            <hr>
-                            <p class="date" id="dataordine">2021/12/17</p>                            
-                            <p>Ordine inviato <span id='date-time'></span> giorni fa.</p>
-                            <div class="text-end">
-                                <a href="#" class="btn btn-success">Conforme</a>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card shadow p-3">
-                        
-                        <div class="card-body">
-                            <h5 class="card-title">How Are you Spa</h5>
-                            <p class="card-text">Order 125 - Date 05/01/2021</p>
-                            <hr>
-                            <p class="date" id="dataordine">2021/12/17</p>                            
-                            <p>Ordine inviato <span id='date-time'></span> giorni fa.</p>
-                            <div class="text-end">
-                                <a href="#" class="btn btn-success">Conforme</a>                                
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card shadow p-3">
-                        
-                        <div class="card-body">
-                            <h5 class="card-title">Hello World Inc.</h5>
-                            <p class="card-text">Order 121 - Date 04/01/2021</p>
-                            <hr>
-                            <p class="date" id="dataordine">2021/12/17</p>                            
-                            <p>Ordine inviato <span id='date-time'></span> giorni fa.</p>
-                            <div class="text-end">
-                                <a href="#" class="btn btn-success">Conforme</a>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-        
-                    <br>
-                    <br>
-        
-        
-            
-                    </div>
-        
-
-
-        </div>
-        <!--Container Main end-->
-                <!-- Footer -->
-<!-- <footer id="main-footer" class="py-4 green text-white text-center fixed-bottom">
-    Copyright &copy;
-    <span class="year"></span> R4gtl
-    <a href="https://github.com/r4gtl" target="_blank">
-        <i class="fab fa-github fa-2x fa-lg"></i></a>
-    <a href="https://twitter.com/rquattrogtl" target="_blank">        
-        <i class="fab fa-twitter fa-2x fa-lg"></i>
-    </a>
-</footer> -->
-
-        
+            </div>
 
 
 
-
-
-    <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
-        
-    <script src="{% static '/js/main.js' %}"></script>
-    <script src="{% static '/js/base.js' %}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-    -->
-    <script>
-        //function myFunction() {
-               //document.getElementsById("dashboard-collapse").collapse('hide');
-               //document.getElementById("dashboard-collapse").innerHTML = "Hello JavaScript!";
-            $(document).ready(function () {
-            
-            $("#header-toggle").click(function () {
-                    $("#dashboard-collapse, #tabelle-collapse, #acquisti-collapse, #ricette-collapse, #bagnato-collapse, #rifinizione-collapse").collapse('hide');
-                    
-            });
-            
-        }); 
-        //var dt = new Date();
-        //document.getElementById('date-time').innerHTML=dt;
-
-        
-        var date_diff_indays = function(date1, date2) {
-            dt1 = new Date(date1);
-            dt2 = new Date(date2);
-            return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
-            };
-
-        var date2=new Date()
-        var date1=Date.parse(document.getElementById('dataordine').innerHTML)
-        document.getElementById('date-time').innerHTML= date_diff_indays(date1, date2);
-    </script>
-</body>
-
-</html>
+</div>
+<!--Container Main end-->
+{% endblock %}
