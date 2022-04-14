@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'accounts',
     'crispy_forms',
     'crispy_bootstrap5',
@@ -79,6 +80,7 @@ TEMPLATES = [
         'DIRS': [BASE_DIR / 'templates',
                     BASE_DIR / 'accounts/templates',
                     BASE_DIR / 'core/templates',
+                    BASE_DIR / 'master_data/templates',
                 ],
         'APP_DIRS': True,
         'OPTIONS': {

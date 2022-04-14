@@ -4,7 +4,7 @@
         <div> 
             <!-- <a href="#" class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span
                     class="nav_logo-name">Chem Tracking</span> </a> -->
-                    <a href="#" class="header_img" style="margin-left: 10px; margin-bottom: 30px;"> <img src="./static/images/r4gtl.png" alt=""></i> </a>
+                    <a href="#" class="header_img" style="margin-left: 10px; margin-bottom: 30px;"> <img src="./static/img/r4gtl.png" alt=""></i> </a>
                     
                     <li class="mb-1">
                         <a class="btn btn-toggle align-items-center rounded collapsed nav_link" data-bs-toggle="collapse"
@@ -13,7 +13,8 @@
                     </a>
                         <div class="collapse nav_list" id="dashboard-collapse" style="margin-left:60px"  >
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small" >
-                                <li><a href="fornitori.html" target="_blank" rel="noopener noreferrer" class="link-light rounded nav_link">Fornitori</a></li>
+                                <li><a href="{% url 'search-supplier' %}" target="_blank" rel="noopener noreferrer" class="link-light rounded nav_link">Fornitori</a></li>
+                                
                                 <li><a href="#" class="link-light rounded nav_link">Clienti</a></li>
                                 <li><a href="#" class="link-light rounded nav_link">Operatori</a></li>                                            
                             </ul>

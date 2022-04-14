@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Suppliers(models.Model):
-    id_supplier = models.IntegerField()
+    id_supplier = models.AutoField(primary_key=True)
     company_name = models.CharField(max_length=100, blank=False, null=False)
     vat_number = models.CharField(max_length=11)
     cf_number = models.CharField(max_length=16)

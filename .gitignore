@@ -7,4 +7,5 @@ db.sqlite3
 /media
 .factory_venv
 .env
+credenziali.txt
 
