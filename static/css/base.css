@@ -35,6 +35,11 @@ a {
     text-decoration: none
 }
 
+
+
+
+
+
 .header {
     width: 100%;
     height: var(--header-height);
@@ -173,6 +178,8 @@ a {
     padding-bottom: 1px;
 } */
 
+
+
 @media screen and (min-width: 768px) {
     body {
         margin: calc(var(--header-height) + 1rem) 0 0 0;
@@ -206,3 +213,4 @@ a {
         padding-left: calc(var(--nav-width) + 188px)
     }
 }
+

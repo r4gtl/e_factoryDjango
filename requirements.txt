@@ -5,4 +5,5 @@ Django==4.0.3
 django-crispy-forms==1.14.0
 django-environ==0.8.1
 django-filter==21.1
+django-widget-tweaks==1.4.12
 sqlparse==0.4.2

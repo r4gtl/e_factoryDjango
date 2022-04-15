@@ -7,6 +7,7 @@ from .filters import SupplierFilter
 def searchSupplier(request):
     suppliers_list = Suppliers.objects.all()
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)
+    
     return render(request, 'master_data/suppliers_list.html', {'filter': suppliers_filter})
 
 class CreateSupplier(CreateView):

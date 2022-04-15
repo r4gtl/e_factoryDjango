@@ -4,13 +4,26 @@
 }
 
 .green {
-    background: #6a994e;
+    background: #2d6a4f;
 }
 
 .fab {
     color : white;
 }
 
+.tabhgreen {
+    background-color: #2a9d8f;
+    color: white;
+    
+}
+
+
+
 #printbutton {
     color:#9381ff
 }
+
+
+
+
+

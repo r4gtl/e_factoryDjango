@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'django_filters',
     'accounts',
     'crispy_forms',
+    'widget_tweaks',
     'crispy_bootstrap5',
     'core',
     'master_data',
@@ -146,8 +147,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = '/static/'
+# STATIC_ROOT = BASE_DIR / 'static'
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    BASE_DIR / 'static'
 ]
 
 LOGIN_REDIRECT_URL = "/"
