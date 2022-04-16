@@ -1,6 +1,20 @@
 from django.db import models
 
 # Create your models here.
+
+class SuppliersCategories(models.Model):
+    category = models.CharField(max_length=50, blank=False, null=False)
+    note = models.TextField()
+    
+    class Meta:
+        verbose_name = "category"
+        verbose_name_plural = "categories"
+        
+    def __str__(self):
+        return self.category
+
+
+
 class Suppliers(models.Model):
     id_supplier = models.AutoField(primary_key=True)
     company_name = models.CharField(max_length=100, blank=False, null=False)
@@ -13,6 +27,7 @@ class Suppliers(models.Model):
     country_state = models.CharField(max_length=10, null=True, blank=True)
     gg_valuta = models.IntegerField(blank=True, null=True)
     sds_path = models.CharField(max_length=200, blank=True, null=True)
+    category = models.ForeignKey(SuppliersCategories, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     #standard data
@@ -34,3 +49,5 @@ class VatCodes(models.Model):
     class Meta:
         verbose_name = "Vat Code"
         verbose_name_plural = "Vat Codes"
+        
+

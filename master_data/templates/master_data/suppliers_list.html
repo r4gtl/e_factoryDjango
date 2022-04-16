@@ -14,8 +14,8 @@
 <div class="container">
   <form method="get">
     <div class="well">
-      <h4 style="margin-top: 0">Filter</h4>
-      <div class="row">
+      <h4 style="margin-top: 0">Cerca Fornitore</h4>
+      <div class="row" style="font-size: 12px">
         <div class="form-group col-sm-4 col-md-3">
           {{ filter.form.company_name.label_tag }} 
           {% render_field filter.form.company_name class="form-control" %}
@@ -36,7 +36,7 @@
   </form>
 
   <table class="table table-bordered table-striped">
-    <thead class="tabhgreen">
+    <thead>
       <tr>
         <th>Ragione Sociale</th>
         <th>Partita IVA</th>

@@ -38,7 +38,22 @@ a {
 
 
 
+.tabhgreen {
+    background-color: #2a9d8f;
+    color: white;
+    font-size: 12px;
+    
+}
 
+tbody {
+    font-size: 12px;
+}
+
+thead {
+    background-color: #2a9d8f;
+    color: white;
+    font-size: 12px;
+}
 
 .header {
     width: 100%;
