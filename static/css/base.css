@@ -12,7 +12,8 @@
     --selected-color: #0633fa;
     --hover-color:#03045e;
     --body-font: 'Nunito', sans-serif;
-    --normal-font-size: 1rem;
+    /* --normal-font-size: 1rem; */
+    --normal-font-size: 14px;
     --z-fixed: 100
 }
 
@@ -35,25 +36,20 @@ a {
     text-decoration: none
 }
 
+/* Styling tables */
 
+thead {
+    background-color: #2a9d8f;
+    color: white;   
+}
 
 
 .tabhgreen {
     background-color: #2a9d8f;
-    color: white;
-    font-size: 12px;
-    
+    color: white;    
 }
 
-tbody {
-    font-size: 12px;
-}
-
-thead {
-    background-color: #2a9d8f;
-    color: white;
-    font-size: 12px;
-}
+/* End styling tables */
 
 .header {
     width: 100%;

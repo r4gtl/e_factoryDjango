@@ -6,7 +6,7 @@ class SupplierModelAdmin(admin.ModelAdmin):
     model = Suppliers
     list_display = ["company_name", "vat_number","cf_number", "address", "cap",
                     "city", "prov", "country_state", "category", "gg_valuta", "created_at", "updated_at"]
-    search_fields = ["company_name", "vat_number", "category"]
+    search_fields = ["company_name", "vat_number"]
     list_filter = ["country_state", "vat_perc", "category"]
 
 class VatCodesModelAdmin(admin.ModelAdmin):

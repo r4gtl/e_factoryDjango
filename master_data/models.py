@@ -27,7 +27,7 @@ class Suppliers(models.Model):
     country_state = models.CharField(max_length=10, null=True, blank=True)
     gg_valuta = models.IntegerField(blank=True, null=True)
     sds_path = models.CharField(max_length=200, blank=True, null=True)
-    category = models.ForeignKey(SuppliersCategories, on_delete=models.PROTECT)
+    category = models.ForeignKey(SuppliersCategories, null=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     #standard data

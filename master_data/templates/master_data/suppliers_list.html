@@ -15,7 +15,7 @@
   <form method="get">
     <div class="well">
       <h4 style="margin-top: 0">Cerca Fornitore</h4>
-      <div class="row" style="font-size: 12px">
+      <div class="row">
         <div class="form-group col-sm-4 col-md-3">
           {{ filter.form.company_name.label_tag }} 
           {% render_field filter.form.company_name class="form-control" %}
@@ -29,8 +29,11 @@
           {% render_field filter.form.cf_number class="form-control" %}
         </div>
       </div>
-      <button type="submit" class="btn btn-primary mt-2 mb-4">
-        <span class="glyphicon glyphicon-search"></span> Search
+      <button type="submit" class="btn btn-primary btn-sm mt-2 mb-4">
+        <span class="bi bi-search"></span> Cerca
+      </button>
+      <button type="submit" class="btn btn-success btn-sm mt-2 mb-4">
+        <span class="bi bi-person-plus-fill"></span> Aggiungi
       </button>
     </div>
   </form>
