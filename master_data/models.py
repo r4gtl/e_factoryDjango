@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -33,12 +34,16 @@ class Suppliers(models.Model):
     #standard data
     vat_perc = models.ForeignKey('VatCodes', on_delete=models.CASCADE,  blank=True, null=True)
 
-    class Meta:
-        verbose_name = "supplier"
-        verbose_name_plural = "suppliers"
         
     def __str__(self):
         return self.company_name
+    
+    def get_absolute_url(self):
+        return reverse("update-supplier", kwargs={"pk": self.id_supplier})
+    
+    class Meta:
+        verbose_name = "supplier"
+        verbose_name_plural = "suppliers"
 
     
 class VatCodes(models.Model):

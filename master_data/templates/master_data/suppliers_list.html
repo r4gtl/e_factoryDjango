@@ -49,8 +49,9 @@
     </thead>
     <tbody>
       {% for supplier in filter.qs %}
-      <tr>
-        <td>{{ supplier.company_name }}</td>
+      <tr>        
+        
+        <td><a href="{{ supplier.get_absolute_url }}">{{ supplier.company_name }}</a></td>
         <td>{{ supplier.vat_number }}</td>
         <td>{{ supplier.cf_number }}</td>
         

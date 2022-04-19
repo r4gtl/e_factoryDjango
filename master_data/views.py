@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from .models import Suppliers
 from .filters import SupplierFilter
+from .mixins import StaffMixin
 
 
 def searchSupplier(request):
@@ -10,9 +11,15 @@ def searchSupplier(request):
     
     return render(request, 'master_data/suppliers_list.html', {'filter': suppliers_filter})
 
-class CreateSupplier(CreateView):
+class CreateSupplier(StaffMixin, CreateView):
     model = Suppliers
     fields = "__all__"
     template_name = "master_data/create_supplier.html"
     success_url = "/"
+    
+class UpdateSupplier(UpdateView):
+    model = Suppliers
+    fields = "__all__"
+    template_name = "master_data/update_supplier.html"
+    
     
