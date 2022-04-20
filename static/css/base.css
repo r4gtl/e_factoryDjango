@@ -99,12 +99,17 @@ thead {
     border: solid 1px lightgrey; 
 }
 
-.nav {
+
+.nav-l {
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    overflow: hidden
+    overflow: hidden;    
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
 }
 
 .nav_logo,

@@ -5,15 +5,69 @@
 
 {% block content %}
 
-<div class="row justify-content-center mt-4">
+<!-- <div class="row justify-content-center mt-4">
     <div class="col-6">
         <h2>Aggiorna Fornitore</h2>
-        <form class="" method="POST" novalidate>
-            {% csrf_token %}
-            {{ form|crispy }}
-            <input type="submit" class="btn btn-info" value="Salva modifiche">
-        </form>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <form class="" method="POST" novalidate>
+                    {% csrf_token %}
+                 
+                        {{ form|crispy }}
+                        <input type="submit" class="btn btn-info" value="Salva modifiche">
+                    
+                    
+                </form>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+          </div>
+        
     </div>
-</div>
+</div> -->
+
+
+    <h4>Aggiorna Fornitore</h4>
+    <ul class="nav nav-tabs mb-3 list-inline" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Generici</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Contatti</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Amministrativi</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="form-group">
+            <form class="" method="POST" novalidate>
+                {% csrf_token %}
+             
+                    {{ form|crispy }}
+                    <input type="submit" class="btn btn-info" value="Salva modifiche">
+                
+                
+            </form>
+        </div>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            
+        </div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">stupido</div>
+      </div>
+
 
 {% endblock content %}

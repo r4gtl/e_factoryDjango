@@ -3,6 +3,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from .models import Suppliers
 from .filters import SupplierFilter
 from .mixins import StaffMixin
+from .forms import SupplierModelForm
 
 
 def searchSupplier(request):
@@ -19,7 +20,8 @@ class CreateSupplier(StaffMixin, CreateView):
     
 class UpdateSupplier(UpdateView):
     model = Suppliers
-    fields = "__all__"
+    form_class = SupplierModelForm
+    # fields = "__all__"
     template_name = "master_data/update_supplier.html"
     
     
