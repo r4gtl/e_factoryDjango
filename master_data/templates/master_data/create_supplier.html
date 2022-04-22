@@ -11,15 +11,15 @@
  <!-- Breadcrumb -->
  <section id="bc" style="font-size: large; color: white;">
     <div class="container mt-3">
-      <nav style="background-color: #269389;" aria-label="breadcrumb">
-        <ol class="breadcrumb link-light">
-          <li class="breadcrumb-item link-light" >
-            <a href="{% url 'homepage' %}" class="link-light">Home</a>
+      <nav style="background-color: #269389; --bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url 'homepage' %}" class="link-light"> <i class="bi bi-house-door"></i>Home</a>
           </li>
           <li class="breadcrumb-item">
-            <a href="{% url 'search-supplier' %}">Listings</a>
+            <a href="{% url 'search-supplier' %}" class="link-light"><i class="bi bi-people"></i> Anagrafiche Fornitori / </a>
           </li>
-          <li class="breadcrumb-item active">Aggiungi</li>
+          <li class="breadcrumb-item" class="text-light"><i class="bi bi-person-plus"></i> Aggiungi</li>
         </ol>
       </nav>
     </div>

@@ -40,3 +40,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         
 
 });
+
+function upperCase() {
+    const x = document.getElementById("setUpper");
+    x.value = x.value.toUpperCase();
+};
