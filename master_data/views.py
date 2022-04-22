@@ -14,7 +14,8 @@ def searchSupplier(request):
 
 class CreateSupplier(StaffMixin, CreateView):
     model = Suppliers
-    fields = "__all__"
+    form_class = SupplierModelForm
+    #fields = "__all__"
     template_name = "master_data/create_supplier.html"
     success_url = "/"
     

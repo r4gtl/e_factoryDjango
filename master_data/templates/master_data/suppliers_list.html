@@ -4,13 +4,7 @@
 {% load widget_tweaks %}
 {% block head_title %}{{ block.super }} - Anagrafiche Fornitori{% endblock head_title %} 
 {% block content %}
-<!-- <style>
-    .tabhgreen {
-        background-color: #2a9d8f;
-        color: white;
-        
-    }
-</style> -->
+
 <div class="container">
   <form method="get">
     <div class="well">
@@ -32,9 +26,10 @@
       <button type="submit" class="btn btn-primary btn-sm mt-2 mb-4">
         <span class="bi bi-search"></span> Cerca
       </button>
-      <button type="submit" class="btn btn-success btn-sm mt-2 mb-4">
+      <a class="btn btn-sm btn-success mt-2 mb-4" href="{% url 'create-supplier' %}"><span class="bi bi-person-plus-fill"></span> Aggiungi</a>
+      <!--<button type="submit" class="btn btn-success btn-sm mt-2 mb-4">
         <span class="bi bi-person-plus-fill"></span> Aggiungi
-      </button>
+      </button>-->
     </div>
   </form>
 
