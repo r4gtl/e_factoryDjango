@@ -1,5 +1,5 @@
 from django import forms
-from .models import Suppliers
+from .models import Suppliers, SuppliersContacts
 
 class SupplierModelForm(forms.ModelForm):
     class Meta:
@@ -24,4 +24,21 @@ class SupplierModelForm(forms.ModelForm):
             'vat_perc': forms.TextInput(attrs={'class': 'form-control'}),
             
             
+        }
+
+class SupplierContactsModelForm(forms.ModelForm):
+    class Meta:
+        model = SuppliersContacts
+        fields = ('contact_name', 'email','phone_number', 
+                'mobile', 'notes', 'id_supplier'
+                )
+        
+        widget = {
+            'contact_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'mobile': forms.TextInput(attrs={'class': 'form-control'}),
+            'notes': forms.Textarea(attrs={'class': 'form-control'}),
+            'id_supplier': forms.HiddenInput()
+
         }

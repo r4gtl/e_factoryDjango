@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Suppliers, VatCodes, SuppliersCategories
+from .models import Suppliers, VatCodes, SuppliersCategories, SuppliersContacts
 
 
 class SupplierModelAdmin(admin.ModelAdmin):
@@ -19,6 +19,11 @@ class SuppliersCategoriesModelAdmin(admin.ModelAdmin):
     list_display = ["category", "note"]
     search_fields = ["category"]
 
+class SuppliesContactsModelAdmin(admin.ModelAdmin):
+    model = SuppliersContacts
+    list_display = ["contact_name", "email", "phone_number", "mobile", "notes", "id_supplier"]
+
 admin.site.register(Suppliers, SupplierModelAdmin)
 admin.site.register(VatCodes, VatCodesModelAdmin)
 admin.site.register(SuppliersCategories, SuppliersCategoriesModelAdmin)
+admin.site.register(SuppliersContacts, SuppliesContactsModelAdmin)

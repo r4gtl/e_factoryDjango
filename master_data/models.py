@@ -45,6 +45,16 @@ class Suppliers(models.Model):
         verbose_name = "supplier"
         verbose_name_plural = "suppliers"
 
+class SuppliersContacts(models.Model):
+    contact_name=models.CharField(max_length=50)
+    email = models.EmailField(max_length=254)
+    phone_number = models.CharField(max_length=20)
+    mobile = models.CharField(max_length=20)
+    notes = models.TextField()
+    id_supplier = models.ForeignKey(Suppliers, null=True, on_delete = models.CASCADE)
+
+    def get_absolute_url(self):
+        return reverse("update-supplier", kwargs={"pk": self.pk})
     
 class VatCodes(models.Model):
     vat_code = models.CharField(max_length=3, blank=False, null=False, primary_key=True)
