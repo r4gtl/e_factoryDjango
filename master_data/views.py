@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.edit import CreateView, UpdateView
-from django.http import HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.urls import reverse
 from .models import Suppliers, SuppliersContacts
 from .filters import SupplierFilter
 from .mixins import StaffMixin
-from .forms import SupplierModelForm
+from .forms import SupplierModelForm, SupplierContactsModelForm
 
 
 def searchSupplier(request):
@@ -64,23 +65,45 @@ def update_supplier(request, pk):
 
 
 def new_contact(request,pk):
-    pass
-#def aggiungi_nomeincarico(request, pk):
- #   operatore = get_object_or_404(Dipendenti, pk=pk)
-  #  form = NomiIncarichiModelForm(instance=operatore)
-   # if request.method == "POST":
-    #    form = NomiIncarichiModelForm(request.POST)
-     #   if form.is_valid():
-      #      form.save(commit=False)
-       #     form.instance.operatore = operatore
-        #    # form.instance.autore_post = request.user
-         #   form.save()
+    supplier = get_object_or_404(Suppliers, pk=pk)
+    form = SupplierContactsModelForm(instance=supplier)
+    if request.method == "POST":
+        form = SupplierContactsModelForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            form.instance.id_supplier = supplier
+            form.save()
+
+            url_supplier = reverse("update-supplier", kwargs={"pk": pk})
+            print(url_supplier)
+
+            return HttpResponseRedirect(url_supplier)
+        else:
+            print("Non va")
+            return HttpResponseBadRequest()
+    
+    context={'supplier': supplier, 'form': form}
+    return render(request, "master_data/create_supplier_contact.html", context)
+
+
+def update_contact(request,pk):
+    contact = get_object_or_404(SuppliersContacts, pk=pk)
+    form = SupplierContactsModelForm(request.POST or None,instance=contact)
+    if request.method == "POST":
+        form = SupplierContactsModelForm(request.POST)
+        if form.is_valid():
+            contact_saved = form.save(commit=False)
+            contact_saved.save()            
             
-          #  url_operatore = reverse("operatore_view", kwargs={"pk": pk})
-            
-            
-    #        return HttpResponseRedirect(url_operatore)
-    #    else:
-     #       return HttpResponseBadRequest()
-    #context={'operatore': operatore, 'form': form}
-    #return render(request, 'human_resources/aggiungi_incarico.html', context)
+
+            url_supplier = reverse("update-supplier", kwargs={"pk": contact.id_supplier})
+            print(url_supplier)
+
+            return HttpResponseRedirect(url_supplier)
+        else:
+            print("Non va")
+            return HttpResponseBadRequest()
+    
+    context={'contact': contact, 'form': form}
+    return render(request, "master_data/create_supplier_contact.html", context)
+

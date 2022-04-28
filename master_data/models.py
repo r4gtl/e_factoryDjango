@@ -54,7 +54,7 @@ class SuppliersContacts(models.Model):
     id_supplier = models.ForeignKey(Suppliers, null=True, on_delete = models.CASCADE)
 
     def get_absolute_url(self):
-        return reverse("update-supplier", kwargs={"pk": self.pk})
+        return reverse("update-contact", kwargs={"pk": self.pk})
     
 class VatCodes(models.Model):
     vat_code = models.CharField(max_length=3, blank=False, null=False, primary_key=True)
