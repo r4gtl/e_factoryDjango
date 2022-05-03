@@ -104,10 +104,10 @@
                       </div>
                     </div>
                     <div class="container">
-                      {% if form.pk  %}
+                      {% if form.instance.pk  %}
                       <a class="btn btn-sm btn-outline-success" href="{% url 'new-contact' pk=supplier.pk %}">Aggiungi</a>
                       {% else %}
-                      <a class="btn btn-sm btn-outline-danger" href="{% url 'new-contact' pk=supplier.pk %}">Aggiungi</a>
+                      <a class="btn btn-sm btn-outline-danger" href="">Non puoi!</a>
                       {% endif %}
                       <table class="table table-bordered table-striped">
                         <thead>
