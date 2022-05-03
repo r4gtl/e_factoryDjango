@@ -14,7 +14,7 @@
           <a href="{% url 'homepage' %}" class="link-light">Home</a>
         </li>
         <li class="breadcrumb-item">
-          <a href="{% url 'search-supplier' %}">Listings</a>
+          <a href="{% url 'search-supplier' %}">Fornitori</a>
         </li>
         <li class="breadcrumb-item active">Aggiungi</li>
       </ol>
@@ -33,6 +33,7 @@
   <div class="form-group">
       <form class="" method="POST" novalidate>
           {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
           <input type="submit" class="btn btn-info mb-2 me-1" value="Salva">
       
           <ul class="nav nav-tabs mb-3 list-inline" id="myTab" role="tablist">
@@ -105,9 +106,9 @@
                     </div>
                     <div class="container">
                       {% if form.instance.pk  %}
-                      <a class="btn btn-sm btn-outline-success" href="{% url 'new-contact' pk=supplier.pk %}">Aggiungi</a>
+                      <a class="btn btn-sm btn-outline-success mb-2" href="{% url 'new-contact' pk=supplier.pk %}">Aggiungi</a>
                       {% else %}
-                      <a class="btn btn-sm btn-outline-danger" href="">Non puoi!</a>
+                      <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
                       {% endif %}
                       <table class="table table-bordered table-striped">
                         <thead>

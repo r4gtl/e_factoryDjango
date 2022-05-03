@@ -19,7 +19,7 @@ class SuppliersCategories(models.Model):
 class Suppliers(models.Model):
     id_supplier = models.AutoField(primary_key=True)
     company_name = models.CharField(max_length=100, blank=False, null=False)
-    vat_number = models.CharField(max_length=11)
+    vat_number = models.CharField(max_length=11, unique=True)
     cf_number = models.CharField(max_length=16, blank=True)
     address = models.CharField(max_length=100, blank=True)
     cap = models.CharField(max_length=10, blank=True, null=True)

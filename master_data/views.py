@@ -19,13 +19,14 @@ class CreateSupplier(StaffMixin, CreateView):
     form_class = SupplierModelForm
     #fields = "__all__"
     template_name = "master_data/create_supplier.html"
-    success_url = "/"
+    success_url = "search-supplier"
     
 class UpdateSupplier(UpdateView):
     model = Suppliers
     form_class = SupplierModelForm
     # fields = "__all__"
     template_name = "master_data/update_supplier.html"
+    success_url = "master_data/suppliers_list.html"
 
 
 def create_supplier(request, pk):
@@ -38,7 +39,8 @@ def create_supplier(request, pk):
             supplier = form.save(commit=False)           
             supplier.save()
             
-            return HttpResponseRedirect(supplier.get_absolute_url())
+            return HttpResponseRedirect('search-supplier')
+            #return HttpResponseRedirect(supplier.get_absolute_url())
     else:
         form = SupplierModelForm()
     context = {"form": form, "supplier": supplier}
@@ -56,7 +58,9 @@ def update_supplier(request, pk):
                 if form.is_valid():
                         supplier_saved = form.save(commit=False)
                         supplier_saved.save()
-                        return HttpResponseRedirect(supplier.get_absolute_url())
+                        #Non funziona
+                        next = request.POST.get('next', '/')
+                        return HttpResponseRedirect(next)
         else:
                 
                 form = SupplierModelForm(instance=supplier)
@@ -79,7 +83,7 @@ def new_contact(request,pk):
 
             return HttpResponseRedirect(url_supplier)
         else:
-            print("Non va")
+            
             return HttpResponseBadRequest()
     
     context={'supplier': supplier, 'form': form}
