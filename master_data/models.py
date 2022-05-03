@@ -20,11 +20,11 @@ class Suppliers(models.Model):
     id_supplier = models.AutoField(primary_key=True)
     company_name = models.CharField(max_length=100, blank=False, null=False)
     vat_number = models.CharField(max_length=11)
-    cf_number = models.CharField(max_length=16)
-    address = models.CharField(max_length=100)
+    cf_number = models.CharField(max_length=16, blank=True)
+    address = models.CharField(max_length=100, blank=True)
     cap = models.CharField(max_length=10, blank=True, null=True)
-    city = models.CharField(max_length=100)
-    prov = models.CharField(max_length=10)
+    city = models.CharField(max_length=100, blank=True)
+    prov = models.CharField(max_length=10, blank=True)
     country_state = models.CharField(max_length=10, null=True, blank=True)
     gg_valuta = models.IntegerField(blank=True, null=True)
     sds_path = models.CharField(max_length=200, blank=True, null=True)
@@ -46,11 +46,11 @@ class Suppliers(models.Model):
         verbose_name_plural = "suppliers"
 
 class SuppliersContacts(models.Model):
-    contact_name=models.CharField(max_length=50)
-    email = models.EmailField(max_length=254)
-    phone_number = models.CharField(max_length=20)
-    mobile = models.CharField(max_length=20)
-    notes = models.TextField()
+    contact_name=models.CharField(max_length=50, blank=True)
+    email = models.EmailField(max_length=254, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True)
+    mobile = models.CharField(max_length=20, blank=True)
+    notes = models.TextField(blank=True)
     id_supplier = models.ForeignKey(Suppliers, null=True, on_delete = models.CASCADE)
 
     def get_absolute_url(self):
@@ -58,7 +58,7 @@ class SuppliersContacts(models.Model):
     
 class VatCodes(models.Model):
     vat_code = models.CharField(max_length=3, blank=False, null=False, primary_key=True)
-    description = models.CharField(max_length=10)
+    description = models.CharField(max_length=10, blank=True)
     tax_perc = models.DecimalField(max_digits=5, decimal_places=2)
 
     class Meta:
