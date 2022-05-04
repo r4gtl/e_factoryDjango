@@ -9,4 +9,5 @@ db.sqlite3
 .env
 credenziali.txt
 .efactory_venv
+/e_factory_venv
 

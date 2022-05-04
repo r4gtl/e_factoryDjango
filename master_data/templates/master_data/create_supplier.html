@@ -33,7 +33,7 @@
   <div class="form-group">
       <form class="" method="POST" novalidate>
           {% csrf_token %}
-          <input type="hidden" name="next" value="{{ request.path }}">
+          
           <input type="submit" class="btn btn-info mb-2 me-1" value="Salva">
       
           <ul class="nav nav-tabs mb-3 list-inline" id="myTab" role="tablist">

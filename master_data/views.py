@@ -39,7 +39,7 @@ def create_supplier(request, pk):
             supplier = form.save(commit=False)           
             supplier.save()
             
-            return HttpResponseRedirect('search-supplier')
+            return HttpResponseRedirect("search-supplier")
             #return HttpResponseRedirect(supplier.get_absolute_url())
     else:
         form = SupplierModelForm()
@@ -59,8 +59,8 @@ def update_supplier(request, pk):
                         supplier_saved = form.save(commit=False)
                         supplier_saved.save()
                         #Non funziona
-                        next = request.POST.get('next', '/')
-                        return HttpResponseRedirect(next)
+                        
+                        return HttpResponseRedirect(reverse('search-supplier'))
         else:
                 
                 form = SupplierModelForm(instance=supplier)
