@@ -19,7 +19,7 @@ class CreateSupplier(StaffMixin, CreateView):
     form_class = SupplierModelForm
     #fields = "__all__"
     template_name = "master_data/create_supplier.html"
-    success_url = "search-supplier"
+    success_url = "master_data:search-supplier"
     
 class UpdateSupplier(UpdateView):
     model = Suppliers
@@ -39,7 +39,7 @@ def create_supplier(request, pk):
             supplier = form.save(commit=False)           
             supplier.save()
             
-            return HttpResponseRedirect("search-supplier")
+            return HttpResponseRedirect("master_data:search-supplier")
             #return HttpResponseRedirect(supplier.get_absolute_url())
     else:
         form = SupplierModelForm()
@@ -60,7 +60,7 @@ def update_supplier(request, pk):
                         supplier_saved.save()
                         #Non funziona
                         
-                        return HttpResponseRedirect(reverse('search-supplier'))
+                        return HttpResponseRedirect(reverse('master_data:search-supplier'))
         else:
                 
                 form = SupplierModelForm(instance=supplier)
@@ -78,7 +78,7 @@ def new_contact(request,pk):
             form.instance.id_supplier = supplier
             form.save()
 
-            url_supplier = reverse("update-supplier", kwargs={"pk": pk})
+            url_supplier = reverse("master_data:update-supplier", kwargs={"pk": pk})
             print(url_supplier)
 
             return HttpResponseRedirect(url_supplier)

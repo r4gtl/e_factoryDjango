@@ -39,7 +39,7 @@ class Suppliers(models.Model):
         return self.company_name
     
     def get_absolute_url(self):
-        return reverse("update-supplier", kwargs={"pk": self.id_supplier})
+        return reverse("master_data:update-supplier", kwargs={"pk": self.id_supplier})
     
     class Meta:
         verbose_name = "supplier"

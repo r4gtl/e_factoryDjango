@@ -6,15 +6,15 @@
 {% block content %}
 
  <!-- Breadcrumb -->
- <section id="bc" style="font-size: large; color: white;">
-  <div class="container mt-3">
-    <nav style="background-color: #269389;" aria-label="breadcrumb">
-      <ol class="breadcrumb link-light">
-        <li class="breadcrumb-item link-light" >
-          <a href="{% url 'homepage' %}" class="link-light">Home</a>
+ <section id="bc" style="font-size: large; color: white;" class="card">
+  <div class="card-body">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb link-dark">
+        <li class="breadcrumb-item link-dark" >
+          <a href="{% url 'homepage' %}" class="link-dark"> Home</a>
         </li>
         <li class="breadcrumb-item">
-          <a href="{% url 'search-supplier' %}">Fornitori</a>
+          <a href="{% url 'master_data:search-supplier' %}">Fornitori</a>
         </li>
         <li class="breadcrumb-item active">Aggiungi</li>
       </ol>
@@ -106,7 +106,7 @@
                     </div>
                     <div class="container">
                       {% if form.instance.pk  %}
-                      <a class="btn btn-sm btn-outline-success mb-2" href="{% url 'new-contact' pk=supplier.pk %}">Aggiungi</a>
+                      <a class="btn btn-sm btn-outline-success mb-2" href="{% url 'master_data:new-contact' pk=supplier.pk %}">Aggiungi</a>
                       {% else %}
                       <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
                       {% endif %}
@@ -124,7 +124,7 @@
                           <tr>        
                             
                             
-                            <td><a href="{% url 'update-contact' id=supplier.pk pk=contact.pk %}">{{ contact.contact_name }}</a></td> 
+                            <td><a href="{% url 'master_data:update-contact' id=supplier.pk pk=contact.pk %}">{{ contact.contact_name }}</a></td> 
                             
                             <td>{{ contact.email }}</td>
                             <td>{{ contact.phone_number }}</td>
