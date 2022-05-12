@@ -33,7 +33,8 @@
   <div class="form-group">
       <form class="" method="POST" novalidate>
           {% csrf_token %}
-          
+          <input type="hidden" id="previous_page" name="previous_page" 
+    value="/previous/page/url">
           <input type="submit" class="btn btn-info mb-2 me-1" value="Salva">
       
           <ul class="nav nav-tabs mb-3 list-inline" id="myTab" role="tablist">
@@ -155,5 +156,9 @@
 
 </div>
 
+<script>
+  prev = document.getElementById("previous_page");
+  prev.value = document.referrer;
+</script>
 
 {% endblock content %}

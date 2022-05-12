@@ -19,32 +19,29 @@ class CreateSupplier(StaffMixin, CreateView):
     form_class = SupplierModelForm
     #fields = "__all__"
     template_name = "master_data/create_supplier.html"
-    success_url = "master_data:search-supplier"
+    # success_url = "master_data/suppliers_list.html"
     
-class UpdateSupplier(UpdateView):
-    model = Suppliers
-    form_class = SupplierModelForm
-    # fields = "__all__"
-    template_name = "master_data/update_supplier.html"
-    success_url = "master_data/suppliers_list.html"
+    def form_valid(self, form):        
+        self.success_url = self.request.POST.get('previous_page')
+        return super().form_valid(form)
 
 
-def create_supplier(request, pk):
-    supplier = get_object_or_404(Suppliers, pk=pk)
-    contacts = SuppliersContacts.objects.filter(id_supplier=pk)
-    
-    if request.method == "POST":
-        form = SupplierModelForm(request.POST)
-        if form.is_valid():
-            supplier = form.save(commit=False)           
-            supplier.save()
+# def create_supplier(request):
+#     supplier = get_object_or_404(Suppliers, pk=pk)
+#     contacts = SuppliersContacts.objects.filter(id_supplier=pk)
+#     print("Eccomi")
+#     if request.method == "POST":
+#         form = SupplierModelForm(request.POST)
+#         if form.is_valid():
+#             supplier = form.save(commit=False)           
+#             supplier.save()
             
-            return HttpResponseRedirect("master_data:search-supplier")
-            #return HttpResponseRedirect(supplier.get_absolute_url())
-    else:
-        form = SupplierModelForm()
-    context = {"form": form, "supplier": supplier}
-    return render(request, "forum/create_supplier.html", context)
+#             return HttpResponseRedirect("master_data:search-supplier")
+            
+#     else:
+#         form = SupplierModelForm()
+#     context = {"form": form, "supplier": supplier, "contacts": contacts}
+#     return render(request, "master_data/create_supplier.html", context)
     
     
 def update_supplier(request, pk):
@@ -97,6 +94,7 @@ class UpdateContact(UpdateView):
     
     def form_valid(self, form):        
         self.success_url = self.request.POST.get('previous_page')
+        print("Eccomi")
         return super().form_valid(form)
 
     

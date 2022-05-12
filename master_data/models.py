@@ -32,7 +32,7 @@ class Suppliers(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     #standard data
-    vat_perc = models.ForeignKey('VatCodes', on_delete=models.CASCADE,  blank=True, null=True)
+    vat_perc = models.ForeignKey('VatCodes', on_delete=models.DO_NOTHING,  blank=True, null=True)
 
         
     def __str__(self):
@@ -64,5 +64,38 @@ class VatCodes(models.Model):
     class Meta:
         verbose_name = "Vat Code"
         verbose_name_plural = "Vat Codes"
-        
 
+
+        
+class Customers(models.Model):
+    company_name = models.CharField(max_length=100, blank=False, null=False)
+    vat_number = models.CharField(max_length=11, unique=True)
+    cf_number = models.CharField(max_length=16, blank=True)
+    address = models.CharField(max_length=100, blank=True)
+    cap = models.CharField(max_length=10, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True)
+    prov = models.CharField(max_length=10, blank=True)
+    country_state = models.CharField(max_length=10, null=True, blank=True)            
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    #standard data
+    vat_perc = models.ForeignKey('VatCodes', on_delete=models.DO_NOTHING,  blank=True, null=True)
+    
+    def __str__(self):
+        return self.company_name
+    
+    class Meta:
+        verbose_name = "Cliente"
+        verbose_name_plural = "Clienti"
+
+
+class CustomersContacts(models.Model):
+    contact_name=models.CharField(max_length=50, blank=True)
+    email = models.EmailField(max_length=254, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True)
+    mobile = models.CharField(max_length=20, blank=True)
+    notes = models.TextField(blank=True)
+    customer = models.ForeignKey(Suppliers, null=True, on_delete = models.CASCADE)
+
+    # def get_absolute_url(self):        
+    #     return reverse("update-contact", kwargs={"pk": self.pk})
