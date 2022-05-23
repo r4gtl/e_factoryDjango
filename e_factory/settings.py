@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'core',
     'master_data',
+    'chemicals',
 ]
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
