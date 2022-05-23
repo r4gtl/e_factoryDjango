@@ -83,6 +83,7 @@ TEMPLATES = [
                     BASE_DIR / 'accounts/templates',
                     BASE_DIR / 'core/templates',
                     BASE_DIR / 'master_data/templates',
+                    BASE_DIR / 'chemicals/templates',
                 ],
         'APP_DIRS': True,
         'OPTIONS': {

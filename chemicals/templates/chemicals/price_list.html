@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{{ block.super }} - Crea nuovo Fornitore{% endblock head_title %}
+
+{% block content %}
+
+    <!-- Breadcrumb -->
+    <section id="bc" style="font-size: large; color: white;" class="card">
+    <div class="card-body">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb link-dark">
+        <li class="breadcrumb-item link-dark" >
+            <a href="{% url 'homepage' %}" class="link-dark"> Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'master_data:search-supplier' %}">Fornitori</a>
+        </li>
+        <li class="breadcrumb-item active">Aggiungi</li>
+        </ol>
+    </nav>
+    </div>
+</section>
+
+
+<div class="container">
+    <br>
+    <h5 class="text-end">Listino Prezzi Fornitore: {{ supplier.company_name }}</h5>
+
+    <hr>
+    <br>
+
+    <div class="form-group">
+        <form class="" method="POST" novalidate>
+            {% csrf_token %}
+            <input type="hidden" id="previous_page" name="previous_page" 
+    value="/previous/page/url">
+            <input type="submit" class="btn btn-info mb-2 me-1" value="Salva">
+        
+            <ul class="nav nav-tabs mb-3 list-inline" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#generic" type="button" role="tab" aria-controls="generic" aria-selected="true">Generici</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#contacts" type="button" role="tab" aria-controls="contacts" aria-selected="false">Contatti</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#administration" type="button" role="tab" aria-controls="administration" aria-selected="false">Amministrativi</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="generic" role="tabpanel" aria-labelledby="generic-tab">
+                    <div class="row mb-4">
+                        <div class="col">
+                        {{ form.company_name|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                        {{ form.vat_number|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3">
+                        {{ form.cf_number|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col">
+                        {{ form.address|as_crispy_field }}
+                        </div>
+                        
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-2">
+                        {{ form.cap|as_crispy_field }}
+                        </div>
+                        <div class="col-md-9">
+                        {{ form.city|as_crispy_field }}
+                        </div>
+                        <div class="col-md-1">
+                        {{ form.prov|as_crispy_field }}
+                        </div>                  
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col">
+                        {{ form.country_state|as_crispy_field }}
+                        </div>
+                        
+                    </div>
+
+                    
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                        {{ form.category|as_crispy_field }}
+                        </div>
+                        
+                    </div>
+                    </div>
+                <div class="tab-pane fade" id="contacts" role="tabpanel" aria-labelledby="contacts-tab">
+                    <div class="row mb-4">
+                        <div class="col-md-2">
+                        {{ form.gg_valuta|as_crispy_field }}
+                        </div>
+                        <div class="col-md-8">
+                        {{ form.sds_path|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="container">
+                        {% if form.instance.pk  %}
+                        <a class="btn btn-sm btn-outline-success mb-2" href="{% url 'master_data:new-contact' pk=supplier.pk %}">Aggiungi</a>
+                        {% else %}
+                        <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
+                        {% endif %}
+                        <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                            <th>Nome Contatto</th>
+                            <th>Email</th>
+                            <th>Telefono</th>
+                            <th>Mobile</th>                                                       
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for contact in contacts %}
+                            <tr>        
+                            
+                            
+                            <td><a href="{% url 'master_data:update-contact' id=supplier.pk pk=contact.pk %}">{{ contact.contact_name }}</a></td> 
+                            
+                            <td>{{ contact.email }}</td>
+                            <td>{{ contact.phone_number }}</td>
+                            <td>{{ contact.mobile }}</td>
+
+                            
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="administration" role="tabpanel" aria-labelledby="administration-tab">
+                    <div class="row mb-4">
+                        <div class="col-md-2">
+                        {{ form.vat_perc|as_crispy_field }}
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            </div>
+            
+        <!-- fine form -->
+        </form>
+        <table class="table table-bordered table-striped">
+                        <thead>
+                          <tr>
+                            <th>Nome Contatto</th>
+                            <th>Email</th>
+                            <th>Telefono</th>
+                            <th>Mobile</th>                                                       
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for contact in contacts %}
+                          <tr>        
+                            
+                            
+                            <td><a href="{% url 'master_data:update-contact' id=supplier.pk pk=contact.pk %}">{{ contact.contact_name }}</a></td> 
+                            
+                            <td>{{ contact.email }}</td>
+                            <td>{{ contact.phone_number }}</td>
+                            <td>{{ contact.mobile }}</td>
+
+                            
+                          {% endfor %}
+                        </tbody>
+                      </table>
+    </div>
+
+
+
+</div>
+
+<script>
+    prev = document.getElementById("previous_page");
+    prev.value = document.referrer;
+</script>
+
+{% endblock content %}
