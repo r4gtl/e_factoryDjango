@@ -133,3 +133,7 @@ class ChemicalHazardStatements(models.Model):
     id_hs=models.ForeignKey(HazardStatements, null=False, on_delete = models.CASCADE)
 
 
+class Prices(models.Model):
+    id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE)
+    price=models.IntegerField(blank=False, null=False, default=0)
+    price_date=models.DateField(auto_now_add=True)
