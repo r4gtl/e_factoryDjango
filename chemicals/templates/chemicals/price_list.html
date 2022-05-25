@@ -44,10 +44,10 @@
                           </tr>
                         </thead>
                         <tbody>
-                          {% for chemical in combined_list %}
+                          {% for chemical in chemicals_list %}
                           <tr>                                    
                             <td><a href="{% url 'chemicals:single-product' pk=chemical.pk %}">{{ chemical.description }}</a></td>
-                            <td>{{ chemical.price }}</td>                            
+                            <td>{{ chemical.last_price.price }}</td>                            
                             <td>{{ chemical.cov }}</td>
                           {% endfor %}
                         </tbody>

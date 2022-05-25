@@ -5,6 +5,8 @@ from master_data.models import Suppliers
 from master_data.forms import SupplierModelForm
 from master_data.filters import SupplierFilter
 from .models import Chemicals, Prices
+from django.db.models import Max
+
 # Create your views here.
 
 def home(request):
@@ -16,11 +18,16 @@ def home(request):
 def price_list(request,pk):
     supplier = get_object_or_404(Suppliers, pk=pk)
     chemicals_list = Chemicals.objects.filter(id_supplier=pk)
+    print("Chem: " + str(chemicals_list))
+    #last_price=Prices.objects.values('id_chemical').order_by('-price_date').distinct()
     
-    last_price=Prices.objects.all().order_by('-price_date')
-    print(last_price)
+    last_price=Prices.objects.values('id_chemical').annotate(Max('price_date')).distinct()
+    
+    print("Last: " + str(last_price))
+    
     combined_list = list(chain(chemicals_list,last_price))    
-    context={'supplier': supplier, 'chemicals_list': chemicals_list, 'combined_list': combined_list}
+    print(combined_list)
+    context={'supplier': supplier, 'chemicals_list': chemicals_list, 'combined_list': combined_list, 'last_price': last_price}
     return render(request, "chemicals/price_list.html", context)
 
 
