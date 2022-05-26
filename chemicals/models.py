@@ -1,5 +1,7 @@
 from django.db import models
 from master_data.models import Suppliers
+import datetime
+from django.db.models import Max
 # Create your models here.
 
 FLAMABILITY_STATUS = (
@@ -133,8 +135,16 @@ class ChemicalHazardStatements(models.Model):
     id_hs=models.ForeignKey(HazardStatements, null=False, on_delete = models.CASCADE)
 
 
+class PricesManager(models.Manager):
+    def max_of_prices(self):
+        return self.get_queryset().values('id_chemical').annotate(Max('price_date', flat=True)).distinct()
+        
+
+
+
 class Prices(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE)
     price=models.IntegerField(blank=False, null=False, default=0)
-    price_date=models.DateField(auto_now_add=True)
+    price_date=models.DateField(default=datetime.date.today)
+    objects = PricesManager()
     
