@@ -22,11 +22,13 @@ def price_list(request,pk):
     #last_price=Prices.objects.values('id_chemical').order_by('-price_date').distinct()
     
     last_price=Prices.objects.values('id_chemical').annotate(Max('price_date')).distinct()
+    newest_price = Chemicals.objects.filter(id_supplier=pk).select_related('last_price')
     
+    print("Newest: " + str(newest_price))
     print("Last: " + str(last_price))
     
-    combined_list = list(chain(chemicals_list,last_price))    
-    print(combined_list)
+    combined_list = list(chain(chemicals_list,newest_price))    
+    print("Combined: " + str(combined_list))
     context={'supplier': supplier, 'chemicals_list': chemicals_list, 'combined_list': combined_list, 'last_price': last_price}
     return render(request, "chemicals/price_list.html", context)
 
