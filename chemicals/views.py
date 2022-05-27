@@ -5,12 +5,12 @@ from master_data.models import Suppliers
 from master_data.forms import SupplierModelForm
 from master_data.filters import SupplierFilter
 from .models import Chemicals, Prices, PricesManager
-from django.db.models import Max, Prefetch
+from django.db.models import Max, Prefetch, Subquery, OuterRef
 
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=3)
+    suppliers_list = Suppliers.objects.filter(category=2)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -19,19 +19,24 @@ def price_list(request,pk):
     supplier = get_object_or_404(Suppliers, pk=pk)
     chemicals_list = Chemicals.objects.filter(id_supplier=pk)
 
+    qs=Prices.objects.all()
+    
+    prova=qs.values('id_chemical').annotate(latest_price=Max('price_date'))
+    qs=qs.filter(price_date__in=prova.values('latest_price')).order_by('-price_date')
+    for qs in qs:
+        print("QS chem: " + str(qs.id_chemical))
+        print("QS prezzo: " + str(qs.price))
+        print("QS data: " + str(qs.price_date))
     
     print("Chem: " + str(chemicals_list))
+    
     last_price=Prices.objects.max_of_prices()
-
-    prezzi=Prices.objects.filter(price_data__in=last_price['price_date__max'])
-    print("Prezzi lista: " + str(prezzi))
-    #for prezzo in last_price:
-      #  print("Prezzi: " + str(prezzo.get('id_chemical')))
-       # print("Prezzi: " + str(prezzo.get('price_date__max')))
+    prezzi= Prices.objects.all().order_by('id_chemical', '-price_date').distinct('id_chemical')
+    
     last_price_1=chemicals_list
 
     
-    #chem_price=chemicals_list.values('id_chemical').annotate(Max('prezzo__price_date'))
+    
     chem_price=chemicals_list
     
     #last_price=Prices.objects.values('id_chemical').annotate(Max('price_date')).distinct()
@@ -45,7 +50,7 @@ def price_list(request,pk):
     
     combined_list = list(chain(chemicals_list,last_price))    
     print("Combined: " + str(combined_list))
-    context={'supplier': supplier, 'chemicals_list': chemicals_list, 'combined_list': combined_list, 'last_price': last_price, 'chem_price': chem_price, 'prezzi': prezzi}
+    context={'supplier': supplier, 'chemicals_list': chemicals_list, 'combined_list': combined_list, 'last_price': last_price, 'chem_price': chem_price, 'prezzi': prezzi, 'qs': qs}
     return render(request, "chemicals/price_list.html", context)
 
 

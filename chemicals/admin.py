@@ -33,7 +33,7 @@ class HazardStatementsModelAdmin(admin.ModelAdmin):
 
 class PricesModelAdmin(admin.ModelAdmin):
     model = Prices
-    list_display = ["price"]
+    list_display = ["id_chemical", "price", "price_date"]
     search_fields = ["price_date"]
 
 
