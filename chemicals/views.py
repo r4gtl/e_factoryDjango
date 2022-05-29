@@ -4,8 +4,8 @@ from itertools import chain
 from master_data.models import Suppliers
 from master_data.forms import SupplierModelForm
 from master_data.filters import SupplierFilter
-from .models import Chemicals, Prices, PricesManager
-from django.db.models import Max, Prefetch, Subquery, OuterRef
+from .models import Chemicals, Prices, PricesManager, Sds
+from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q
 
 # Create your views here.
 
@@ -22,13 +22,28 @@ def price_list(request,pk):
     qs=Prices.objects.all()
     
     prova=qs.values('id_chemical').annotate(latest_price=Max('price_date'))
-    qs=qs.filter(price_date__in=prova.values('latest_price')).order_by('-price_date')
+    qs=qs.filter(Q(price_date__in=prova.values('latest_price').order_by('-price_date'))|Q(id_chemical__isnull=True)).filter(id_chemical__id_supplier=pk)
     for qs in qs:
         print("QS chem: " + str(qs.id_chemical))
         print("QS prezzo: " + str(qs.price))
         print("QS data: " + str(qs.price_date))
+        print("QS cov: " + str(qs.id_chemical.cov))
     
+    
+    qs1=Sds.objects.all()
+    prova_sds=qs1.values('id_chemical').annotate(latest_sds=Max('rev_date'))
+    sds=qs1.filter(rev_date__in=prova_sds.values('latest_sds')).order_by('-rev_date').filter(id_chemical__id_supplier=pk)
+    
+    for sds in sds:
+        print("sds chem: " + str(sds.id_chemical))
+        print("sds sds: " + str(sds.sds))
+        print("sds data: " + str(sds.rev_date))
+        
+    
+        
     print("Chem: " + str(chemicals_list))
+    #v=Chemicals.objects.filter(id_supplier=pk).annotate(latest_price=FilteredRelation('prices', condition=Q(Max('price_date')))).values('id_chemical', 'latest_price__price')
+    #print("v: " + str(v))
     
     last_price=Prices.objects.max_of_prices()
     prezzi= Prices.objects.all().order_by('id_chemical', '-price_date').distinct('id_chemical')
