@@ -46,9 +46,8 @@
                         <tbody>
                           {% for chemical in chem_price %}
                           <tr>                                    
-                            <td><a href="{% url 'chemicals:single-product' pk=chemical.id_chemical %}">{{ chemical.description }}</a></td>    
-                                               
-                            <td>{{ qs.price|idc:chemical.id_chemical }}</td>
+                            <td><a href="{% url 'chemicals:single-product' pk=chemical.id_chemical %}">{{ chemical.description }}</a></td>                                                   
+                            <td>{{ qs.price }}</td>
                             
                             <td>{{ chemical.cov }}</td>
                           {% endfor %}

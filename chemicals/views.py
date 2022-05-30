@@ -10,7 +10,7 @@ from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=3)
+    suppliers_list = Suppliers.objects.filter(category=2)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -26,13 +26,16 @@ def price_list(request,pk):
     #qs=qs.filter(Q(price_date__in=prova.values('latest_price').order_by('-price_date'))|Q(price_date__isnull=True)).filter(id_chemical__id_supplier=pk)
     qs=qs.filter(price_date__in=prova.values('latest_price').order_by('-price_date')).filter(id_chemical__id_supplier=pk)
     #qs=qs.filter(price_date__in=prova.values('latest_price').order_by('-price_date'))
-    
+    '''
     for qs in qs:
         print("QS chem: " + str(qs.id_chemical))
         print("QS prezzo: " + str(qs.price))
         print("QS data: " + str(qs.price_date))
         print("QS cov: " + str(qs.id_chemical.cov))
-
+    '''
+    provaqs=Chemicals.objects.filter(id_supplier=pk).select_related('prezzo')
+    #print('provaqs: ' + str(provaqs))
+    
     
     #chem_price=chemicals_list
     #chem_price_1 = Chemicals.objects.filter(id_supplier=pk).prefetch_related('id_chemical__qs').all()
@@ -40,8 +43,8 @@ def price_list(request,pk):
     
     chem_price_1 = Chemicals.objects.filter(id_supplier=pk).prefetch_related('id_chemical__qs', 'id_chemical__qs.price')
     #ModelA.objects.prefetch_related('modelb_set').all()
-    for chem in chem_price_1:
-        print("chem_price_1 price: " + str(qs.price))   
+    #for chem in chem_price_1:
+     #   print("chem_price_1 price: " + str(chem.price))   
 
     print("chem_price_1: " + str(chem_price_1))
     qs1=Sds.objects.all()
