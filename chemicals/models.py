@@ -1,7 +1,7 @@
 from django.db import models
 from master_data.models import Suppliers
 import datetime
-from django.db.models import Count, Max
+from django.db.models import Count, Max, Subquery, OuterRef
 # Create your models here.
 
 FLAMABILITY_STATUS = (
@@ -32,6 +32,9 @@ class Chemicals(models.Model):
     class Meta:
         verbose_name = "chemical"
         verbose_name_plural = "chemicals"
+
+    
+
 
 
 
@@ -136,15 +139,28 @@ class ChemicalHazardStatements(models.Model):
 
 
 class PricesManager(models.Manager):
-    def max_of_prices(self):
-        return self.get_queryset().values('id_chemical').annotate(Max('price_date'))
-        
-
-
+    def max_of_prices(self, idc):
+        qs=Prices.objects.all()    
+        prova=qs.values('id_chemical').annotate(latest_price=Max('price_date'))
+        qs=qs.filter(price_date__in=prova.values('latest_price').order_by('-price_date')).filter(**{'id_chemical':idc})
+        return qs
+ 
 
 class Prices(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE, related_name='prezzo')
     price=models.IntegerField(blank=False, null=False, default=0)
     price_date=models.DateField(default=datetime.date.today)
     objects = PricesManager()
+
+  
+    def get_queryset(self):
+        return super().get_queryset().annotate(
+            last_price_date=Subquery(
+                Prices.objects.filter(
+                    chemicals_id=OuterRef('pk')
+                ).order_by('-price_date').values('prezzo__price')[:1]
+            )
+        )
+
+    
     
