@@ -43,38 +43,74 @@
             
               
                   <div class="row mb-4">
-                      <div class="col-md-4">
-                        {{ form.description|as_crispy_field }}
+                    <!-- preparo un riquadro con descrizione, cov e sotto la tbl delle sds -->
+                    <div class="col-md-6 border rounded">
+                      <div class="row">
+                        <div class="col-md-9">
+                          {{ form.description|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.cov|as_crispy_field }}
+                        </div>
                       </div>
-                      <div class="col-md-1">
-                        {{ form.cov|as_crispy_field }}
-                      </div>
-                      <div class="col-md-1">
-                        {{ form.tanning|as_crispy_field }}
-                      </div>
-                      <div class="col-md-1">
-                        {{ form.finishing|as_crispy_field }}
-                      </div>
-                      <!-- riquadro prezzi-->
-                      <div class="col-md-3">
+                      <div class="row">
+                        <div class="col-md-9">
                         <table class="table table-bordered table-striped">
                           <thead>
                             <tr>
-                              <th>Data variazione</th>
-                              <th>Prezzo</th>
+                              <th class="text-center">Data revisione</th>
+                              <th class="text-center">Sds</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for sds in sds %}
+                            <tr>  
+                              
+                              <td class="text-end">{{ sds.rev_date|date:'d/m/Y' }}</td>
+                              <td class="text-end">{{ sds.sds }}</td>
+                            </tr>  
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-3">
+                        <input type="submit" class="btn btn-xl btn-success mb-2 me-1 data-toggle="tooltip" data-placement="right" title="Aggiungi Scheda di Sicurezza" value="Sds">
+                      </div>
+                      </div>
+
+                    </div>
+                    <!-- fine riquadro -->
+
+                      <div class="col-md-1">
+                      <div class="row mb-0">                        
+                          {{ form.tanning|as_crispy_field }}
+                        </div>
+                          <div class="row mt-0">
+                          {{ form.finishing|as_crispy_field }}
+                        </div>
+                        
+                      </div>
+                      <!-- riquadro prezzi-->
+                      <div class="col-md-4">
+                        <table class="table table-bordered table-striped">
+                          <thead>
+                            <tr>
+                              <th class="text-center">Data variazione</th>
+                              <th class="text-center">Prezzo</th>
                             </tr>
                           </thead>
                           <tbody>
                             {% for price in prices %}
                             <tr>  
                               
-                              <td>{{ price.price_date }}</td>
+                              <td class="text-end">{{ price.price_date|date:'d/m/Y' }}</td>
                               <td class="text-end">{{ price.price }}</td>
                             </tr>  
                             {% endfor %}
                           </tbody>
                         </table>
                       </div>
+                      
                       <!-- fine riquadro prezzi-->
                     </div>
                     
