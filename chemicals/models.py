@@ -29,6 +29,23 @@ class Chemicals(models.Model):
     def __str__(self):
         return self.description
 
+    '''Recupero l'ultimo prezzo del prodotto chimico'''
+    def get_price(self):
+        price_object = Prices.objects.all()        
+        partial_qs=price_object.values('id_chemical').annotate(latest_price=Max('price_date'))
+        price_object=price_object.filter(price_date__in=partial_qs.values('latest_price').order_by('-price_date')).get(id_chemical=self.id_chemical)
+        price = price_object.price        
+        return price 
+
+    '''Recupero l'ultima revisione della SDS'''
+    def get_sds(self):
+        sds_object = Sds.objects.all()        
+        partial_qs=sds_object.values('id_chemical').annotate(latest_rev=Max('rev_date'))
+        sds_object=sds_object.filter(rev_date__in=partial_qs.values('latest_rev').order_by('-rev_date')).get(id_chemical=self.id_chemical)             
+        return sds_object 
+
+    
+
     class Meta:
         verbose_name = "chemical"
         verbose_name_plural = "chemicals"
@@ -95,11 +112,6 @@ class HazardStatements(models.Model):
         verbose_name_plural = "hazard statements"
 
 
-#class ForbiddenHazStat(models.Model):
- #   id_hs=models.ForeignKey(HazardStatements, null=False, on_delete = models.CASCADE)
-
-
-
 class ChemicalsPackagingType(models.Model):
     id_packaging_type = models.AutoField(primary_key=True)
     description = models.CharField(max_length=50, blank=False, null=False)
@@ -139,28 +151,20 @@ class ChemicalHazardStatements(models.Model):
 
 
 class PricesManager(models.Manager):
+    '''Al momento non serve'''
     def max_of_prices(self, idc):
         qs=Prices.objects.all()    
         prova=qs.values('id_chemical').annotate(latest_price=Max('price_date'))
         qs=qs.filter(price_date__in=prova.values('latest_price').order_by('-price_date')).filter(**{'id_chemical':idc})
         return qs
- 
+    
+    
 
 class Prices(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE, related_name='prezzo')
-    price=models.IntegerField(blank=False, null=False, default=0)
-    price_date=models.DateField(default=datetime.date.today)
-    objects = PricesManager()
-
-  
-    def get_queryset(self):
-        return super().get_queryset().annotate(
-            last_price_date=Subquery(
-                Prices.objects.filter(
-                    chemicals_id=OuterRef('pk')
-                ).order_by('-price_date').values('prezzo__price')[:1]
-            )
-        )
-
+    price=models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, default=0)
+    price_date=models.DateTimeField(default=datetime.date.today)
+    objects = PricesManager()  
+    
     
     

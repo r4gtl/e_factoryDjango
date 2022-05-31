@@ -36,20 +36,22 @@
         <table class="table table-bordered table-striped">
                         <thead>
                           <tr>
-                            <th>Prodotto</th>
-                            <th>Prezzo</th>
-                            <th>Solvente</th>
-                            <th>Revisione SDS</th>                                                       
-                            <th>SDS</th>    
+                            <th class="text-center">Prodotto</th>
+                            <th class="text-center">Prezzo</th>
+                            <th class="text-center">Solvente</th>
+                            <th class="text-center">Revisione SDS</th>                                                       
+                            <th class="text-center">SDS</th>    
                           </tr>
                         </thead>
                         <tbody>
-                          {% for chemical in chem_price %}
+                          {% for chemical in chemicals_list %}
                           <tr>                                    
                             <td><a href="{% url 'chemicals:single-product' pk=chemical.id_chemical %}">{{ chemical.description }}</a></td>                                                   
-                            <td>{{ qs.price }}</td>
-                            
-                            <td>{{ chemical.cov }}</td>
+                            <td class="text-end">{{ chemical.get_price }}</td>                            
+                            <td class="text-end">{{ chemical.cov }}</td>
+                            <td class="text-end">{{ chemical.get_sds.rev_date }}</td>
+                            <td>{{ chemical.get_sds.sds }}</td>
+                          </tr>
                           {% endfor %}
                         </tbody>
                       </table>
