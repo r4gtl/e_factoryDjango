@@ -20,7 +20,7 @@ class Chemicals(models.Model):
     id_chemical = models.AutoField(primary_key=True)
     id_supplier = models.ForeignKey(Suppliers, null=True, on_delete = models.CASCADE)
     description = models.CharField(max_length=50, blank=False, null=False)
-    cov = models.IntegerField(blank=False, null=False, default=0)
+    cov = models.DecimalField(max_digits=6, decimal_places=2,blank=False, null=False, default=0)
     tanning = models.BooleanField(default=False)
     finishing = models.BooleanField(default=False)
     notes = models.TextField()

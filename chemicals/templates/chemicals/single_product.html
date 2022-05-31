@@ -23,45 +23,88 @@
 </section>
 
 
-<div class="container">
-    <br>
-    <h5 class="text-end">Listino Prezzi Fornitore: {{ supplier.company_name }}</h5>
 
-    <hr>
-    <br>
-
-    <input type="hidden" id="previous_page" name="previous_page" 
-    value="/previous/page/url">
     
-        <table class="table table-bordered table-striped">
-                        <thead>
-                          <tr>
-                            <th>Prodotto</th>
-                            <th>Prezzo</th>
-                            <th>Solvente</th>
-                            <th>Revisione SDS</th>                                                       
-                            <th>SDS</th>    
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {% for chemical in combined_list %}
-                          <tr>        
-                            
-                            
-                            <td><a href="{% url 'chemicals:single-product' pk=chemical.pk %}">{{ chemical.description }}</a></td>
-                            <td>{{ chemical.COV }}</td>
-                          
-                            
+  <div class="container">
+  <br>
+  <h5 class="text-end">Dettaglio Prodotto {{ chemical.id_chemical }}</h5>
+  
+  <hr>
+  <br>
 
-                            
-                          {% endfor %}
-                        </tbody>
-                      </table>
-    </div>
+  <div class="form-group">
+      <form class="" method="POST" novalidate>
+          {% csrf_token %}
+          <input type="hidden" id="previous_page" name="previous_page" 
+          value="/previous/page/url">
+          <input type="submit" class="btn btn-info mb-2 me-1" value="Salva">
+      
+          
+            
+              
+                  <div class="row mb-4">
+                      <div class="col-md-4">
+                        {{ form.description|as_crispy_field }}
+                      </div>
+                      <div class="col-md-1">
+                        {{ form.cov|as_crispy_field }}
+                      </div>
+                      <div class="col-md-1">
+                        {{ form.tanning|as_crispy_field }}
+                      </div>
+                      <div class="col-md-1">
+                        {{ form.finishing|as_crispy_field }}
+                      </div>
+                      <!-- riquadro prezzi-->
+                      <div class="col-md-3">
+                        <table class="table table-bordered table-striped">
+                          <thead>
+                            <tr>
+                              <th>Data variazione</th>
+                              <th>Prezzo</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for price in prices %}
+                            <tr>  
+                              
+                              <td>{{ price.price_date }}</td>
+                              <td class="text-end">{{ price.price }}</td>
+                            </tr>  
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                      <!-- fine riquadro prezzi-->
+                    </div>
+                    
+                    <div class="row mb-2">
+                      <div class="col-md-5">
+                        {{ form.notes|as_crispy_field }}
+                      </div>
+                      <div class="col-md-4">
+                        {{ form.flamability_status|as_crispy_field }}
+                      </div>
+                    </div>
+                      
+                    </div>
+                      
+                  
+            
+          
+          
+      <!-- fine form -->
+      </form>
+  </div>
 
 
 
 </div>
+    
+
+
+
+
 
 <script>
     prev = document.getElementById("previous_page");
