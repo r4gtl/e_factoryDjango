@@ -16,8 +16,7 @@ def searchSupplier(request):
 
 class CreateSupplier(StaffMixin, CreateView):
     model = Suppliers
-    form_class = SupplierModelForm
-    #fields = "__all__"
+    form_class = SupplierModelForm    
     template_name = "master_data/create_supplier.html"
     # success_url = "master_data/suppliers_list.html"
     
@@ -26,24 +25,6 @@ class CreateSupplier(StaffMixin, CreateView):
         return super().form_valid(form)
 
 
-# def create_supplier(request):
-#     supplier = get_object_or_404(Suppliers, pk=pk)
-#     contacts = SuppliersContacts.objects.filter(id_supplier=pk)
-#     print("Eccomi")
-#     if request.method == "POST":
-#         form = SupplierModelForm(request.POST)
-#         if form.is_valid():
-#             supplier = form.save(commit=False)           
-#             supplier.save()
-            
-#             return HttpResponseRedirect("master_data:search-supplier")
-            
-#     else:
-#         form = SupplierModelForm()
-#     context = {"form": form, "supplier": supplier, "contacts": contacts}
-#     return render(request, "master_data/create_supplier.html", context)
-    
-    
 def update_supplier(request, pk):
         supplier = get_object_or_404(Suppliers, pk=pk)
         contacts = SuppliersContacts.objects.filter(id_supplier=pk)

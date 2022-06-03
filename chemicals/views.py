@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from itertools import chain
@@ -9,11 +9,12 @@ from master_data.filters import SupplierFilter
 from .forms import ChemicalModelForm
 from .models import Chemicals, Prices, PricesManager, Sds
 from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q, F
+from master_data.mixins import StaffMixin
 
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=2)
+    suppliers_list = Suppliers.objects.filter(category=3)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -36,14 +37,35 @@ def update_product(request, pk):
                 if form.is_valid():
                         chemical_saved = form.save(commit=False)
                         chemical_saved.save()
-                        #Non funziona
-                        
+                        #Non funziona                        
                         return HttpResponseRedirect(reverse('chemicals:search-supplier'))
     else:                
             form = ChemicalModelForm(instance=chemical)
 
     context={'chemical': chemical, 'prices': prices, 'sds': sds, 'form': form}
     return render(request, "chemicals/single_product.html", context)
+
+class CreateProduct(StaffMixin, CreateView):
+    model = Chemicals
+    form_class = ChemicalModelForm    
+    template_name = "chemicals/single_product.html"
+    # success_url = "master_data/suppliers_list.html"
+    
+    def form_valid(self, form):        
+        self.success_url = self.request.POST.get('previous_page')
+        return super().form_valid(form)
+
+
+
+class CancellaProdotto(DeleteView):
+    model = Chemicals
+    success_url = "chemicals:price-list"
+
+    
+
+
+def addSds():
+    pass
 
 
 

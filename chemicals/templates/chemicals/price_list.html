@@ -32,7 +32,7 @@
 
     <input type="hidden" id="previous_page" name="previous_page" 
     value="/previous/page/url">
-    
+    <a class="btn btn-sm btn-success mt-2 mb-4" href="{% url 'chemicals:create-product' %}"><span class="bi bi-person-plus-fill"></span> Aggiungi</a>
         <table class="table table-bordered table-striped">
                         <thead>
                           <tr>
@@ -40,7 +40,8 @@
                             <th class="text-center">Prezzo</th>
                             <th class="text-center">Solvente</th>
                             <th class="text-center">Revisione SDS</th>                                                       
-                            <th class="text-center">SDS</th>    
+                            <th class="text-center">SDS</th>
+                            <th class="text-center">Azioni</i></th>    
                           </tr>
                         </thead>
                         <tbody>
@@ -51,6 +52,7 @@
                             <td class="text-end">{{ chemical.cov }}</td>
                             <td class="text-end">{{ chemical.get_sds.rev_date }}</td>
                             <td>{{ chemical.get_sds.sds }}</td>
+                            <td class="text-center" style="color: red"><a href="{% url 'chemicals:cancella_prodotto' pk=chemical.id_chemical %}"><i class="bi bi-trash"></i></a></td>                            
                           </tr>
                           {% endfor %}
                         </tbody>
