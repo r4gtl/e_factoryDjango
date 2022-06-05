@@ -48,6 +48,7 @@
                       <div class="row">
                         <div class="col-md-9">
                           {{ form.description|as_crispy_field }}
+                          {{ form.id_supplier.as_hidden }}
                         </div>
                         <div class="col-md-3">
                           {{ form.cov|as_crispy_field }}
@@ -74,7 +75,7 @@
                         </table>
                       </div>
                       <div class="col-md-3">
-                        <input type="submit" class="btn btn-xl btn-success mb-2 me-1 data-toggle="tooltip" data-placement="right" title="Aggiungi Scheda di Sicurezza" value="Sds">
+                        <input type="submit" class="btn btn-xl btn-success mb-2 me-1" data-toggle="tooltip" data-placement="right" title="Aggiungi Scheda di Sicurezza" value="Sds">
                       </div>
                       </div>
 

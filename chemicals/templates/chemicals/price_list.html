@@ -32,7 +32,7 @@
 
     <input type="hidden" id="previous_page" name="previous_page" 
     value="/previous/page/url">
-    <a class="btn btn-sm btn-success mt-2 mb-4" href="{% url 'chemicals:create-product' %}"><span class="bi bi-person-plus-fill"></span> Aggiungi</a>
+    <a class="btn btn-sm btn-success mt-2 mb-4" href="{% url 'chemicals:create-product' pk=supplier.pk %}"><span class="bi bi-person-plus-fill"></span> Aggiungi</a>
         <table class="table table-bordered table-striped">
                         <thead>
                           <tr>

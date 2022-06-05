@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.urls import reverse, reverse_lazy
 from itertools import chain
 from master_data.models import Suppliers
 from master_data.forms import SupplierModelForm
@@ -14,7 +14,7 @@ from master_data.mixins import StaffMixin
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=3)
+    suppliers_list = Suppliers.objects.filter(category=1)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -49,19 +49,45 @@ class CreateProduct(StaffMixin, CreateView):
     model = Chemicals
     form_class = ChemicalModelForm    
     template_name = "chemicals/single_product.html"
-    # success_url = "master_data/suppliers_list.html"
+    #success_url = "chemicals/suppliers_list.html"
     
     def form_valid(self, form):        
         self.success_url = self.request.POST.get('previous_page')
         return super().form_valid(form)
 
+def new_product(request,pk):
+    supplier = get_object_or_404(Suppliers, pk=pk)
+    form = ChemicalModelForm(instance=supplier)
+    if request.method == "POST":
+        form = ChemicalModelForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            form.instance.id_supplier = supplier
+            form.save()
 
+            url_chemical = reverse("chemicals:price-list", kwargs={"pk": pk})
+            print(url_chemical)
 
-class CancellaProdotto(DeleteView):
-    model = Chemicals
-    success_url = "chemicals:price-list"
-
+            return HttpResponseRedirect(url_chemical)
+        else:
+            
+            return HttpResponseBadRequest()
     
+    context={'supplier': supplier, 'form': form}
+    return render(request, "chemicals/single_product.html", context)
+
+
+# class CancellaProdotto(DeleteView):
+#     template_name ='confirm_delete.html'
+#     model = Chemicals
+#     success_url = "chemicals:price-list"
+
+def delete_product(request, pk):
+    obj = get_object_or_404(Chemicals, pk=pk)
+    context = {
+        "object": obj
+    }
+    return render(request, "confirm_delete.html", context)
 
 
 def addSds():

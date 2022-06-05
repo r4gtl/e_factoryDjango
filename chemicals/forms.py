@@ -8,7 +8,7 @@ from .models import Chemicals, Prices, Sds
 class ChemicalModelForm(forms.ModelForm):
     class Meta:
         model = Chemicals
-        fields = ('description', 'cov', 'tanning', 'finishing', 'notes', 'flamability_status')
+        fields = ('id_supplier', 'description', 'cov', 'tanning', 'finishing', 'notes', 'flamability_status')
         
         widget = {
             'description': forms.TextInput(attrs={'class': 'form-control'}),
@@ -16,5 +16,6 @@ class ChemicalModelForm(forms.ModelForm):
             'tanning': forms.BooleanField(),
             'finishing': forms.BooleanField(),
             'notes': forms.Textarea(attrs={'class': 'form-control'}),
-            'flamability_status': forms.ChoiceField()
+            'flamability_status': forms.ChoiceField(),
+            'id_supplier': forms.HiddenInput()
         }
