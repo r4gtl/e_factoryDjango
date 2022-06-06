@@ -19,3 +19,16 @@ class ChemicalModelForm(forms.ModelForm):
             'flamability_status': forms.ChoiceField(),
             'id_supplier': forms.HiddenInput()
         }
+        
+class SdsModelForm(forms.ModelForm):
+    class Meta:
+        model = Sds
+        fields = ('id_chemical', 'sds', 'rev_date', 'conformityReach', 'reg_id')
+
+        widget = {
+            'id_chemical': forms.HiddenInput(),
+            'sds': forms.FileField(),
+            'rev_date': forms.DateField(),
+            'conformityReach': forms.BooleanField(),            
+            'reg_id': forms.ChoiceField(),            
+        }

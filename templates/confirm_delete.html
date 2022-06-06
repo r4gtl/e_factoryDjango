@@ -3,15 +3,23 @@
 {% block head_title %}{{ block.super }} - Conferma{% endblock head_title %}
 
 {% block content %}
-<div class="row justify-content-center mt-3">
+
+<div class="row justify-content-center mt-4" >
     <div class="col-4 text-center">
         <h4>Vuoi eliminare {{ object.id }}?</h4>
         <form method="POST">
             {% csrf_token %}
+            <input type="hidden" id="previous_page" name="previous_page" 
+            value="/previous/page/url">
             <input type="submit" class="btn btn-warning" value="Confermo">
             <a href="{% url 'chemicals:price-list' pk=object.id_supplier.pk %}" class="btn btn-default">Annulla</a>
             
         </form>
     </div>
 </div>
+
+<script>
+    prev = document.getElementById("previous_page");
+    prev.value = document.referrer;
+</script>
 {% endblock content %}

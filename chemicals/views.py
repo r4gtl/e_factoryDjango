@@ -6,7 +6,7 @@ from itertools import chain
 from master_data.models import Suppliers
 from master_data.forms import SupplierModelForm
 from master_data.filters import SupplierFilter
-from .forms import ChemicalModelForm
+from .forms import ChemicalModelForm, SdsModelForm
 from .models import Chemicals, Prices, PricesManager, Sds
 from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q, F
 from master_data.mixins import StaffMixin
@@ -14,7 +14,7 @@ from master_data.mixins import StaffMixin
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=3)
+    suppliers_list = Suppliers.objects.filter(category=1)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -77,26 +77,43 @@ def new_product(request,pk):
     return render(request, "chemicals/single_product.html", context)
 
 
-# class CancellaProdotto(DeleteView):
-#     template_name ='confirm_delete.html'
-#     model = Chemicals
-#     success_url = "chemicals:price-list"
-
 def delete_product(request, pk):
     obj = get_object_or_404(Chemicals, pk=pk)
     if request.method == "POST":
         parent_obj_url = obj.id_supplier.get_absolute_url()
         obj.delete()
-        return HttpResponseRedirect(parent_obj_url)
+        #return HttpResponseRedirect(parent_obj_url)
+        url_chemical = reverse("chemicals:price-list", kwargs={"pk": obj.id_supplier.pk })
+        print(url_chemical)
+
+        return HttpResponseRedirect(url_chemical)
     context = {
         "object": obj
     }
     return render(request, "confirm_delete.html", context)
 
 
-def addSds():
-    pass
+'''Schede di sicurezza'''
 
+def new_sds(request,pk):
+    chemical = get_object_or_404(Chemicals, pk=pk)
+    form = SdsModelForm(instance=chemical)
+    if request.method == "POST":
+        form = SdsModelForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            form.instance.id_chemical = chemical
+            form.save()
 
+            url_chemical = reverse("chemicals:single-product", kwargs={"pk": pk})
+            print(url_chemical)
+
+            return HttpResponseRedirect(url_chemical)
+        else:
+            
+            return HttpResponseBadRequest()
+    
+    context={'chemical': chemical, 'form': form}
+    return render(request, "chemicals/safety_data_sheet.html", context)
 
 

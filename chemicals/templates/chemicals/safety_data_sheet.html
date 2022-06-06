@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %} 
+{% block head_title %}{{ block.super }} - Scheda di Sicurezza{% endblock head_title %}
+
+{% block content %}
+
+<h1>Vai a cagare!!!!</h1>
+
+<script>
+    prev = document.getElementById("previous_page");
+    prev.value = document.referrer;
+</script>
+{% endblock content %}
