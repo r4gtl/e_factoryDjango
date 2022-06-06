@@ -14,7 +14,7 @@ from master_data.mixins import StaffMixin
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=1)
+    suppliers_list = Suppliers.objects.filter(category=3)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -84,6 +84,10 @@ def new_product(request,pk):
 
 def delete_product(request, pk):
     obj = get_object_or_404(Chemicals, pk=pk)
+    if request.method == "POST":
+        parent_obj_url = obj.id_supplier.get_absolute_url()
+        obj.delete()
+        return HttpResponseRedirect(parent_obj_url)
     context = {
         "object": obj
     }
