@@ -32,3 +32,9 @@ class SdsModelForm(forms.ModelForm):
             'conformityReach': forms.BooleanField(),            
             'reg_id': forms.ChoiceField(),            
         }
+        labels = {
+                'sds': 'Allega Scheda',
+                'rev_date': 'Data Revisione',
+                'conformityReach': 'Ok Reach',
+                'reg_id': 'Regolamento Riferimento'
+        }

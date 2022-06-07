@@ -5,7 +5,173 @@
 
 {% block content %}
 
-<h1>Vai a cagare!!!!</h1>
+<div class="container">
+    <br>
+    <h5 class="text-end">Scheda di Sicurezza Prodotto {{ chemical.id_chemical }}</h5>
+    
+    <hr>
+    <br>
+  
+    <div class="form-group">
+        <form class="" method="POST" novalidate>
+            {% csrf_token %}
+            <input type="hidden" id="previous_page" name="previous_page" 
+            value="/previous/page/url">
+            <input type="submit" class="btn btn-info mb-2 me-1" value="Salva">
+        
+            
+              
+                
+                    <div class="row mb-4">
+                      
+                      <div class="col-md-12 border rounded shadow-sm">
+                        <div class="row">
+                          <div class="col-md-5">
+                            {{ form.sds|as_crispy_field }}
+                            {{ form.id_schemical.as_hidden }}
+                          </div>
+                          <div class="col-md-3">
+                            {{ form.rev_date|as_crispy_field }}
+                          </div>
+                          <div class="col-md-1">
+                            {{ form.conformityReach|as_crispy_field }}
+                          </div>
+                          <div class="col-md-3">
+                            {{ form.reg_id|as_crispy_field }}
+                          </div>
+                        </div>
+                        
+                    </div>
+                      </div>
+                      
+        <!-- fine form -->
+        </form>
+
+
+
+    </div>
+    <!-- riquadro sostanze -->
+    <div class="col-md-4">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="text-center">Sostanza</th>
+              <th class="text-center">Num EC</th>
+              <th class="text-center">Num CAS</th>
+              <th class="text-center">Concentrazione</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for substance in substances %}
+            <tr>  
+              
+              <td class="text-end">{{ substance.id_substance }}</td>
+              <td class="text-end">{{ substance.id_substance.ec_number }}</td>
+              <td class="text-end">{{ substance.id_substance.cas_number }}</td>
+              <td class="text-end">{{ substance.concentration }}</td>
+            </tr>  
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if form.instance.pk  %}
+            <a class="btn btn-sm btn-outline-success mb-2" href="">Aggiungi</a>
+        {% else %}
+            <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
+        {% endif %}
+      </div>
+    
+    <!-- fine riquadro sostanze -->
+    <div class="row">
+    <!-- riquadro Frasi di Rischio -->
+    <div class="col-md-4">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="text-center">Frase di Rischio</th>
+              <th class="text-center">Descrizione</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            {% for hazard_statement in hazard_statement %}
+            <tr>  
+              
+              <td class="text-end">{{ hazard_statement.id_hs }}</td>              
+              <td class="text-end">{{ hazard_statement.id_hs.description }}</td>              
+            </tr>  
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if form.instance.pk  %}
+            <a class="btn btn-sm btn-outline-success mb-2" href="">Aggiungi</a>
+        {% else %}
+            <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
+        {% endif %}
+      </div>
+    
+    <!-- fine riquadro Frasi di Rischio -->
+
+    <!-- riquadro Simboli di Pericolo -->
+    <div class="col-md-3">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="text-center">Sigla</th>
+              <th class="text-center">Pericolo</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            {% for danger_symbol in danger_symbols %}
+            <tr>  
+              
+              <td class="text-end">{{ danger_symbol.id_danger.acronym }}</td>              
+              <td class="text-end">{{ danger_symbol.id_danger }}</td>              
+            </tr>  
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if form.instance.pk  %}
+            <a class="btn btn-sm btn-outline-success mb-2" href="">Aggiungi</a>
+        {% else %}
+            <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
+        {% endif %}
+      </div>
+    
+    <!-- fine riquadro Simboli di Pericolo -->
+
+    <!-- riquadro Consigli di Prudenza -->
+    <div class="col-md-3">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="text-center">Consiglio di Prudenza</th>
+              
+              
+            </tr>
+          </thead>
+          <tbody>
+            {% for precautionary_statement in precautionary_statements %}
+            <tr>  
+              
+              <td class="text-end">{{ precautionary_statement.id_ps }}</td>              
+              
+            </tr>  
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if form.instance.pk  %}
+            <a class="btn btn-sm btn-outline-success mb-2" href="">Aggiungi</a>
+        {% else %}
+            <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
+        {% endif %}
+      </div>
+    
+    <!-- fine riquadro Consigli di Prudenza -->
+</div>
+  
+  
+  </div>
 
 <script>
     prev = document.getElementById("previous_page");

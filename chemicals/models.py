@@ -150,6 +150,56 @@ class ChemicalHazardStatements(models.Model):
     id_hs=models.ForeignKey(HazardStatements, null=False, on_delete = models.CASCADE)
 
 
+class DangerSymbols(models.Model):
+    id_danger = models.AutoField(primary_key=True)
+    description = models.CharField(max_length=50, blank=False, null=False)
+    acronym = models.CharField(max_length=50, blank=False, null=False)
+    symbol = models.ImageField(upload_to='danger_symbols')
+
+    def __str__(self):
+        return self.description
+
+class ChemicalDangerSymbols(models.Model):
+    '''XR Danger Symbols-Chemicals'''
+    id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE)
+    id_sds=models.ForeignKey(Sds, null=False, on_delete = models.CASCADE)
+    id_danger=models.ForeignKey(DangerSymbols, null=False, on_delete = models.CASCADE)
+
+
+
+class DangersCategory(models.Model):
+    '''Fields of dangers'''
+    id_category=models.AutoField(primary_key=True)
+    description=models.CharField(max_length=50, blank=False, null=False)
+    created_at=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.description
+    
+
+class ChemicalsPrecautionaryStatement(models.Model):
+    id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE)
+    id_sds=models.ForeignKey(Sds, null=False, on_delete = models.CASCADE)
+    id_ps=models.ForeignKey(PrecautionaryStatements, null=False, on_delete = models.CASCADE)
+
+
+class Substances(models.Model):
+    id_substance=models.AutoField(primary_key=True)
+    description=models.CharField(max_length=255, blank=False, null=False)
+    ec_number=models.CharField(max_length=50, blank=False, null=False)
+    cas_number=models.CharField(max_length=50, blank=False, null=False)
+
+    def __str__(self):
+        return self.description
+
+class ChemicalsSubstances(models.Model):
+    '''XR substances - chemicals'''
+    id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE)
+    id_sds=models.ForeignKey(Sds, null=False, on_delete = models.CASCADE)
+    id_substance=models.ForeignKey(Substances, null=False, on_delete = models.CASCADE)
+    concentration=models.CharField(max_length=50, blank=False, null=False)
+
+
 class PricesManager(models.Manager):
     '''Al momento non serve'''
     def max_of_prices(self, idc):

@@ -7,14 +7,14 @@ from master_data.models import Suppliers
 from master_data.forms import SupplierModelForm
 from master_data.filters import SupplierFilter
 from .forms import ChemicalModelForm, SdsModelForm
-from .models import Chemicals, Prices, PricesManager, Sds
-from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q, F
+from .models import Chemicals, Prices, PricesManager, Sds, ChemicalHazardStatements, Substances, ChemicalsSubstances, ChemicalsPrecautionaryStatement, ChemicalDangerSymbols                    
+#from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q, F
 from master_data.mixins import StaffMixin
 
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=1)
+    suppliers_list = Suppliers.objects.filter(category=3)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -96,7 +96,14 @@ def delete_product(request, pk):
 '''Schede di sicurezza'''
 
 def new_sds(request,pk):
-    chemical = get_object_or_404(Chemicals, pk=pk)
+    '''ATTENZIONE!!! LE VOCI DEVONO ESSERE COLLEGATE ALL'ID SCHEDA!!!'''
+    chemical = get_object_or_404(Chemicals, pk=pk)    
+    substances = ChemicalsSubstances.objects.filter(id_chemical=pk)
+    precautionary_statements=ChemicalsPrecautionaryStatement.objects.filter(id_chemical=pk)
+    hazard_statements=ChemicalHazardStatements.objects.filter(id_chemical=pk)
+    danger_symbols=ChemicalDangerSymbols.objects.filter(id_chemical=pk)
+
+
     form = SdsModelForm(instance=chemical)
     if request.method == "POST":
         form = SdsModelForm(request.POST)
@@ -113,7 +120,14 @@ def new_sds(request,pk):
             
             return HttpResponseBadRequest()
     
-    context={'chemical': chemical, 'form': form}
+    context={
+        'chemical': chemical, 
+        'form': form,
+        'substances': substances,
+        'precautionary_statements': precautionary_statements,
+        'hazard_statements': hazard_statements,
+        'danger_symbols': danger_symbols
+        }
     return render(request, "chemicals/safety_data_sheet.html", context)
 
 

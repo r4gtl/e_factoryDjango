@@ -75,7 +75,11 @@
                         </table>
                       </div>
                       <div class="col-md-3">
-                        <input type="submit" class="btn btn-xl btn-success mb-2 me-1" data-toggle="tooltip" data-placement="right" title="Aggiungi Scheda di Sicurezza" value="Sds">
+                        {% if form.instance.pk  %}
+                      <a class="btn btn-sm btn-outline-success mb-2" href="{% url 'chemicals:new-sds' pk=chemical.pk %}">Aggiungi</a>
+                      {% else %}
+                      <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
+                      {% endif %}
                       </div>
                       </div>
 

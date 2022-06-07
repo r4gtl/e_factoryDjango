@@ -9,5 +9,5 @@ urlpatterns = [
     path('single-product/<int:pk>/', views.update_product, name="single-product"),    
     path('single-product/<int:pk>/create-product/', views.new_product, name="create-product"),
     path('elimina-prodotto/<int:pk>/', views.delete_product, name="cancella_prodotto"),
-    path('new-sds/', views.new_sds, name="new-sds"), 
+    path('single-product/<int:pk>/new-sds/', views.new_sds, name="new-sds"),     
 ]
