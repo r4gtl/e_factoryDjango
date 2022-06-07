@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Chemicals, Operations, Svhc, PrecautionaryStatements, HazardStatements, Prices
+from .models import Chemicals, Operations, Svhc, PrecautionaryStatements, HazardStatements, Prices, RegReach, Sds
                     
 
 class ChemicalsModelAdmin(admin.ModelAdmin):
@@ -36,7 +36,14 @@ class PricesModelAdmin(admin.ModelAdmin):
     list_display = ["id_chemical", "price", "price_date"]
     search_fields = ["price_date"]
 
-
+class RegReachModelAdmin(admin.ModelAdmin):
+    model = RegReach
+    list_display = ["reg_id", "reg_name", "validity"]
+    
+class SdsModelAdmin(admin.ModelAdmin):
+    model = Sds
+    list_display = ["id_sds", "id_chemical", "sds", "rev_date", "conformityReach", "reg_id"]
+    
 
 admin.site.register(Chemicals, ChemicalsModelAdmin)
 admin.site.register(Operations, OperationsModelAdmin)
@@ -44,6 +51,8 @@ admin.site.register(Svhc, SvhcModelAdmin)
 admin.site.register(PrecautionaryStatements, PrecautionaryStatementsModelAdmin)
 admin.site.register(HazardStatements, HazardStatementsModelAdmin)
 admin.site.register(Prices, PricesModelAdmin)
+admin.site.register(RegReach, RegReachModelAdmin)
+admin.site.register(Sds, SdsModelAdmin)
 
 
 
