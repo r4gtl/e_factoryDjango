@@ -14,7 +14,7 @@ from master_data.mixins import StaffMixin
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=1)
+    suppliers_list = Suppliers.objects.filter(category=3)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -97,7 +97,7 @@ def delete_product(request, pk):
 def new_sds(request,pk):
     '''ATTENZIONE!!! LE VOCI DEVONO ESSERE COLLEGATE ALL'ID SCHEDA!!!'''
     chemical = get_object_or_404(Chemicals, pk=pk)
-    print("Chemical: " + str(chemical))    
+    print("Chemical: " + str(chemical.pk))    
     substances = ChemicalsSubstances.objects.filter(id_chemical=pk)
     precautionary_statements=ChemicalsPrecautionaryStatement.objects.filter(id_chemical=pk)
     hazard_statements=ChemicalHazardStatements.objects.filter(id_chemical=pk)
@@ -106,18 +106,19 @@ def new_sds(request,pk):
 
     form = SdsModelForm(instance=chemical)
     if request.method == "POST":
-        form = SdsModelForm(request.POST)
+        form = SdsModelForm(request.POST, request.FILES)
         if form.is_valid():
             form.save(commit=False)
             form.instance.id_chemical = chemical
             form.save()
-
+            
             url_chemical = reverse("chemicals:single-product", kwargs={"pk": pk})
             print(url_chemical)
 
             return HttpResponseRedirect(url_chemical)
         else:
             print("Eco")
+            print(form.errors)
             return HttpResponseBadRequest()
     
     context={
@@ -131,3 +132,12 @@ def new_sds(request,pk):
     return render(request, "chemicals/safety_data_sheet.html", context)
 
 
+class UpdateSds(UpdateView):
+    model = Sds
+    form_class = SdsModelForm
+    template_name = "chemicals/safety_data_sheet.html"
+    
+    def form_valid(self, form):        
+        self.success_url = self.request.POST.get('previous_page')
+        
+        return super().form_valid(form)

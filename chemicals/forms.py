@@ -19,6 +19,15 @@ class ChemicalModelForm(forms.ModelForm):
             'flamability_status': forms.ChoiceField(),
             'id_supplier': forms.HiddenInput()
         }
+        labels = {
+                'description': 'Nome Prodotto',
+                'cov': 'Solvente',
+                'tanning': 'Bagnato',
+                'finishing': 'Rifinizione',
+                'notes': 'Note',
+                'flamability_status': 'Classe di Infiammabilità',
+                
+        }
         
 class SdsModelForm(forms.ModelForm):
     class Meta:

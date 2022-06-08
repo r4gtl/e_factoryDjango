@@ -55,20 +55,27 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-6">
+                          
                         <table class="table table-bordered table-striped">
+                          
                           <thead>
+                            
+                              
+                              <p class="text-center mb-0">Schede di Sicurezza</p>
+                            
+                            
                             <tr>
                               <th class="text-center">Data revisione</th>
-                              <th class="text-center">Sds</th>
+                              <th class="text-center">Vedi Sds</th>
                             </tr>
                           </thead>
                           <tbody>
                             {% for sds in sds %}
                             <tr>  
                               
-                              <td class="text-end">{{ sds.rev_date|date:'d/m/Y' }}</td>
-                              <td class="text-end">{{ sds.sds }}</td>
+                              <td class="text-center"><a href="{% url 'chemicals:update-sds' id=chemical.pk pk=sds.pk %}">{{ sds.rev_date|date:'d/m/Y' }}</a></td>
+                              <td class="text-center"><a href="{{ sds.sds.url }}" target="_blank"><i class="bi bi-file-pdf" style="color: red;"></i></a></td>
                             </tr>  
                             {% endfor %}
                           </tbody>

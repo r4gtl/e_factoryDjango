@@ -137,7 +137,7 @@ class RegReach(models.Model):
 
 class Sds(models.Model):
     id_sds = models.AutoField(primary_key=True)
-    id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE)
+    id_chemical=models.ForeignKey(Chemicals, blank=False, null=False, on_delete = models.CASCADE)
     sds = models.FileField(upload_to='sds')
     rev_date = models.DateField(blank=True, null=True)
     conformityReach = models.BooleanField(default=True)
