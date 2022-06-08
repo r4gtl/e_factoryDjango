@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load crispy_forms_tags %} 
+{% load crispy_forms_tags %}
 {% block head_title %}{{ block.super }} - Scheda di Sicurezza{% endblock head_title %}
 
 {% block content %}
@@ -8,23 +8,23 @@
 <div class="container">
     <br>
     <h5 class="text-end">Scheda di Sicurezza Prodotto {{ chemical.id_chemical }}</h5>
-    
+
     <hr>
     <br>
-  
-    
+
+
     <div class="form-group">
         <form class="" method="POST" novalidate enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="hidden" id="previous_page" name="previous_page" 
+            <input type="hidden" id="previous_page" name="previous_page"
             value="/previous/page/url">
             <input type="submit" class="btn btn-info mb-2 me-1" value="Salva">
-        
-            
-              
-                
+
+
+
+
                     <div class="row mb-4">
-                      
+
                       <div class="col-md-12 border rounded shadow-sm">
                         <div class="row">
                           <div class="col-md-5">
@@ -41,10 +41,10 @@
                             {{ form.reg_id|as_crispy_field }}
                           </div>
                         </div>
-                        
+
                     </div>
                       </div>
-                      
+
         <!-- fine form -->
         </form>
 
@@ -64,13 +64,13 @@
           </thead>
           <tbody>
             {% for substance in substances %}
-            <tr>  
-              
+            <tr>
+
               <td class="text-end">{{ substance.id_substance }}</td>
               <td class="text-end">{{ substance.id_substance.ec_number }}</td>
               <td class="text-end">{{ substance.id_substance.cas_number }}</td>
               <td class="text-end">{{ substance.concentration }}</td>
-            </tr>  
+            </tr>
             {% endfor %}
           </tbody>
         </table>
@@ -80,7 +80,7 @@
             <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
         {% endif %}
       </div>
-    
+
     <!-- fine riquadro sostanze -->
     <div class="row">
     <!-- riquadro Frasi di Rischio -->
@@ -90,16 +90,16 @@
             <tr>
               <th class="text-center">Frase di Rischio</th>
               <th class="text-center">Descrizione</th>
-              
+
             </tr>
           </thead>
           <tbody>
             {% for hazard_statement in hazard_statement %}
-            <tr>  
-              
-              <td class="text-end">{{ hazard_statement.id_hs }}</td>              
-              <td class="text-end">{{ hazard_statement.id_hs.description }}</td>              
-            </tr>  
+            <tr>
+
+              <td class="text-end">{{ hazard_statement.id_hs }}</td>
+              <td class="text-end">{{ hazard_statement.id_hs.description }}</td>
+            </tr>
             {% endfor %}
           </tbody>
         </table>
@@ -109,7 +109,7 @@
             <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
         {% endif %}
       </div>
-    
+
     <!-- fine riquadro Frasi di Rischio -->
 
     <!-- riquadro Simboli di Pericolo -->
@@ -119,16 +119,16 @@
             <tr>
               <th class="text-center">Sigla</th>
               <th class="text-center">Pericolo</th>
-              
+
             </tr>
           </thead>
           <tbody>
             {% for danger_symbol in danger_symbols %}
-            <tr>  
-              
-              <td class="text-end">{{ danger_symbol.id_danger.acronym }}</td>              
-              <td class="text-end">{{ danger_symbol.id_danger }}</td>              
-            </tr>  
+            <tr>
+
+              <td class="text-end">{{ danger_symbol.id_danger.acronym }}</td>
+              <td class="text-end">{{ danger_symbol.id_danger }}</td>
+            </tr>
             {% endfor %}
           </tbody>
         </table>
@@ -138,7 +138,7 @@
             <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
         {% endif %}
       </div>
-    
+
     <!-- fine riquadro Simboli di Pericolo -->
 
     <!-- riquadro Consigli di Prudenza -->
@@ -147,17 +147,17 @@
           <thead>
             <tr>
               <th class="text-center">Consiglio di Prudenza</th>
-              
-              
+
+
             </tr>
           </thead>
           <tbody>
             {% for precautionary_statement in precautionary_statements %}
-            <tr>  
-              
-              <td class="text-end">{{ precautionary_statement.id_ps }}</td>              
-              
-            </tr>  
+            <tr>
+
+              <td class="text-end">{{ precautionary_statement.id_ps }}</td>
+
+            </tr>
             {% endfor %}
           </tbody>
         </table>
@@ -167,11 +167,57 @@
             <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
         {% endif %}
       </div>
-    
+
     <!-- fine riquadro Consigli di Prudenza -->
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cerca...</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="text-center">Prodotto</th>
+              <th class="text-center">Prezzo</th>
+              <th class="text-center">Solvente</th>
+              <th class="text-center">Azioni</i></th>    
+            </tr>
+          </thead>
+          <tbody>
+            {% for chemical in chemicals %}
+            <tr>                                    
+              <td><a href="{% url 'chemicals:single-product' pk=chemical.id_chemical %}">{{ chemical.description }}</a></td>                                                   
+              <td class="text-end">{{ chemical.get_price }}</td>                            
+              <td class="text-end">{{ chemical.cov }}</td>
+              
+              
+              <td class="text-center" style="color: red"><a href="{% url 'chemicals:cancella_prodotto' pk=chemical.id_chemical %}"><i class="bi bi-trash"></i></a></td>                            
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
-  
-  
+    <!-- Fine Modal -->
+</div>
+
+
   </div>
 
 <script>

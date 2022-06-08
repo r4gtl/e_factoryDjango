@@ -14,7 +14,7 @@ from master_data.mixins import StaffMixin
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=3)
+    suppliers_list = Suppliers.objects.filter(category=1)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -97,6 +97,7 @@ def delete_product(request, pk):
 def new_sds(request,pk):
     '''ATTENZIONE!!! LE VOCI DEVONO ESSERE COLLEGATE ALL'ID SCHEDA!!!'''
     chemical = get_object_or_404(Chemicals, pk=pk)
+    chemicals=Chemicals.objects.all()
     print("Chemical: " + str(chemical.pk))    
     substances = ChemicalsSubstances.objects.filter(id_chemical=pk)
     precautionary_statements=ChemicalsPrecautionaryStatement.objects.filter(id_chemical=pk)
@@ -127,7 +128,8 @@ def new_sds(request,pk):
         'substances': substances,
         'precautionary_statements': precautionary_statements,
         'hazard_statements': hazard_statements,
-        'danger_symbols': danger_symbols
+        'danger_symbols': danger_symbols,
+        'chemicals': chemicals
         }
     return render(request, "chemicals/safety_data_sheet.html", context)
 
