@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block head_title %}{{ block.super }} - Scheda di Sicurezza{% endblock head_title %}
+
+{% block content %}
+
+<div class="container">
+    <br>
+    <h5 class="text-end">Scheda di Sicurezza Prodotto {{ chemical.id_chemical }}</h5>
+
+    <hr>
+    <br>
+
+
+    <div class="form-group">
+        <form class="" method="POST" novalidate enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" id="previous_page" name="previous_page"
+            value="/previous/page/url">
+            <input type="submit" class="btn btn-info mb-2 me-1" value="Salva">
+
+
+
+
+                    <div class="row mb-4">
+
+                      <div class="col-md-12 border rounded shadow-sm">
+                        <div class="row">
+                          <div class="col-md-5">
+                            {{ form.id_substance|as_crispy_field }}
+                            {{ form.id_sds.as_hidden }}
+                            {{ form.id_chemical.as_hidden }}
+                          </div>
+                          <div class="col-md-3">
+                            {{ form.concentration|as_crispy_field }}
+                          </div>
+                          
+                        </div>
+
+                    </div>
+                      </div>
+
+        <!-- fine form -->
+        </form>
+
+
+
+    </div>
+    
+
+
+</div>
+
+
+ 
+
+<script>
+    prev = document.getElementById("previous_page");
+    prev.value = document.referrer;
+</script>
+{% endblock content %}

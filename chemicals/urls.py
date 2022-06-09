@@ -11,4 +11,6 @@ urlpatterns = [
     path('elimina-prodotto/<int:pk>/', views.delete_product, name="cancella_prodotto"),
     path('single-product/<int:pk>/new-sds/', views.new_sds, name="new-sds"),
     path('single-product/<int:id>/update-sds/<int:pk>/', views.UpdateSds.as_view(), name="update-sds"),
+    path('update-sds/<int:pk>/new-substance/', views.new_substance_sds, name="new-substance-sds"),
+    
 ]

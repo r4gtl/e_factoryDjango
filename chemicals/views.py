@@ -6,7 +6,7 @@ from itertools import chain
 from master_data.models import Suppliers
 from master_data.forms import SupplierModelForm
 from master_data.filters import SupplierFilter
-from .forms import ChemicalModelForm, SdsModelForm
+from .forms import ChemicalModelForm, SdsModelForm, SubstanceSdsModelForm
 from .models import Chemicals, Prices, PricesManager, Sds, ChemicalHazardStatements, Substances, ChemicalsSubstances, ChemicalsPrecautionaryStatement, ChemicalDangerSymbols                    
 #from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q, F
 from master_data.mixins import StaffMixin
@@ -14,7 +14,7 @@ from master_data.mixins import StaffMixin
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=1)
+    suppliers_list = Suppliers.objects.filter(category=3)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -143,3 +143,34 @@ class UpdateSds(UpdateView):
         self.success_url = self.request.POST.get('previous_page')
         
         return super().form_valid(form)
+
+
+
+def new_substance_sds(request,pk):
+    
+    sds = get_object_or_404(Sds, pk=pk)
+    chemical=Chemicals.objects.filter(pk=sds.id_chemical.pk)  
+    print("Chemical: " + str(chemical))      
+    form = SubstanceSdsModelForm(instance=sds)
+    if request.method == "POST":
+        form = SubstanceSdsModelForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            form.instance.id_chemical = chemical.pk
+            form.instance.id_sds = sds
+            form.save()
+            
+            url_sds = reverse("chemicals:new-substance-sds", kwargs={"id": chemical.id_chemical, "pk": pk})
+
+            return HttpResponseRedirect(url_sds)
+        else:
+            print("Eco")
+            print(form.errors)
+            return HttpResponseBadRequest()
+    
+    context={
+        'chemical': chemical, 
+        'form': form,
+        'sds': sds        
+        }
+    return render(request, "chemicals/substances_in_sds.html", context)

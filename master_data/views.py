@@ -75,7 +75,7 @@ class UpdateContact(UpdateView):
     
     def form_valid(self, form):        
         self.success_url = self.request.POST.get('previous_page')
-        print("Eccomi")
+        
         return super().form_valid(form)
 
-    
+

@@ -1,6 +1,6 @@
 from django import forms
 from master_data.models import Suppliers
-from .models import Chemicals, Prices, Sds
+from .models import Chemicals, Prices, Sds, ChemicalsSubstances
 
 
 
@@ -46,4 +46,21 @@ class SdsModelForm(forms.ModelForm):
                 'rev_date': 'Data Revisione',
                 'conformityReach': 'Ok Reach',
                 'reg_id': 'Regolamento Riferimento'
+        }
+
+class SubstanceSdsModelForm(forms.ModelForm):
+    class Meta:
+        model = ChemicalsSubstances
+        fields = ('id_chemical', 'id_sds', 'id_substance', 'concentration')
+
+        widget = {
+            'id_chemical': forms.HiddenInput(),
+            'id_sds': forms.HiddenInput(),
+            'id_substance': forms.CharField(),
+            'concentration': forms.CharField(),            
+                        
+        }
+        labels = {
+                'id_substance': 'Nome Sostanza',
+                'concentration': 'Concentrazione'                
         }
