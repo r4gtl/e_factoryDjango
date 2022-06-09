@@ -1,6 +1,6 @@
 from django import forms
 from master_data.models import Suppliers
-from .models import Chemicals, Prices, Sds, ChemicalsSubstances
+from .models import Chemicals, Prices, Sds, ChemicalsSubstances, ChemicalsPrecautionaryStatement, ChemicalHazardStatements
 
 
 
@@ -63,4 +63,38 @@ class SubstanceSdsModelForm(forms.ModelForm):
         labels = {
                 'id_substance': 'Nome Sostanza',
                 'concentration': 'Concentrazione'                
+        }
+        
+class PrecautionaryStatementSdsModelForm(forms.ModelForm):
+    class Meta:
+        model = ChemicalsPrecautionaryStatement
+        fields = ('id_chemical', 'id_sds', 'id_ps')
+
+        widget = {
+            'id_chemical': forms.HiddenInput(),
+            'id_sds': forms.HiddenInput(),
+            'id_ps': forms.CharField(),
+            
+                        
+        }
+        labels = {
+                'id_ps': 'Consiglio di Prudenza'                
+        }
+        
+        
+        
+class HazardStatementSdsModelForm(forms.ModelForm):
+    class Meta:
+        model = ChemicalHazardStatements
+        fields = ('id_chemical', 'id_sds', 'id_hs')
+
+        widget = {
+            'id_chemical': forms.HiddenInput(),
+            'id_sds': forms.HiddenInput(),
+            'id_hs': forms.CharField(),
+            
+                        
+        }
+        labels = {
+                'id_hs': 'Frase di Rischio'                
         }
