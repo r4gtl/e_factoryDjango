@@ -133,7 +133,7 @@
           </tbody>
         </table>
         {% if form.instance.id_sds  %}
-            <a class="btn btn-sm btn-outline-success mb-2" href="">Aggiungi</a>
+            <a class="btn btn-sm btn-outline-success mb-2" href="{% url 'chemicals:new-ds-sds' pk=sds.pk %}">Aggiungi</a>
         {% else %}
             <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
         {% endif %}

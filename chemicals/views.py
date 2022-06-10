@@ -6,15 +6,25 @@ from itertools import chain
 from master_data.models import Suppliers
 from master_data.forms import SupplierModelForm
 from master_data.filters import SupplierFilter
-from .forms import ChemicalModelForm, SdsModelForm, SubstanceSdsModelForm, PrecautionaryStatementSdsModelForm, HazardStatementSdsModelForm
-from .models import Chemicals, Prices, PricesManager, Sds, ChemicalHazardStatements, Substances, ChemicalsSubstances, ChemicalsPrecautionaryStatement, ChemicalDangerSymbols                   
+from .forms import (
+    ChemicalModelForm, SdsModelForm, 
+    SubstanceSdsModelForm,PrecautionaryStatementSdsModelForm, 
+    HazardStatementSdsModelForm, DangerSymbolsSdsModelForm,
+    )
+
+from .models import (
+    Chemicals, Prices, PricesManager, 
+    Sds, ChemicalHazardStatements, Substances, 
+    ChemicalsSubstances, ChemicalsPrecautionaryStatement, 
+    ChemicalDangerSymbols
+    )
 #from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q, F
 from master_data.mixins import StaffMixin
 
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=1)
+    suppliers_list = Suppliers.objects.filter(category=3)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -231,3 +241,32 @@ def new_hs_sds(request,pk):
         'sds': sds        
         }
     return render(request, "chemicals/hs_in_sds.html", context)
+
+
+def new_ds_sds(request,pk):
+    
+    sds = get_object_or_404(Sds, pk=pk)
+    chemical=Chemicals.objects.filter(pk=sds.id_chemical.pk)           
+    form = DangerSymbolsSdsModelForm(instance=sds)
+    if request.method == "POST":
+        form = DangerSymbolsSdsModelForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            form.instance.id_chemical = chemical.pk
+            form.instance.id_sds = sds
+            form.save()
+            
+            url_ds = reverse("chemicals:new-ds-sds", kwargs={"id": chemical.id_chemical, "pk": pk})
+
+            return HttpResponseRedirect(url_ds)
+        else:
+            print("Eco")
+            print(form.errors)
+            return HttpResponseBadRequest()
+    
+    context={
+        'chemical': chemical, 
+        'form': form,
+        'sds': sds        
+        }
+    return render(request, "chemicals/ds_in_sds.html", context)
