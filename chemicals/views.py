@@ -9,7 +9,8 @@ from master_data.filters import SupplierFilter
 from .forms import (
     ChemicalModelForm, SdsModelForm, 
     SubstanceSdsModelForm,PrecautionaryStatementSdsModelForm, 
-    HazardStatementSdsModelForm, DangerSymbolsSdsModelForm,
+    HazardStatementSdsModelForm,
+    DangerSymbolsSdsModelForm, 
     )
 
 from .models import (
@@ -24,7 +25,7 @@ from master_data.mixins import StaffMixin
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=3)
+    suppliers_list = Suppliers.objects.filter(category=1)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -107,7 +108,8 @@ def delete_product(request, pk):
 def new_sds(request,pk):
     '''ATTENZIONE!!! LE VOCI DEVONO ESSERE COLLEGATE ALL'ID SCHEDA!!!'''
     chemical = get_object_or_404(Chemicals, pk=pk)
-    chemicals=Chemicals.objects.all()
+    
+    #chemicals=Chemicals.objects.all()
     print("Chemical: " + str(chemical.pk))    
     substances = ChemicalsSubstances.objects.filter(id_chemical=pk)
     precautionary_statements=ChemicalsPrecautionaryStatement.objects.filter(id_chemical=pk)
@@ -243,20 +245,22 @@ def new_hs_sds(request,pk):
     return render(request, "chemicals/hs_in_sds.html", context)
 
 
-def new_ds_sds(request,pk):
+def new_ds_sds(request, id, pk):
     
     sds = get_object_or_404(Sds, pk=pk)
-    chemical=Chemicals.objects.filter(pk=sds.id_chemical.pk)           
+    print("Nuova pk:" + str(pk))
+    chemical=Chemicals.objects.get(pk=sds.id_chemical.pk) 
+    print("Chemical:" + str(chemical.id_chemical))          
     form = DangerSymbolsSdsModelForm(instance=sds)
     if request.method == "POST":
         form = DangerSymbolsSdsModelForm(request.POST)
         if form.is_valid():
             form.save(commit=False)
-            form.instance.id_chemical = chemical.pk
+            form.instance.id_chemical = chemical
             form.instance.id_sds = sds
             form.save()
             
-            url_ds = reverse("chemicals:new-ds-sds", kwargs={"id": chemical.id_chemical, "pk": pk})
+            url_ds = reverse("chemicals:update-sds", kwargs={"id": id, "pk": pk})
 
             return HttpResponseRedirect(url_ds)
         else:

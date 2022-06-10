@@ -1,6 +1,10 @@
 from django import forms
 from master_data.models import Suppliers
-from .models import Chemicals, Prices, Sds, ChemicalsSubstances, ChemicalsPrecautionaryStatement, ChemicalHazardStatements
+from .models import (
+    Chemicals, Prices, Sds, 
+    ChemicalsSubstances, ChemicalsPrecautionaryStatement, ChemicalHazardStatements, 
+    ChemicalDangerSymbols,
+    )
 
 
 
@@ -97,4 +101,21 @@ class HazardStatementSdsModelForm(forms.ModelForm):
         }
         labels = {
                 'id_hs': 'Frase di Rischio'                
+        }
+        
+
+class DangerSymbolsSdsModelForm(forms.ModelForm):
+    class Meta:
+        model = ChemicalDangerSymbols
+        fields = ('id_chemical', 'id_sds', 'id_danger')
+
+        widget = {
+            'id_chemical': forms.HiddenInput(),
+            'id_sds': forms.HiddenInput(),
+            'id_danger': forms.IntegerField(),
+            
+                        
+        }
+        labels = {
+                'id_danger': 'Simbolo di pericolo'                
         }

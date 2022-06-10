@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import Chemicals, Operations, Svhc, PrecautionaryStatements, HazardStatements, Prices, RegReach, Sds
+from .models import (
+    Chemicals, Operations, Svhc, 
+    PrecautionaryStatements, HazardStatements, Prices, 
+    RegReach, Sds, DangerSymbols
+    )
                     
 
 class ChemicalsModelAdmin(admin.ModelAdmin):
@@ -45,6 +49,18 @@ class SdsModelAdmin(admin.ModelAdmin):
     list_display = ["id_sds", "id_chemical", "sds", "rev_date", "conformityReach", "reg_id"]
     
 
+class DangerSymbolsModelAdmin(admin.ModelAdmin):
+    model = DangerSymbols
+    list_display = [
+        "id_danger", 
+        "description", 
+        "acronym", 
+        "symbol",         
+        ]
+
+
+
+
 admin.site.register(Chemicals, ChemicalsModelAdmin)
 admin.site.register(Operations, OperationsModelAdmin)
 admin.site.register(Svhc, SvhcModelAdmin)
@@ -53,6 +69,7 @@ admin.site.register(HazardStatements, HazardStatementsModelAdmin)
 admin.site.register(Prices, PricesModelAdmin)
 admin.site.register(RegReach, RegReachModelAdmin)
 admin.site.register(Sds, SdsModelAdmin)
+admin.site.register(DangerSymbols, DangerSymbolsModelAdmin)
 
 
 
