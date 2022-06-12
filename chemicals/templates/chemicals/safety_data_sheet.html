@@ -119,6 +119,7 @@
             <tr>
               <th class="text-center">Sigla</th>
               <th class="text-center">Pericolo</th>
+              <th class="text-center">Simbolo</th>
 
             </tr>
           </thead>
@@ -126,8 +127,9 @@
             {% for danger_symbol in danger_symbols %}
             <tr>
 
-              <td class="text-end">{{ danger_symbol.id_danger.acronym }}</td>
-              <td class="text-end">{{ danger_symbol.id_danger }}</td>
+              <td class="text-center align-middle">{{ danger_symbol.id_danger.acronym }}</td>
+              <td class="text-center align-middle">{{ danger_symbol.id_danger }}</td>
+              <td class="text-center"><img src="{{ danger_symbol.id_danger.symbol.url }}" alt="logo" style="width: 50px;"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -167,9 +169,7 @@
             <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
         {% endif %}
       </div>
-      {% for danger_symbol in danger_symbols %}
-      <img src="{{ danger_symbol.id_danger.symbol.url }}" alt="logo">
-      {% endfor %}
+      
     <!-- fine riquadro Consigli di Prudenza -->
   <!-- fine form -->
   </form>

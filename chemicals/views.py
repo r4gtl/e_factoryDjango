@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.db import IntegrityError
+from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse, reverse_lazy
@@ -141,7 +143,7 @@ def new_sds(request,pk):
         'precautionary_statements': precautionary_statements,
         'hazard_statements': hazard_statements,
         'danger_symbols': danger_symbols,
-        'chemicals': chemicals
+        #'chemicals': chemicals
         }
     return render(request, "chemicals/safety_data_sheet.html", context)
 
@@ -151,17 +153,66 @@ class UpdateSds(UpdateView):
     form_class = SdsModelForm
     template_name = "chemicals/safety_data_sheet.html"
     
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['substances'] = ChemicalsSubstances.objects.filter(id_sds=self.kwargs['pk'])
+        context['danger_symbols'] = ChemicalDangerSymbols.objects.filter(id_sds=self.kwargs['pk'])
+        context['precautionary_statements'] = ChemicalsPrecautionaryStatement.objects.filter(id_sds=self.kwargs['pk'])
+        context['hazard_statements'] = ChemicalHazardStatements.objects.filter(id_sds=self.kwargs['pk'])        
+        return context
+    
     def form_valid(self, form):        
         self.success_url = self.request.POST.get('previous_page')
         
         return super().form_valid(form)
 
 
+def update_sds(request, id, pk):
+        print("ID: " + str(id))
+        print("PK: " + str(pk))
+        sds = get_object_or_404(Sds, pk=pk)
+        print("Sds: " + str(sds.pk))
+        chemical=get_object_or_404(Chemicals, pk=id)
+        print("Chemical: " + str(chemical))
+        #contacts = SuppliersContacts.objects.filter(id_supplier=pk)
+        substances = ChemicalsSubstances.objects.filter(id_sds=sds.pk)
+        precautionary_statements=ChemicalsPrecautionaryStatement.objects.filter(id_sds=pk)
+        hazard_statements=ChemicalHazardStatements.objects.filter(id_sds=pk)
+        danger_symbols=ChemicalDangerSymbols.objects.filter(id_sds=pk)
+        
+        form = SdsModelForm(request.POST or None, instance = sds)
+        
+        if request.method == 'POST':
+                
+                if form.is_valid():
+                        sds_saved = form.save(commit=False)
+                        sds_saved.save()
+                        #Non funziona
+                        
+                        return HttpResponseRedirect(reverse('chemicals/safety_data_sheet.html', kwargs={"id": id, "pk": pk}))
+        else:
+                
+                form = SdsModelForm(instance=sds)
+        context = {
+            'chemical': chemical, 
+            'form': form,
+            'substances': substances,
+            'precautionary_statements': precautionary_statements,
+            'hazard_statements': hazard_statements,
+            'danger_symbols': danger_symbols,
+            }        
+        return render(request, "chemicals/safety_data_sheet.html", context)
+
+
+
 
 def new_substance_sds(request,pk):
     
     sds = get_object_or_404(Sds, pk=pk)
-    chemical=Chemicals.objects.filter(pk=sds.id_chemical.pk)  
+    #chemical=Chemicals.objects.filter(pk=sds.id_chemical.pk)  
+    chemical=Chemicals.objects.get(pk=sds.id_chemical.pk)  
     print("Chemical: " + str(chemical))      
     form = SubstanceSdsModelForm(instance=sds)
     if request.method == "POST":
@@ -234,8 +285,10 @@ def new_hs_sds(request,pk):
             return HttpResponseRedirect(url_hs)
         else:
             print("Eco")
+            messages.error(request, "prova")
             print(form.errors)
-            return HttpResponseBadRequest()
+            #return redirect("chemicals:new-hs-sds")
+            #return HttpResponseBadRequest()
     
     context={
         'chemical': chemical, 
@@ -266,7 +319,8 @@ def new_ds_sds(request, id, pk):
         else:
             print("Eco")
             print(form.errors)
-            return HttpResponseBadRequest()
+            messages.error(request, "Hai già inserito questo simbolo in questa scheda")
+            #return HttpResponseBadRequest()
     
     context={
         'chemical': chemical, 

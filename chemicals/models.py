@@ -143,7 +143,8 @@ class Sds(models.Model):
     conformityReach = models.BooleanField(default=True)
     reg_id=models.ForeignKey(RegReach, null=False, on_delete = models.CASCADE)
 
-
+        
+    
 class ChemicalHazardStatements(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE)
     id_sds=models.ForeignKey(Sds, null=False, on_delete = models.CASCADE)
@@ -164,6 +165,9 @@ class ChemicalDangerSymbols(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE)
     id_sds=models.ForeignKey(Sds, null=False, on_delete = models.CASCADE)
     id_danger=models.ForeignKey(DangerSymbols, null=False, on_delete = models.CASCADE)
+    
+    class Meta:
+        unique_together=['id_sds', 'id_danger']
 
 
 
