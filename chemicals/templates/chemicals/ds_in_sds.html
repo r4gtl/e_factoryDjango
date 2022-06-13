@@ -32,8 +32,60 @@
                             {{ form.id_sds.as_hidden }}
                             {{ form.id_chemical.as_hidden }}
                           </div>
-                          
-                          
+
+                          <!-- Modal -->
+                          <!-- Button trigger modal -->
+<button type="button" id="btnLaunch" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Scegli Simbolo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Enter text:</p>
+        <input type="text" id="txtInput">
+        
+        <hr>
+        <h1></h1>
+        <hr>
+
+        <table class="table table-bordered table-striped">
+          <thead>
+              <tr>
+                <th class="text-center">Descrizione</th>
+                <th class="text-center">Sigla</th>
+                <th class="text-center">Simbolo</th>
+              
+              
+              </tr>
+          </thead>
+          <tbody>
+              {% for symbol in symbols %}
+              <tr>           
+                <td>{{ symbol.description }}</td>
+                <td>{{ symbol.acronym }}</td>
+                <td class="text-center"><img src="{{ symbol.symbol.url }}" alt="logo" style="width: 50px;"></td>        
+              </tr>
+              {% endfor %}
+              
+          </tbody>
+          </table>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="btnSave" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- fine modal -->
                         </div>
 
                     </div>
@@ -50,11 +102,23 @@
 
 </div>
 
-
- 
-
 <script>
-    prev = document.getElementById("previous_page");
-    prev.value = document.referrer;
+  prev = document.getElementById("previous_page");
+  prev.value = document.referrer;
+
+
+  $(function() {
+    $('#btnLaunch').click(function() {
+      $('#exampleModal').modal('show');
+    });
+  
+    $('#btnSave').click(function() {
+      var value = $('input').val();
+      $('h1').html(value);
+      $('#exampleModal').modal('hide');
+    });
+  });
 </script>
+
+
 {% endblock content %}

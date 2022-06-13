@@ -19,7 +19,7 @@ from .models import (
     Chemicals, Prices, PricesManager, 
     Sds, ChemicalHazardStatements, Substances, 
     ChemicalsSubstances, ChemicalsPrecautionaryStatement, 
-    ChemicalDangerSymbols
+    ChemicalDangerSymbols, DangerSymbols
     )
 #from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q, F
 from master_data.mixins import StaffMixin
@@ -302,6 +302,7 @@ def new_ds_sds(request, id, pk):
     
     sds = get_object_or_404(Sds, pk=pk)
     print("Nuova pk:" + str(pk))
+    symbols = DangerSymbols.objects.all()
     chemical=Chemicals.objects.get(pk=sds.id_chemical.pk) 
     print("Chemical:" + str(chemical.id_chemical))          
     form = DangerSymbolsSdsModelForm(instance=sds)
@@ -325,6 +326,7 @@ def new_ds_sds(request, id, pk):
     context={
         'chemical': chemical, 
         'form': form,
-        'sds': sds        
+        'sds': sds,
+        'symbols': symbols
         }
     return render(request, "chemicals/ds_in_sds.html", context)
