@@ -60,10 +60,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-        
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>     -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'js/main.js' %}"></script>
     <script src="{% static 'js/base.js' %}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--  -->
+    
     
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <!--
@@ -95,6 +97,9 @@
         var date2=new Date()
         var date1=Date.parse(document.getElementById('dataordine').innerHTML)
         document.getElementById('date-time').innerHTML= date_diff_indays(date1, date2);
+
+        
+
     </script>
 </body>
 

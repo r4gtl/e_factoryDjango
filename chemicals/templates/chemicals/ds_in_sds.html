@@ -28,14 +28,16 @@
                       <div class="col-md-12 border rounded shadow-sm">
                         <div class="row">
                           <div class="col-md-5">
-                            {{ form.id_danger|as_crispy_field }}
+                            {{ form.id_danger|as_crispy_field }} <!-- as_crispy_field -->
                             {{ form.id_sds.as_hidden }}
                             {{ form.id_chemical.as_hidden }}
+                            <img id="mettiqua" src="{{ form.id_danger.url }}" alt="logo" style="width: 50px;">
+                            
                           </div>
-
+                          
                           <!-- Modal -->
                           <!-- Button trigger modal -->
-<button type="button" id="btnLaunch" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<button type="button" id="btnLaunch" class="btn btn-primary mt-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
   Launch demo modal
 </button>
 
@@ -44,7 +46,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Scegli Simbolo</h5>
+        <h5 class="modal-title" id="htmlexampleModalLabel">Scegli Simbolo</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -52,7 +54,7 @@
         <input type="text" id="txtInput">
         
         <hr>
-        <h1></h1>
+        
         <hr>
 
         <table class="table table-bordered table-striped">
@@ -102,22 +104,34 @@
 
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+  
   prev = document.getElementById("previous_page");
   prev.value = document.referrer;
 
 
-  $(function() {
-    $('#btnLaunch').click(function() {
-      $('#exampleModal').modal('show');
-    });
-  
-    $('#btnSave').click(function() {
-      var value = $('input').val();
-      $('h1').html(value);
-      $('#exampleModal').modal('hide');
-    });
-  });
+  console.log("Provaprima")
+        //prova
+        $(function() {
+            $('#btnLaunch').click(function() {
+              $('#exampleModal').modal('show');
+            });
+                        
+            $('#btnSave').click(function() {
+              var value = $('#txtInput').val();
+              data={
+                id_danger: value
+              }
+              
+              console.log(value);
+              $('#id_id_danger').val(data.id_danger);
+              $('#mettiqua').val(data.id_danger);
+              $('#exampleModal').modal('hide');
+            });
+          });
+        //fineprova
+    
 </script>
 
 
