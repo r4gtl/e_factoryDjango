@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{{ block.super }} - Crea/Modifica Ordine{% endblock head_title %}
+
+{% block content %}
+
+    <div class="container">
+      <br>
+      <h5 class="text-end">Ordine {{ supplier.id_supplier }}</h5>
+  
+      <hr>
+      <br>
+
+      <div class="form-group">
+        <form class="" method="POST" novalidate enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" id="previous_page" name="previous_page"
+            value="/previous/page/url">
+            <input type="submit" class="btn btn-info mb-2 me-1" value="Salva">
+
+
+
+
+                    <div class="row mb-4">
+
+                      <div class="col-md-12 border rounded shadow-sm">
+                        <div class="row">
+                          <div class="col-md-12">
+                            {{ form.id_order.as_hidden }}
+                            {{ form.id_dich_int.as_hidden }}
+                            {{ form.id_supplier|as_crispy_field }} 
+                            {{ form.n_order|as_crispy_field }}
+                            {{ form.order_date|as_crispy_field }}
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">                            
+                            {{ form.delivery_date|as_crispy_field }} 
+                            {{ form.notes|as_crispy_field }}
+                            {{ form.user_id|as_crispy_field }}
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">                            
+                            {{ form.conformity|as_crispy_field }} 
+                            {{ form.n_conformity|as_crispy_field }}
+                            {{ form.n_conformity_reasons|as_crispy_field }}
+                            {{ form.operator|as_crispy_field }}
+                          </div>
+                        </div>
+
+                    </div>
+                      </div>
+
+        <!-- fine form -->
+        </form>
+
+
+
+    </div>
+
+
+
+
+
+
+    </div>
+    
+
+
+
+
+
+<script>
+    prev = document.getElementById("previous_page");
+    prev.value = document.referrer;
+</script>
+
+{% endblock content %}

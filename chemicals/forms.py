@@ -2,9 +2,10 @@ from django import forms
 from master_data.models import Suppliers
 from .models import (
     Chemicals, Prices, Sds, 
-    ChemicalsSubstances, ChemicalsPrecautionaryStatement, ChemicalHazardStatements, 
-    ChemicalDangerSymbols,
-    )
+    ChemicalsSubstances, ChemicalsPrecautionaryStatement, 
+    ChemicalHazardStatements, ChemicalDangerSymbols,
+    ChemicalOrder, ChemicalOrderDetail
+)
 
 
 
@@ -102,7 +103,7 @@ class HazardStatementSdsModelForm(forms.ModelForm):
         labels = {
                 'id_hs': 'Frase di Rischio'                
         }
-        
+
 
 class DangerSymbolsSdsModelForm(forms.ModelForm):
     class Meta:
@@ -112,10 +113,54 @@ class DangerSymbolsSdsModelForm(forms.ModelForm):
         widget = {
             'id_chemical': forms.HiddenInput(),
             'id_sds': forms.HiddenInput(),
-            'id_danger': forms.IntegerField(),
-            
-                        
+            'id_danger': forms.CharField(),
         }
         labels = {
-                'id_danger': 'Simbolo di pericolo'                
+                'id_danger': 'Simbolo di Pericolo'                
         }
+
+
+class ChemicalOrderModelForm(forms.ModelForm):
+    class Meta:
+        model = ChemicalOrder
+        fields = (
+            'id_order',
+            'n_order',
+            'id_supplier',
+            'order_date',
+            'delivery_date',
+            'notes',
+            'user_id',
+            'conformity',
+            'n_conformity',
+            'n_conformity_reasons',
+            'operator',
+            'id_dich_int'
+        )
+        widget = {
+            'id_order': forms.HiddenInput(),
+            'n_order': forms.IntegerField(),
+            'id_supplier': forms.ChoiceField(),
+            'order_date': forms.DateField(),
+            'delivery_date': forms.DateField(),
+            'notes': forms.Textarea(),
+            'user_id': forms.CharField(),
+            'conformity': forms.BooleanField(),
+            'n_conformity': forms.BooleanField(),
+            'n_conformity_reasons': forms.Textarea(),
+            'operator': forms.CharField(),
+            'id_dich_int': forms.HiddenInput()
+        }
+        labels = {
+                'n_order': 'Ordine N.',
+                'id_supplier': 'Fornitore',
+                'order_date': 'Data Ordine',
+                'delivery_date': 'Data Consegna',
+                'notes': 'Note',
+                'user_id': 'Redatto Da',
+                'conformity': 'Conforme',
+                'n_conformity': 'Non Conforme',
+                'n_conformity_reasons': 'Non Conformità',
+                'operator': 'Operatore'
+        }
+        

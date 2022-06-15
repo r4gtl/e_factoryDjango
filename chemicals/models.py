@@ -219,6 +219,37 @@ class Prices(models.Model):
     price=models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, default=0)
     price_date=models.DateTimeField(default=datetime.date.today)
     objects = PricesManager()  
+
+
+class ChemicalOrder(models.Model):
+    id_order= models.AutoField(primary_key=True)
+    n_order = models.IntegerField()
+    id_supplier = models.ForeignKey(Suppliers, null=True, on_delete = models.CASCADE)
+    order_date = models.DateField(default=datetime.date.today)
+    delivery_date = models.DateField(blank=True, null=True)
+    notes = models.TextField()
+    user_id = models.IntegerField()
+    conformity = models.BooleanField()
+    n_conformity = models.BooleanField()
+    n_conformity_reasons = models.TextField()
+    operator = models.CharField(max_length=50, blank=True, null=True)
+    id_dich_int = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Order"
+        verbose_name_plural = "Orders"
+
+    def __str__(self):
+        return 'Ordine n. {} del {} fornitore {}'. format(self.n_order, self.order_date, self.id_supplier)
+
+class ChemicalOrderDetail(models.Model):
+    id_detail = models.AutoField(primary_key=True)
+    id_order=models.ForeignKey(ChemicalOrder, on_delete = models.CASCADE)
+    id_chemical=models.ForeignKey(Chemicals, on_delete = models.CASCADE)
+    um=models.CharField(max_length=3)
+    quantity=models.DecimalField(max_digits=6, decimal_places=2)
+    id_packaging_type=models.ForeignKey(ChemicalsPackagingType, on_delete = models.DO_NOTHING)
+
     
     
     

@@ -5,6 +5,7 @@ app_name = 'chemicals'
 
 urlpatterns = [
     path('supplier-list/', views.home, name="search-supplier"),
+    path('new-order/', views.CreateOrder.as_view(), name="new-order"),
     path('price-list/<int:pk>/', views.price_list, name="price-list"),
     path('single-product/<int:pk>/', views.update_product, name="single-product"),    
     path('single-product/<int:pk>/create-product/', views.new_product, name="create-product"),

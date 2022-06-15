@@ -52,11 +52,7 @@
       <div class="modal-body">
         <p>Enter text:</p>
         <input type="text" id="txtInput">
-        
-        <hr>
-        
-        <hr>
-
+        <hr>       
         <table class="table table-bordered table-striped">
           <thead>
               <tr>
@@ -70,9 +66,9 @@
           <tbody>
               {% for symbol in symbols %}
               <tr>           
-                <td>{{ symbol.description }}</td>
-                <td>{{ symbol.acronym }}</td>
-                <td class="text-center"><img src="{{ symbol.symbol.url }}" alt="logo" style="width: 50px;"></td>        
+                <td class="align-middle">{{ symbol.description }}</td>
+                <td class="align-middle">{{ symbol.acronym }}</td>
+                <td class="text-center align-middle"><img src="{{ symbol.symbol.url }}" alt="logo" style="width: 50px;"></td>        
               </tr>
               {% endfor %}
               

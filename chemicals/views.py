@@ -11,15 +11,16 @@ from master_data.filters import SupplierFilter
 from .forms import (
     ChemicalModelForm, SdsModelForm, 
     SubstanceSdsModelForm,PrecautionaryStatementSdsModelForm, 
-    HazardStatementSdsModelForm,
-    DangerSymbolsSdsModelForm, 
+    HazardStatementSdsModelForm, DangerSymbolsSdsModelForm, 
+    ChemicalOrderModelForm,
     )
 
 from .models import (
     Chemicals, Prices, PricesManager, 
     Sds, ChemicalHazardStatements, Substances, 
     ChemicalsSubstances, ChemicalsPrecautionaryStatement, 
-    ChemicalDangerSymbols, DangerSymbols
+    ChemicalDangerSymbols, DangerSymbols,
+    ChemicalOrder, ChemicalOrderDetail,
     )
 #from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q, F
 from master_data.mixins import StaffMixin
@@ -27,7 +28,7 @@ from master_data.mixins import StaffMixin
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=1)
+    suppliers_list = Suppliers.objects.filter(category=3)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -330,3 +331,14 @@ def new_ds_sds(request, id, pk):
         'symbols': symbols
         }
     return render(request, "chemicals/ds_in_sds.html", context)
+
+
+class CreateOrder(CreateView):
+    model = ChemicalOrder
+    form_class = ChemicalOrderModelForm    
+    template_name = "chemicals/order.html"
+    #success_url = "chemicals/suppliers_list.html"
+    
+    def form_valid(self, form):        
+        self.success_url = self.request.POST.get('previous_page')
+        return super().form_valid(form)
