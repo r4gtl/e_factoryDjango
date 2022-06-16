@@ -139,9 +139,9 @@ class ChemicalOrderModelForm(forms.ModelForm):
         )
         widget = {
             'id_order': forms.HiddenInput(),
-            'n_order': forms.IntegerField(),
+            'n_order': forms.TextInput(),
             'id_supplier': forms.ChoiceField(),
-            'order_date': forms.DateField(),
+            'order_date': forms.DateInput(),
             'delivery_date': forms.DateField(),
             'notes': forms.Textarea(),
             'user_id': forms.CharField(),

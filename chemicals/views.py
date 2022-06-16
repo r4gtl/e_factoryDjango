@@ -176,8 +176,8 @@ def update_sds(request, id, pk):
         sds = get_object_or_404(Sds, pk=pk)
         print("Sds: " + str(sds.pk))
         chemical=get_object_or_404(Chemicals, pk=id)
-        print("Chemical: " + str(chemical))
-        #contacts = SuppliersContacts.objects.filter(id_supplier=pk)
+        
+        
         substances = ChemicalsSubstances.objects.filter(id_sds=sds.pk)
         precautionary_statements=ChemicalsPrecautionaryStatement.objects.filter(id_sds=pk)
         hazard_statements=ChemicalHazardStatements.objects.filter(id_sds=pk)
@@ -339,6 +339,14 @@ class CreateOrder(CreateView):
     template_name = "chemicals/order.html"
     #success_url = "chemicals/suppliers_list.html"
     
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        #context['order_detail'] = ChemicalOrderDetail.objects.filter(id_order=self.kwargs['id_order'])        
+        return context
+    
     def form_valid(self, form):        
         self.success_url = self.request.POST.get('previous_page')
         return super().form_valid(form)
+

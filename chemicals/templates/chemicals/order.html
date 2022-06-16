@@ -26,14 +26,57 @@
 
                       <div class="col-md-12 border rounded shadow-sm">
                         <div class="row">
-                          <div class="col-md-12">
-                            {{ form.id_order.as_hidden }}
-                            {{ form.id_dich_int.as_hidden }}
-                            {{ form.id_supplier|as_crispy_field }} 
-                            {{ form.n_order|as_crispy_field }}
-                            {{ form.order_date|as_crispy_field }}
-                          </div>
+                          
+                            <div class="col-md-1">
+                              {{ form.id_order.as_hidden }}
+                              {{ form.id_dich_int.as_hidden }}
+                              {{ form.n_order|as_crispy_field }}
+                            </div>
+                            <div class="col-md-3">
+                              {{ form.order_date|as_crispy_field }}
+                            </div>
+                            <div class="col-md-8">
+                              {{ form.id_supplier|as_crispy_field }} 
+                            </div>
+                            
+                          
                         </div>
+                        <hr>
+                        <p>Dettaglio Ordine</p>
+                        <!-- Detail Section -->
+                        <div class="row">
+                          <div class="col-md-8">
+                          
+                            <table class="table table-bordered table-striped">
+                              
+                              <thead>
+                                
+                                
+                                <tr>
+                                  <th class="text-center">Prodotto</th>
+                                  <th class="text-center">UM</th>
+                                  <th class="text-center">Quantità</th>
+                                  <th class="text-center">Aspetto dei beni</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for detail in order_detail %}
+                                <tr>  
+                                  
+                                  <td class="text-center"><a href="">{{ detail.id_chemical }}</a></td>
+                                  <td class="text-center">{{ detail.um }}</td>
+                                  <td class="text-center">{{ detail.quantity }}</td>
+                                  <td class="text-center">{{ detail.id_packaging_type }}</td>
+                                  
+                                </tr>  
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+
+
+                        </div>
+                        <!-- Detail Section -->
                         <div class="row">
                           <div class="col-md-12">                            
                             {{ form.delivery_date|as_crispy_field }} 
