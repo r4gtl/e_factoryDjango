@@ -119,7 +119,7 @@ class DangerSymbolsSdsModelForm(forms.ModelForm):
                 'id_danger': 'Simbolo di Pericolo'                
         }
 
-
+'''Sezione Ordini'''
 class ChemicalOrderModelForm(forms.ModelForm):
     class Meta:
         model = ChemicalOrder
@@ -152,15 +152,43 @@ class ChemicalOrderModelForm(forms.ModelForm):
             'id_dich_int': forms.HiddenInput()
         }
         labels = {
-                'n_order': 'Ordine N.',
-                'id_supplier': 'Fornitore',
-                'order_date': 'Data Ordine',
-                'delivery_date': 'Data Consegna',
-                'notes': 'Note',
-                'user_id': 'Redatto Da',
-                'conformity': 'Conforme',
-                'n_conformity': 'Non Conforme',
-                'n_conformity_reasons': 'Non Conformità',
-                'operator': 'Operatore'
+            'n_order': 'Ordine N.',
+            'id_supplier': 'Fornitore',
+            'order_date': 'Data Ordine',
+            'delivery_date': 'Data Consegna',
+            'notes': 'Note',
+            'user_id': 'Redatto Da',
+            'conformity': 'Conforme',
+            'n_conformity': 'Non Conforme',
+            'n_conformity_reasons': 'Non Conformità',
+            'operator': 'Operatore'
+        }
+
+class ChemicalOrderDetailModelForm(forms.ModelForm):
+    class Meta:
+        model = ChemicalOrderDetail
+        fields = (
+            'id_detail', 
+            'id_order', 
+            'id_chemical',
+            'um',
+            'quantity',
+            'id_packaging_type'
+            )
+
+        widget = {
+            'id_detail': forms.HiddenInput(),
+            'id_order': forms.HiddenInput(),
+            'id_chemical': forms.CharField(),
+            'um': forms.CharField(),
+            'quantity':forms.CharField(),
+            'id_packaging_type':forms.CharField()
+
+        }
+        labels = {                            
+            'id_chemical': 'Prodotto',
+            'um': 'Unità di Misura',
+            'quantity':'Quantità',
+            'id_packaging_type':'Aspetto dei beni'               
         }
         

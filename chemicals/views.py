@@ -2,9 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db import IntegrityError
 from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.list import ListView
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse, reverse_lazy
 from itertools import chain
+from django_filters.views import FilterView
 from master_data.models import Suppliers
 from master_data.forms import SupplierModelForm
 from master_data.filters import SupplierFilter
@@ -12,7 +14,7 @@ from .forms import (
     ChemicalModelForm, SdsModelForm, 
     SubstanceSdsModelForm,PrecautionaryStatementSdsModelForm, 
     HazardStatementSdsModelForm, DangerSymbolsSdsModelForm, 
-    ChemicalOrderModelForm,
+    ChemicalOrderModelForm, ChemicalOrderDetailModelForm,
     )
 
 from .models import (
@@ -22,6 +24,8 @@ from .models import (
     ChemicalDangerSymbols, DangerSymbols,
     ChemicalOrder, ChemicalOrderDetail,
     )
+
+from .filters import OrderFilter
 #from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q, F
 from master_data.mixins import StaffMixin
 
@@ -106,7 +110,7 @@ def delete_product(request, pk):
     return render(request, "confirm_delete.html", context)
 
 
-'''Schede di sicurezza'''
+'''Sezione Schede di sicurezza'''
 
 def new_sds(request,pk):
     '''ATTENZIONE!!! LE VOCI DEVONO ESSERE COLLEGATE ALL'ID SCHEDA!!!'''
@@ -333,6 +337,21 @@ def new_ds_sds(request, id, pk):
     return render(request, "chemicals/ds_in_sds.html", context)
 
 
+'''Fine Sezione Schede di sicurezza'''
+
+
+
+'''Sezione Ordini'''
+'''In questa sezione ci sono tutte le views per gestire gli ordini di prodotti chimici'''
+
+class OrderList(FilterView):
+    '''Ottenere un elenco degli ordini con filtraggio'''
+    queryset = ChemicalOrder.objects.all().order_by('-order_date')
+    template_name = "chemicals/orders_list.html"
+    filterset_class = OrderFilter
+    context_object_name = "order_list"
+
+
 class CreateOrder(CreateView):
     model = ChemicalOrder
     form_class = ChemicalOrderModelForm    
@@ -349,4 +368,17 @@ class CreateOrder(CreateView):
     def form_valid(self, form):        
         self.success_url = self.request.POST.get('previous_page')
         return super().form_valid(form)
+
+class CreateDetail(CreateView):
+    model = ChemicalOrderDetail
+    form_class = ChemicalOrderDetailModelForm    
+    template_name = "chemicals/order_detail.html"
+    
+    
+    def form_valid(self, form):        
+        self.success_url = self.request.POST.get('previous_page')
+        return super().form_valid(form)
+
+
+'''Fine Sezione Ordini'''
 

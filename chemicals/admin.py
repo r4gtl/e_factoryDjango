@@ -2,7 +2,8 @@ from django.contrib import admin
 from .models import (
     Chemicals, Operations, Svhc, 
     PrecautionaryStatements, HazardStatements, Prices, 
-    RegReach, Sds, DangerSymbols
+    RegReach, Sds, DangerSymbols,
+    ChemicalOrder, ChemicalOrderDetail,
     )
                     
 
@@ -58,8 +59,28 @@ class DangerSymbolsModelAdmin(admin.ModelAdmin):
         "symbol",         
         ]
 
+class ChemicalOrderModelAdmin(admin.ModelAdmin):
+    model = ChemicalOrder
+    list_display = [
+        "id_order", 
+        "n_order", 
+        "id_supplier", 
+        "order_date",         
+        "delivery_date",
+        ]
+    search_fields = ["n_order"]
 
 
+class ChemicalOrderDetailModelAdmin(admin.ModelAdmin):
+    model = ChemicalOrderDetail
+    list_display = [
+        "id_detail", 
+        "id_order", 
+        "id_chemical", 
+        "um",         
+        "quantity",
+        ]
+    search_fields = ["id_order"]
 
 admin.site.register(Chemicals, ChemicalsModelAdmin)
 admin.site.register(Operations, OperationsModelAdmin)
@@ -70,6 +91,8 @@ admin.site.register(Prices, PricesModelAdmin)
 admin.site.register(RegReach, RegReachModelAdmin)
 admin.site.register(Sds, SdsModelAdmin)
 admin.site.register(DangerSymbols, DangerSymbolsModelAdmin)
+admin.site.register(ChemicalOrder, ChemicalOrderModelAdmin)
+admin.site.register(ChemicalOrderDetail, ChemicalOrderDetailModelAdmin)
 
 
 

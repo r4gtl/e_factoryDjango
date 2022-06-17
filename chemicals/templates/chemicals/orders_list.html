@@ -1,0 +1,66 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% load crispy_forms_tags %} 
+{% load widget_tweaks %}
+{% block head_title %}{{ block.super }} - Elenco Ordini{% endblock head_title %} 
+{% block content %}
+
+<div class="container">
+    <br>
+    <h5 class="text-end">Elenco Ordini</h5>
+    <hr>
+    <br>
+    <a class="btn btn-sm btn-outline-success mb-2" href="{% url 'chemicals:new-order' %}">Nuovo Ordine</a>
+    <!-- filtro -->
+    <div class="row">
+        <div class="col">
+            <div class="card card-body">
+                <form method="get">
+    
+                    <div class="table-responsive-sm">
+                        <table class="table table-hover table-striped table-bordered">
+                            <thead class="thead-dark">
+                                <tr>     
+                                    <th>Ordine</th>
+                                    <th>Fornitore</th>                                    
+                                </tr>
+                            </thead>                            
+                            <tbody>
+                                <tr>
+                                    <td style="width: 20%">{{ filter.form.n_ordine|as_crispy_field }}</td>                                    
+                                    <td style="width: 20%">{{ filter.form.supplier|as_crispy_field }}</td>                                
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Cerca</button>
+                </form>        
+            </div>
+        </div>        
+    </div>
+    <!-- fine filtro-->
+
+
+    <table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+        <th>Numero Ordine</th>
+        <th>Data Ordine</th>
+        <th>Fornitore</th>
+        
+        
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in order_list %}
+        <tr>           
+        <td><a href="">{{ order.n_order }}</a></td>        
+        <td>{{ order.order_date }}</td>
+        <td>{{ order.id_supplier }}</td>        
+        {% endfor %}
+        
+    </tbody>
+    </table>
+</div>
+
+{% endblock content %}
