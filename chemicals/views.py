@@ -357,6 +357,7 @@ class CreateOrder(CreateView):
     form_class = ChemicalOrderModelForm    
     template_name = "chemicals/order.html"
     #success_url = "chemicals/suppliers_list.html"
+    context_object_name = 'order'
     
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -373,10 +374,34 @@ class CreateDetail(CreateView):
     model = ChemicalOrderDetail
     form_class = ChemicalOrderDetailModelForm    
     template_name = "chemicals/order_detail.html"
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        
+        context['chemicals'] = Chemicals.objects.filter(id_supplier=self.kwargs['id_supplier'])        
+        return context
     
     
     def form_valid(self, form):        
         self.success_url = self.request.POST.get('previous_page')
+        return super().form_valid(form)
+
+class UpdateOrder(UpdateView):
+    model = ChemicalOrder
+    form_class = ChemicalOrderModelForm
+    template_name = "chemicals/order.html"
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books             
+        return context
+    
+    def form_valid(self, form):        
+        self.success_url = self.request.POST.get('previous_page')
+        
         return super().form_valid(form)
 
 
