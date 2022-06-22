@@ -175,11 +175,12 @@ class ChemicalOrderDetailModelForm(forms.ModelForm):
             'quantity',
             'id_packaging_type'
             )
+        
 
         widget = {
             'id_detail': forms.HiddenInput(),
             'id_order': forms.HiddenInput(),
-            'id_chemical': forms.CharField(),
+            'id_chemical': forms.CharField(),            
             'um': forms.CharField(),
             'quantity':forms.CharField(),
             'id_packaging_type':forms.CharField()

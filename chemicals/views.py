@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db import IntegrityError
 from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse, reverse_lazy
@@ -380,7 +381,10 @@ class CreateDetail(CreateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books        
-        context['chemical_list'] = Chemicals.objects.filter(id_supplier=CreateOrder.get_context_data)
+        context['chemical_list'] = Chemicals.objects.filter(id_supplier=self.request.GET.get('order.id_supplier'))
+        result = self.request.GET[CreateDetail]
+        print(result)
+        print("Context: " + str(context['chemical_list']))
         return context
     
     
