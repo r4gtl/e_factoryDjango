@@ -235,6 +235,13 @@ class ChemicalOrder(models.Model):
     operator = models.CharField(max_length=50, blank=True, null=True)
     id_dich_int = models.IntegerField(blank=True, null=True)
 
+
+    '''Recupero l'elenco di prodotti chimici per Fornitore'''
+    def get_chemical_list(self):
+        chemical_object = Chemicals.objects.filter(id_supplier=self.id_supplier)  
+        print("Chemical List:" + str(chemical_object))
+        return chemical_object 
+
     class Meta:
         verbose_name = "Order"
         verbose_name_plural = "Orders"

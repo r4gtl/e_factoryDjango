@@ -69,8 +69,8 @@
                             </table>
                           </div>
                           <div class="col-md-4">
-                            {% if form.instance.id_order  %}
-                            <a class="btn btn-sm btn-outline-success mb-2" href="{% url 'chemicals:add-detail' pk=order.pk %}">Aggiungi</a>
+                            {% if form.instance.pk  %}
+                            <a class="btn btn-sm btn-outline-success mb-2" href="{% url 'chemicals:add-detail' pk=order_instance.pk %}">Aggiungi</a>
                             {% else %}
                                 <a class="btn btn-sm btn-outline-success mb-2" disabled>Salvare per inserire</a>
                             {% endif %}

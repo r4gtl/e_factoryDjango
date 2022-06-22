@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
+
 # Create your models here.
 
 class SuppliersCategories(models.Model):
@@ -34,6 +35,7 @@ class Suppliers(models.Model):
     #standard data
     vat_perc = models.ForeignKey('VatCodes', on_delete=models.DO_NOTHING,  blank=True, null=True)
 
+    
         
     def __str__(self):
         return self.company_name
