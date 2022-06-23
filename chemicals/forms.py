@@ -165,6 +165,15 @@ class ChemicalOrderModelForm(forms.ModelForm):
         }
 
 class ChemicalOrderDetailModelForm(forms.ModelForm):
+
+     
+    def __init__(self, *args, **kwargs):
+        super(ChemicalOrderDetailModelForm, self).__init__(*args, **kwargs)
+        # access object through self.instance...
+        print(self.instance.pk)
+        #self.fields['id_chemical'].choices = groupChoices_
+        #self.fields['id_chemical'].queryset = Chemicals.objects.filter(id_supplier=self.instance.id_detail.id_order.id_supplier)
+
     class Meta:
         model = ChemicalOrderDetail
         fields = (
@@ -180,7 +189,7 @@ class ChemicalOrderDetailModelForm(forms.ModelForm):
         widget = {
             'id_detail': forms.HiddenInput(),
             'id_order': forms.HiddenInput(),
-            'id_chemical': forms.CharField(),            
+            'id_chemical': forms.ChoiceField(),            
             'um': forms.CharField(),
             'quantity':forms.CharField(),
             'id_packaging_type':forms.CharField()
@@ -192,4 +201,6 @@ class ChemicalOrderDetailModelForm(forms.ModelForm):
             'quantity':'Quantità',
             'id_packaging_type':'Aspetto dei beni'               
         }
+
+        
         

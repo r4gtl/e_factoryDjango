@@ -373,24 +373,32 @@ class CreateOrder(CreateView):
 
 class CreateDetail(CreateView):
     model = ChemicalOrderDetail
-    form_class = ChemicalOrderDetailModelForm    
+    
+    form_class = ChemicalOrderDetailModelForm()   
     template_name = "chemicals/order_detail.html"
     #success_url="chemicals/order.html"
+
+
+    def get_object(self):
+        '''Mi prendo l'istanza dell'Ordine dalla pagina che sto lasciando'''
+        pk = self.kwargs.get('pk')
+        order_instance = get_object_or_404(ChemicalOrder, pk=pk)        
+        return order_instance
+
+    
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books        
-        context['chemical_list'] = Chemicals.objects.filter(id_supplier=self.request.GET.get('order.id_supplier'))
-        result = self.request.GET[CreateDetail]
-        print(result)
-        print("Context: " + str(context['chemical_list']))
+        # Mi prendo l'elenco dei prodotti acquistati dal fornitore dell'ordine        
+        context['chemical_list'] = Chemicals.objects.filter(id_supplier=self.get_object().pk)        
+        print("Context: " + str(context['chemical_list']))        
         return context
-    
-    
+
     def form_valid(self, form):        
         self.success_url = self.request.POST.get('previous_page')
         return super().form_valid(form)
+
 
 class UpdateOrder(UpdateView):
     model = ChemicalOrder
