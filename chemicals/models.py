@@ -236,11 +236,7 @@ class ChemicalOrder(models.Model):
     id_dich_int = models.IntegerField(blank=True, null=True)
 
 
-    '''Recupero l'elenco di prodotti chimici per Fornitore'''
-    def get_chemical_list(self):
-        chemical_object = Chemicals.objects.filter(id_supplier=self.id_supplier)  
-        print("Chemical List:" + str(chemical_object))
-        return chemical_object 
+    
 
     class Meta:
         verbose_name = "Order"
@@ -258,5 +254,10 @@ class ChemicalOrderDetail(models.Model):
     id_packaging_type=models.ForeignKey(ChemicalsPackagingType, on_delete = models.DO_NOTHING)
 
     
-    
+    '''Recupero l'elenco di prodotti chimici per Fornitore'''
+    def get_chemical_list(self):
+        order = ChemicalOrder.objects.get(id_order=self.id_order)
+        chemical_object = Chemicals.objects.filter(id_supplier=order.id_supplier)  
+        print("Chemical List:" + str(chemical_object))
+        return chemical_object 
     

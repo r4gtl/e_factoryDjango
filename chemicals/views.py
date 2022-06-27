@@ -374,7 +374,7 @@ class CreateOrder(CreateView):
 class CreateDetail(CreateView):
     model = ChemicalOrderDetail
     
-    form_class = ChemicalOrderDetailModelForm()   
+    form_class = ChemicalOrderDetailModelForm
     template_name = "chemicals/order_detail.html"
     #success_url="chemicals/order.html"
 
@@ -395,7 +395,8 @@ class CreateDetail(CreateView):
         print("Context: " + str(context['chemical_list']))        
         return context
 
-    def form_valid(self, form):        
+    def form_valid(self, form): 
+               
         self.success_url = self.request.POST.get('previous_page')
         return super().form_valid(form)
 
@@ -411,7 +412,7 @@ class UpdateOrder(UpdateView):
         # Add in a QuerySet of all the books   
         # 
         context['order_instance'] = ChemicalOrder.objects.get(id_order=self.kwargs['pk'])            
-                 
+        print(context)
         return context
     
     def form_valid(self, form):        
