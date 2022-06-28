@@ -3,9 +3,15 @@ from .models import (
     Chemicals, Operations, Svhc, 
     PrecautionaryStatements, HazardStatements, Prices, 
     RegReach, Sds, DangerSymbols,
-    ChemicalOrder, ChemicalOrderDetail,
+    ChemicalOrder, ChemicalOrderDetail,ChemicalsPackagingType,
+
     )
                     
+class ChemicalsPackagingTypeModelAdmin(admin.ModelAdmin):
+    model = ChemicalsPackagingType
+    list_display = ["description", "kg"]
+    search_fields = ["description"]
+
 
 class ChemicalsModelAdmin(admin.ModelAdmin):
     model = Chemicals
@@ -93,6 +99,7 @@ admin.site.register(Sds, SdsModelAdmin)
 admin.site.register(DangerSymbols, DangerSymbolsModelAdmin)
 admin.site.register(ChemicalOrder, ChemicalOrderModelAdmin)
 admin.site.register(ChemicalOrderDetail, ChemicalOrderDetailModelAdmin)
+admin.site.register(ChemicalsPackagingType, ChemicalsPackagingTypeModelAdmin)
 
 
 

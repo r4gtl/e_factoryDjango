@@ -164,15 +164,7 @@ class ChemicalOrderModelForm(forms.ModelForm):
             'operator': 'Operatore'
         }
 
-class ChemicalOrderDetailModelForm(forms.ModelForm):
-
-     
-    def __init__(self, *args, **kwargs):
-        super(ChemicalOrderDetailModelForm, self).__init__(*args, **kwargs)
-        # access object through self.instance...
-        print(self.instance.pk)
-        #self.fields['id_chemical'].choices = groupChoices_
-        #self.fields['id_chemical'].queryset = Chemicals.objects.filter(id_supplier=self.instance.id_detail.id_order.id_supplier)
+class ChemicalOrderDetailModelFormOld(forms.ModelForm):
 
     class Meta:
         model = ChemicalOrderDetail
@@ -203,4 +195,38 @@ class ChemicalOrderDetailModelForm(forms.ModelForm):
         }
 
         
-        
+
+class ChemicalOrderDetailModelForm(forms.ModelForm):
+    class Meta:
+        model = ChemicalOrderDetail
+        fields = (
+            'id_detail', 
+            'id_order', 
+            'id_chemical',
+            'um',
+            'quantity',
+            'id_packaging_type'
+            )
+        widget = {
+            'id_detail': forms.HiddenInput(),
+            'id_order': forms.HiddenInput(),
+            #'id_chemical': forms.ChoiceField(),            
+            'um': forms.CharField(),
+            'quantity':forms.CharField(),
+            'id_packaging_type':forms.CharField()
+
+        }
+        labels = {                            
+            'id_chemical': 'Prodotto',
+            'um': 'Unità di Misura',
+            'quantity':'Quantità',
+            'id_packaging_type':'Aspetto dei beni'               
+        }
+    '''
+    Con questa parte inizializzo la choicefield popolandolo con i soli 
+    prodotti chimici del fornitore dell'ordine (vedi anche la view create_detail)
+    '''
+    def __init__(self, id_supplier, id_order, *args, **kwargs):
+        super(ChemicalOrderDetailModelForm, self).__init__(*args, **kwargs)
+        self.fields['id_chemical'].queryset = Chemicals.objects.filter(id_supplier=id_supplier)
+        self.fields['id_order']=id_order

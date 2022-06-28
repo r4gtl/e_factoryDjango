@@ -371,6 +371,7 @@ class CreateOrder(CreateView):
         self.success_url = self.request.POST.get('previous_page')
         return super().form_valid(form)
 
+'''
 class CreateDetail(CreateView):
     model = ChemicalOrderDetail
     
@@ -380,7 +381,7 @@ class CreateDetail(CreateView):
 
 
     def get_object(self):
-        '''Mi prendo l'istanza dell'Ordine dalla pagina che sto lasciando'''
+        #Mi prendo l'istanza dell'Ordine dalla pagina che sto lasciando
         pk = self.kwargs.get('pk')
         order_instance = get_object_or_404(ChemicalOrder, pk=pk)        
         return order_instance
@@ -399,6 +400,35 @@ class CreateDetail(CreateView):
                
         self.success_url = self.request.POST.get('previous_page')
         return super().form_valid(form)
+'''
+
+def create_detail(request,pk):
+    order=ChemicalOrder.objects.get(id_order=pk)
+    print(order.pk)
+    print("Ordine: " + str(order.pk))
+    supplier=get_object_or_404(Suppliers, pk=order.id_supplier.pk)  
+    form= ChemicalOrderDetailModelForm(supplier.pk, order.pk)
+    if request.method == 'POST':
+        print("Request: POST")
+        form = ChemicalOrderDetailModelForm(supplier.pk, order.pk, request.POST)
+        
+        if form.is_valid():
+            print("Valido")
+            form.save(commit=False)
+            #form.id_order = order.pk
+            form.save()
+            url_hs = reverse("chemicals:add-detail", kwargs={"id_order": order.id_order})
+
+            return HttpResponseRedirect(url_hs)
+    else:
+        form = ChemicalOrderDetailModelForm(supplier.pk, order.pk)
+    context={
+        'order': order, 
+        'form': form,
+        'supplier': supplier        
+        }
+    return render(request, 'chemicals/order_detail.html', context)
+
 
 
 class UpdateOrder(UpdateView):

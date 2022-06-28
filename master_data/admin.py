@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Suppliers, VatCodes, SuppliersCategories, SuppliersContacts
+from .models import (
+    Suppliers, 
+    VatCodes, 
+    SuppliersCategories, 
+    SuppliersContacts    
+)
 
 
 class SupplierModelAdmin(admin.ModelAdmin):
