@@ -248,7 +248,7 @@ class ChemicalOrderDetail(models.Model):
     id_order=models.ForeignKey(ChemicalOrder, on_delete = models.CASCADE)
     id_chemical=models.ForeignKey(Chemicals, on_delete = models.CASCADE)
     um=models.CharField(max_length=3)
-    quantity=models.DecimalField(max_digits=6, decimal_places=2)
+    quantity=models.FloatField()
     id_packaging_type=models.ForeignKey(ChemicalsPackagingType, on_delete = models.DO_NOTHING)
 
     

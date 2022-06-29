@@ -26,11 +26,17 @@
                       <div class="col-md-12 border rounded shadow-sm">
                         <div class="row">
                           
-                            <div class="col-md-1">
+                            <div class="col-md-4">
                               {{ form.id_order.as_hidden }}
                               {{ form.id_chemical|as_crispy_field }}
+                            </div>  
+                            <div class="col-md-2">
                               {{ form.um|as_crispy_field }}
+                            </div>
+                            <div class="col-md-3">
                               {{ form.quantity|as_crispy_field }}
+                            </div>
+                            <div class="col-md-3">
                               {{ form.id_packaging_type|as_crispy_field }}
                             </div>
                         </div>
