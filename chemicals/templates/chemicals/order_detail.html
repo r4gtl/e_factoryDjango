@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
+{% block scripts %}
+    
+{% endblock scripts %}
+
 {% block head_title %}{{ block.super }} - Crea/Modifica Ordine{% endblock head_title %}
 
 {% block content %}
@@ -40,8 +44,21 @@
                               {{ form.id_packaging_type|as_crispy_field }}
                             </div>
                         </div>
+                        
+
+                        
+
+                    </div>
+                      </div>
+
+        <!-- fine form -->
+        </form>
+
+    </div>
+    <!-- inizio lista recenti -->
+    <button class="btn btn-primary" id="load-btn">Vedi recenti</button>
                         <hr>
-                        <p>Dettaglio Ordine</p>
+                        <p>Ordini Precedenti</p>
                         <!-- Detail Section -->
                         <div class="row">
                           <div class="col-md-8">                          
@@ -68,23 +85,53 @@
                           </div>
                           
 
-                        </div>
-
-                        
-
-                    </div>
-                      </div>
-
-        <!-- fine form -->
-        </form>
-
-    </div>
+                        </div> <!-- fine lista recenti -->
 
     </div>
     
 <script>
     prev = document.getElementById("previous_page");
     prev.value = document.referrer;
+
+const loadBtn = document.getElementById('load-btn')
+const url = window.location.href + "data/"
+
+console.log('Hello World')
+
+
+
+const getData = () => {
+  let idchem=document.querySelector('#id_id_chemical').value
+    $.ajax({
+        type: 'GET',        
+        url: `/chemicals/data/${idchem}/`,
+        
+        
+        success: function(response){
+            const data = response.data
+            console.log('Hello World ce l\'hai fatta')
+            console.log(response)
+        },
+        error: function(error){
+          console.log("errore")
+          console.log(error)
+          console.log(response)
+        }
+        
+    })
+}
+
+
+loadBtn.addEventListener('click', ()=>{
+    
+    let idchem=document.querySelector('#id_id_chemical').value
+    console.log('Hello World da pulsante')
+    console.log(idchem)
+    getData()
+})
+
+
+getData()
 </script>
 
 {% endblock content %}

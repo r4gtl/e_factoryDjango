@@ -19,5 +19,9 @@ urlpatterns = [
     path('update-sds/<int:pk>/new-ps-sds/', views.new_ps_sds, name="new-ps-sds"),
     path('update-sds/<int:pk>/new-hs-sds/', views.new_hs_sds, name="new-hs-sds"),
     path('single-product/<int:id>/update-sds/<int:pk>/new-ds-sds/', views.new_ds_sds, name="new-ds-sds"),
+
+    path('data/<int:id_chemical>/', views.load_last_orders_view, name='last-orders' ),
+    
+    
     
 ]

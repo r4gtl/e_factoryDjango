@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.urls import reverse, reverse_lazy
 from itertools import chain
 from django_filters.views import FilterView
@@ -408,6 +408,7 @@ def create_detail(request,pk):
     order=ChemicalOrder.objects.get(id_order=pk)
     print(order)
     print("Ordine: " + str(order.pk))
+    
     supplier=get_object_or_404(Suppliers, pk=order.id_supplier.pk)  
     form= ChemicalOrderDetailModelForm(supplier.pk, order)
     if request.method == 'POST':
@@ -432,6 +433,23 @@ def create_detail(request,pk):
         'supplier': supplier        
         }
     return render(request, 'chemicals/order_detail.html', context)
+
+def load_last_orders_view(request, id_chemical):
+    qs = ChemicalOrderDetail.objects.filter(id_chemical=id_chemical)
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        data=[]
+        for obj in qs:
+            item = {
+                'id_detail': obj.id_detail,
+                'id_order': obj.id_order.pk,
+                'id_chemical': obj.id_chemical.pk,
+                'um': obj.um,
+                'quantity': obj.quantity,
+                'id_packaging_type': obj.id_packaging_type.pk
+            }
+            data.append(item)
+        print(data)
+        return JsonResponse({'data': data})
 
 
 
