@@ -441,14 +441,14 @@ def load_last_orders_view(request, id_chemical):
         for obj in qs:
             item = {
                 'id_detail': obj.id_detail,
-                'id_order': obj.id_order.pk,
-                'id_chemical': obj.id_chemical.pk,
+                'id_order': obj.id_order.n_order,
+                'order_date':obj.id_order.order_date,
+                'id_chemical': obj.id_chemical.description,
                 'um': obj.um,
                 'quantity': obj.quantity,
-                'id_packaging_type': obj.id_packaging_type.pk
+                'id_packaging_type': obj.id_packaging_type.description
             }
-            data.append(item)
-        print(data)
+            data.append(item)        
         return JsonResponse({'data': data})
 
 
