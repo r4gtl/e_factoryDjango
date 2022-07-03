@@ -34,7 +34,7 @@ from master_data.mixins import StaffMixin
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=3)
+    suppliers_list = Suppliers.objects.filter(category=2)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -77,19 +77,19 @@ class CreateProduct(StaffMixin, CreateView):
 
 def new_product(request,pk):
     supplier = get_object_or_404(Suppliers, pk=pk)
+    
     form = ChemicalModelForm(instance=supplier)
     if request.method == "POST":
-        form = ChemicalModelForm(request.POST)
-        if form.is_valid():
-            form.save(commit=False)
-            form.instance.id_supplier = supplier
+        form = ChemicalModelForm(request.POST)        
+        if form.is_valid():            
+            form.save(commit=False)            
+            form.instance.id_supplier = supplier            
             form.save()
 
-            url_chemical = reverse("chemicals:price-list", kwargs={"pk": pk})
-            print(url_chemical)
+            url_chemical = reverse("chemicals:price-list", kwargs={"pk": pk})            
 
             return HttpResponseRedirect(url_chemical)
-        else:            
+        else:                       
             return HttpResponseBadRequest()
     
     context={'supplier': supplier, 'form': form}
@@ -361,17 +361,22 @@ class CreateOrder(CreateView):
     #success_url = "chemicals/suppliers_list.html"
     context_object_name = 'order'
     
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['order_detail'] = ChemicalOrderDetail.objects.filter(id_order=self.kwargs['pk'])
-        context['order_instance'] = ChemicalOrder.objects.get(id_order=self.kwargs['id_order'])               
-        return context
-    
     def form_valid(self, form):        
         self.success_url = self.request.POST.get('previous_page')
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        print(context)
+        # Add in a QuerySet of all the books
+        if self.request=='GET':
+            context['order_detail'] = ChemicalOrderDetail.objects.filter(id_order=self.kwargs['id_order'])
+            print(context['order_detail'])
+            context['order_instance'] = ChemicalOrder.objects.get(id_order=self.kwargs['id_order'])               
+        return context
+    
+    
 
 '''
 class CreateDetail(CreateView):

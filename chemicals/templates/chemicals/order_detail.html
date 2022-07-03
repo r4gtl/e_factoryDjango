@@ -100,6 +100,7 @@
 
 
 const loadBtn = document.getElementById('load-btn')
+const choiceProd = document.getElementById('div_id_id_chemical')
 const url = window.location.href + "data/"
 const recentBox = document.getElementById('recent-box')
 
@@ -144,8 +145,15 @@ const getData = () => {
 
 loadBtn.addEventListener('click', ()=>{
     
-    let idchem=document.querySelector('#id_id_chemical').value    
-    getData()
+  let idchem=document.querySelector('#id_id_chemical').value    
+  getData()
+})
+
+choiceProd.addEventListener('change', ()=>{
+  console.log("Eccoci")
+  let idchem=document.querySelector('#div_id_id_chemical').value
+  console.log(idchem)    
+  getData()
 })
 
 

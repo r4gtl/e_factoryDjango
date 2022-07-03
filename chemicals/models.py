@@ -23,7 +23,7 @@ class Chemicals(models.Model):
     cov = models.DecimalField(max_digits=6, decimal_places=2,blank=False, null=False, default=0)
     tanning = models.BooleanField(default=False)
     finishing = models.BooleanField(default=False)
-    notes = models.TextField()
+    notes = models.TextField(blank=True, null=True)
     flamability_status = models.IntegerField(choices=FLAMABILITY_STATUS, default=4)
 
     def __str__(self):
