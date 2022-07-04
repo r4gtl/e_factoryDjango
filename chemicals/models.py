@@ -29,7 +29,8 @@ class Chemicals(models.Model):
     def __str__(self):
         return self.description
 
-    '''Recupero l'ultimo prezzo del prodotto chimico'''
+    '''Recupero l'ultimo prezzo del prodotto chimico'''  
+    @classmethod
     def get_price(self):
         price_object = Prices.objects.all()        
         partial_qs=price_object.values('id_chemical').annotate(latest_price=Max('price_date'))
