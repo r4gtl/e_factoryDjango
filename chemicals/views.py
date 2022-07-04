@@ -463,8 +463,8 @@ def load_chemicals_to_search(request, id_supplier):
         for obj in qs:
             item = {
                 'id_chemical': obj.id_chemical,
-                'id_supplier': obj.id_supplier,
-                'description':obj.description,                
+                'id_supplier': obj.id_supplier.company_name,
+                'description': obj.id_chemical,                
             }
             data.append(item)        
         return JsonResponse({'data': data})

@@ -217,14 +217,14 @@ const getDataChemicals = () => {
         success: function(response){
             const data = response.data
             console.log('Hello World ce l\'hai fatta')
-            
+            console.log(response)
             $(chemList).empty()
             for (var i = 0; i < data.length; i++){
                 var row = `
                 <tr>  
                 <td class="text-center"><a href="">${data[i].id_chemical}</a></td>
                 <td class="text-center">${data[i].id_supplier}</td>
-                <td class="text-center">${data[i].description}</td>                
+                <td class="text-center">${data[i].id_chemical}</td>                
                 </tr>  
                 `
             chemList.innerHTML+=row
