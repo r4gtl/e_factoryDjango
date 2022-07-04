@@ -18,9 +18,7 @@
     <link rel="stylesheet" href="{% static 'css/colors.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <!-- <link rel="stylesheet" href="{% static 'css/agora.css' %}" /> -->
-    {% block scripts %}
-
-    {% endblock scripts %}
+    
     
     <title>{% block head_title %}E_factory - Homepage {% endblock head_title %}</title>
 </head>
@@ -103,6 +101,9 @@
         
 
     </script>
+{% block scripts %}
+
+{% endblock scripts %}
 </body>
 
 </html>

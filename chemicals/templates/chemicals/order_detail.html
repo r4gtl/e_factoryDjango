@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block scripts %}
-    
-{% endblock scripts %}
+
 
 {% block head_title %}{{ block.super }} - Crea/Modifica Ordine{% endblock head_title %}
 
@@ -11,8 +9,9 @@
 
     <div class="container">
       <br>
-      <h5 class="text-end">Ordine {{ supplier.id_supplier }}</h5>
-  
+      <h5 class="text-end">Ordine {{ supplier }}</h5>
+      <h5 class="text-end hidden" id="supplier">{{ supplier.id_supplier }}</h5>
+      
       <hr>
       <br>
 
@@ -33,6 +32,55 @@
                             <div class="col-md-4">
                               {{ form.id_order.as_hidden }}
                               {{ form.id_chemical|as_crispy_field }}
+                              <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary" id="load-modal" data-bs-toggle="modal" data-bs-target="#SearchChemModal">
+                                  Launch demo modal
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="SearchChemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                      </div>
+                                      <div class="modal-body" id="">
+                                        <div class="row" >
+                                          <div class="col-md-8" >                          
+                                            <table class="table table-bordered table-striped">                              
+                                              <thead>   
+                                                <tr>
+                                                  <th class="text-center">Chemical</th>
+                                                  <th class="text-center">Supplier</th>
+                                                  <th class="text-center">Sov</th>
+                                                  
+                                                </tr>
+                                              </thead>
+                                              <tbody id="chem-list">
+                                                <!-- {% for detail in order_detail %}
+                                                <tr >  
+                                                  <td class="text-center"><a href="">{{ detail.id_chemical }}</a></td>
+                                                  <td class="text-center">{{ detail.um }}</td>
+                                                  <td class="text-center">{{ detail.quantity }}</td>
+                                                  <td class="text-center">{{ detail.id_packaging_type }}</td>
+                                                </tr>  
+                                                {% endfor %} -->
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                          
+                
+                                        </div> <!-- fine lista recenti -->
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- Fine -->
                             </div>  
                             <div class="col-md-2">
                               {{ form.um|as_crispy_field }}
@@ -80,8 +128,8 @@
                                   <td class="text-center">{{ detail.um }}</td>
                                   <td class="text-center">{{ detail.quantity }}</td>
                                   <td class="text-center">{{ detail.id_packaging_type }}</td>
-                                </tr>   -->
-                                {% endfor %}
+                                </tr>  
+                                {% endfor %} -->
                               </tbody>
                             </table>
                           </div>
@@ -90,8 +138,10 @@
                         </div> <!-- fine lista recenti -->
 
     </div>
+    {% endblock content %}
+    {% block scripts %}
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script>
     prev = document.getElementById("previous_page");
     prev.value = document.referrer;
@@ -101,12 +151,10 @@
 
 const loadBtn = document.getElementById('load-btn')
 const choiceProd = document.getElementById('div_id_id_chemical')
+const loadModal = document.getElementById('load-modal')
 const url = window.location.href + "data/"
 const recentBox = document.getElementById('recent-box')
-
-console.log('Hello World')
-
-
+const chemList = document.getElementById('chem-list')
 
 const getData = () => {
     let idchem=document.querySelector('#id_id_chemical').value
@@ -149,15 +197,58 @@ loadBtn.addEventListener('click', ()=>{
   getData()
 })
 
+
 choiceProd.addEventListener('change', ()=>{
-  console.log("Eccoci")
-  let idchem=document.querySelector('#div_id_id_chemical').value
-  console.log(idchem)    
+  console.log("Eccoci")    
   getData()
 })
 
 
 getData()
-</script>
 
-{% endblock content %}
+const getDataChemicals = () => {
+    let idsup=document.getElementById('supplier').innerText
+    console.log("supplier" + idsup)
+    $.ajax({
+        type: 'GET',        
+        url: `/chemicals/chemlist/${idsup}/`,
+        
+        
+        success: function(response){
+            const data = response.data
+            console.log('Hello World ce l\'hai fatta')
+            
+            $(chemList).empty()
+            for (var i = 0; i < data.length; i++){
+                var row = `
+                <tr>  
+                <td class="text-center"><a href="">${data[i].id_chemical}</a></td>
+                <td class="text-center">${data[i].id_supplier}</td>
+                <td class="text-center">${data[i].description}</td>                
+                </tr>  
+                `
+            chemList.innerHTML+=row
+        }},
+        error: function(error){
+        
+        console.log(error)
+        
+        }
+        
+    })
+}
+
+
+
+loadModal.addEventListener('click', ()=>{
+    
+  let idsup=document.getElementById('#supplier')
+    getDataChemicals()
+  })
+
+getDataChemicals()
+
+
+</script>
+{% endblock scripts %}
+

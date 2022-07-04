@@ -440,7 +440,7 @@ def create_detail(request,pk):
     return render(request, 'chemicals/order_detail.html', context)
 
 def load_last_orders_view(request, id_chemical):
-    qs = ChemicalOrderDetail.objects.filter(id_chemical=id_chemical)
+    qs = ChemicalOrderDetail.objects.filter(id_chemical=id_chemical)    
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data=[]
         for obj in qs:
@@ -452,6 +452,19 @@ def load_last_orders_view(request, id_chemical):
                 'um': obj.um,
                 'quantity': obj.quantity,
                 'id_packaging_type': obj.id_packaging_type.description
+            }
+            data.append(item)        
+        return JsonResponse({'data': data})
+
+def load_chemicals_to_search(request, id_supplier):
+    qs = Chemicals.objects.filter(id_supplier=id_supplier)    
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        data=[]
+        for obj in qs:
+            item = {
+                'id_chemical': obj.id_chemical,
+                'id_supplier': obj.id_supplier,
+                'description':obj.description,                
             }
             data.append(item)        
         return JsonResponse({'data': data})
