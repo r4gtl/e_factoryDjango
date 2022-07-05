@@ -460,19 +460,15 @@ def load_chemicals_to_search(request, id_supplier):
     qs = Chemicals.objects.filter(id_supplier=id_supplier)      
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data=[]
-        for obj in qs:
-            print("Obj:" + str(obj.id_chemical))
-            instance = Chemicals.objects.get(id_chemical=obj.id_chemical)
-            print("Instance:" + str(instance))
-            price=instance.get_price()
-            print("Prezzo: " + str(price))
+        for obj in qs:            
+            instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))            
+            price=instance.get_price            
             item = {
                 'id_chemical': obj.description,
-                'id_supplier': instance.get_price(),
+                'last_price': price,
                 'description': str(obj.cov),                
             }
-            data.append(item)
-        print("COV: " + str(data))        
+            data.append(item)        
         return JsonResponse({'data': data})
 
 

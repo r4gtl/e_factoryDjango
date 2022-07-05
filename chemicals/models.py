@@ -30,7 +30,7 @@ class Chemicals(models.Model):
         return self.description
 
     '''Recupero l'ultimo prezzo del prodotto chimico'''  
-    @classmethod
+    @property
     def get_price(self):
         price_object = Prices.objects.all()        
         partial_qs=price_object.values('id_chemical').annotate(latest_price=Max('price_date'))

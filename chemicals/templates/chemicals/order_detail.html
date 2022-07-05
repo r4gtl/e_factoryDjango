@@ -25,18 +25,18 @@
 
 
                     <div class="row mb-4">
-
                       <div class="col-md-12 border rounded shadow-sm">
-                        <div class="row">
-                          
-                            <div class="col-md-4">
+                        <div class="row" style="align-items:center;">                          
+                            <div class="col-md-4">                              
                               {{ form.id_order.as_hidden }}
                               {{ form.id_chemical|as_crispy_field }}
+                            </div>
+                            <div class="col-md-1" >
                               <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary" id="load-modal" data-bs-toggle="modal" data-bs-target="#SearchChemModal">
-                                  Cerca
-                                </button>
-
+                            <button type="button" class="btn btn-primary " id="load-modal" data-bs-toggle="modal" data-bs-target="#SearchChemModal">
+                              <span class="bi bi-search"></span>
+                            </button>
+                          </div>  
                                 <!-- Modal -->
                                 <div class="modal fade" id="SearchChemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                   <div class="modal-dialog">
@@ -53,7 +53,7 @@
                                                 <thead>   
                                                   <tr>
                                                     <th class="text-center">Chemical</th>
-                                                    <th class="text-center">Supplier</th>
+                                                    <th class="text-center">Prezzo Corrente</th>
                                                     <th class="text-center">Sov</th>
                                                     
                                                   </tr>
@@ -76,11 +76,11 @@
                                   </div>
                                 </div>
                                 <!-- Fine Modal-->
-                            </div>  
+                            
                             <div class="col-md-2">
                               {{ form.um|as_crispy_field }}
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                               {{ form.quantity|as_crispy_field }}
                             </div>
                             <div class="col-md-3">
@@ -91,8 +91,8 @@
 
                         
 
-                    </div>
                       </div>
+                    </div>
 
         <!-- fine form -->
         </form>
@@ -117,14 +117,7 @@
                                 </tr>
                               </thead>
                               <tbody id="recent-box">
-                                <!-- {% for detail in order_detail %}
-                                <tr >  
-                                  <td class="text-center"><a href="">{{ detail.id_chemical }}</a></td>
-                                  <td class="text-center">{{ detail.um }}</td>
-                                  <td class="text-center">{{ detail.quantity }}</td>
-                                  <td class="text-center">{{ detail.id_packaging_type }}</td>
-                                </tr>  
-                                {% endfor %} -->
+                                
                               </tbody>
                             </table>
                           </div>
@@ -186,15 +179,12 @@ const getData = () => {
 }
 
 
-loadBtn.addEventListener('click', ()=>{
-    
-  let idchem=document.querySelector('#id_id_chemical').value    
+loadBtn.addEventListener('click', ()=>{  
   getData()
 })
 
 
-choiceProd.addEventListener('change', ()=>{
-  console.log("Eccoci")    
+choiceProd.addEventListener('change', ()=>{  
   getData()
 })
 
@@ -202,8 +192,7 @@ choiceProd.addEventListener('change', ()=>{
 getData()
 
 const getDataChemicals = () => {
-    let idsup=document.getElementById('supplier').innerText
-    console.log("supplier" + idsup)
+    let idsup=document.getElementById('supplier').innerText    
     $.ajax({
         type: 'GET',        
         url: `/chemicals/chemlist/${idsup}/`,
@@ -217,8 +206,8 @@ const getDataChemicals = () => {
             for (var i = 0; i < data.length; i++){
                 var row = `
                 <tr>  
-                <td class="text-center"><a href="">${data[i].id_chemical}</a></td>
-                <td class="text-center">${data[i].id_supplier}</td>
+                <td class="text-center" id="sel-prod${data[i].id_chemical}"><a href="">${data[i].id_chemical}</a></td>
+                <td class="text-center">${data[i].last_price}</td>
                 <td class="text-center">${data[i].description}</td>                
                 </tr>  
                 `
