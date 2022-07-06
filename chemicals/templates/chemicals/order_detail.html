@@ -134,10 +134,24 @@
     prev = document.getElementById("previous_page");
     prev.value = document.referrer;
 
+
+
     $('#chem-list').on('click', 'a', function(){
-      let prova=$(this).attr('id')
-      console.log(prova)
-      document.querySelector('#id_id_chemical').value=prova;
+      var prova=$(this).attr('id');
+      var idChem = $("#" + prova).val();
+      console.log("IDChem: " + idChem)
+      data={
+        id_chemical: idChem
+      }
+      
+      $('#id_id_chemical').val(data.id_chemical);
+      console.log("id_chemical: " + data.id_chemical);
+      /*var idChem = document.getElementById(prova)*/
+      ///var idChem = $("#" + prova).val();
+      ///console.log("IdChem: " + idChem)
+      /*document.getElementById('#id_id_chemical').innerHTML=idChem*/
+      
+      /*document.querySelector('#id_id_chemical').value=prova;*/
 })
 
 
@@ -147,6 +161,7 @@ const loadModal = document.getElementById('load-modal')
 const url = window.location.href + "data/"
 const recentBox = document.getElementById('recent-box')
 const chemList = document.getElementById('chem-list')
+
 
 const getData = () => {
     let idchem=document.querySelector('#id_id_chemical').value
