@@ -135,7 +135,9 @@
     prev.value = document.referrer;
 
     $('#chem-list').on('click', 'a', function(){
-    console.log( $(this).attr('id') );
+      let prova=$(this).attr('id')
+      console.log(prova)
+      document.querySelector('#id_id_chemical').value=prova;
 })
 
 
