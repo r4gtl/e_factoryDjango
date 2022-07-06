@@ -134,7 +134,9 @@
     prev = document.getElementById("previous_page");
     prev.value = document.referrer;
 
-
+    $('#chem-list').on('click', 'a', function(){
+    console.log( $(this).attr('id') );
+})
 
 
 const loadBtn = document.getElementById('load-btn')
@@ -206,7 +208,7 @@ const getDataChemicals = () => {
             for (var i = 0; i < data.length; i++){
                 var row = `
                 <tr>  
-                <td class="text-center" id="sel-prod${data[i].id_chemical}"><a href="">${data[i].id_chemical}</a></td>
+                <td class="text-center" ><a href="" id="${data[i].id_chemical}">${data[i].id_chemical}</a></td>
                 <td class="text-center">${data[i].last_price}</td>
                 <td class="text-center">${data[i].description}</td>                
                 </tr>  
@@ -233,6 +235,24 @@ loadModal.addEventListener('click', ()=>{
 getDataChemicals()
 
 
+/*$(function() {
+  $('#btnLaunch').click(function() {
+    $('#exampleModal').modal('show');
+  });
+              
+  $('#btnSave').click(function() {
+    var value = $('#txtInput').val();
+    data={
+      id_danger: value
+    }
+    
+    console.log(value);
+    $('#id_id_danger').val(data.id_danger);
+    $('#mettiqua').val(data.id_danger);
+    $('#exampleModal').modal('hide');
+  });*/
 </script>
+
+
 {% endblock scripts %}
 

@@ -218,7 +218,7 @@ class PricesManager(models.Manager):
 class Prices(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE, related_name='prezzo')
     price=models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, default=0)
-    price_date=models.DateTimeField(default=datetime.date.today)
+    price_date=models.DateField(default=datetime.date.today)
     objects = PricesManager()  
 
 

@@ -410,20 +410,13 @@ class CreateDetail(CreateView):
 '''
 
 def create_detail(request,pk):
-    order=ChemicalOrder.objects.get(id_order=pk)
-    print(order)
-    print("Ordine: " + str(order.pk))
-    
+    order=ChemicalOrder.objects.get(id_order=pk)   
     supplier=get_object_or_404(Suppliers, pk=order.id_supplier.pk)  
     form= ChemicalOrderDetailModelForm(supplier.pk, order)
-    if request.method == 'POST':
-        print("Request: POST")
+    if request.method == 'POST':        
         form = ChemicalOrderDetailModelForm(supplier.pk, order, request.POST)
         
         if form.is_valid():
-            print("Valido")
-
-            print(form.cleaned_data)
             form.save(commit=False)
             form.instance.id_order = order
             form.save()
@@ -484,8 +477,7 @@ class UpdateOrder(UpdateView):
         # Add in a QuerySet of all the books   
         # 
         context['order_detail'] = ChemicalOrderDetail.objects.filter(id_order=self.kwargs['pk'])
-        context['order_instance'] = ChemicalOrder.objects.get(id_order=self.kwargs['pk'])            
-        print(context)
+        context['order_instance'] = ChemicalOrder.objects.get(id_order=self.kwargs['pk'])                    
         return context
     
     def form_valid(self, form):        
