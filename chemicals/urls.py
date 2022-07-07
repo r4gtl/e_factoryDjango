@@ -22,6 +22,7 @@ urlpatterns = [
 
     path('data/<int:id_chemical>/', views.load_last_orders_view, name='last-orders' ),
     path('chemlist/<int:id_supplier>/', views.load_chemicals_to_search, name='load-chemicals' ),
+    path('chemlist/<int:id_supplier>/<str:search_text>', views.load_chemicals_to_search_filtered, name='load-chemicals-filtered' ),
     
     
     

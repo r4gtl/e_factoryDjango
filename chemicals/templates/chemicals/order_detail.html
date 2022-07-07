@@ -46,13 +46,15 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                       </div>
                                       <div class="container">
-                                        <div class="modal-body" >                                        
+                                        <div class="modal-body" >   
+                                          <input type="text" id="searchChemical" class="form-control mb-2" placeholder="Cerca prodotto" aria-label="ProdottoChimico" aria-describedby="basic-addon1">                                 
                                           <div class="row" >
                                             <div class="col-md-12" >                          
                                               <table class="table table-bordered table-striped">                              
                                                 <thead>   
                                                   <tr>
-                                                    <th class="text-center">Chemical</th>
+                                                    <th class="text-center">Scegli</th>
+                                                    <th class="text-center">Prodotto Chimico</th>
                                                     <th class="text-center">Prezzo Corrente</th>
                                                     <th class="text-center">Sov</th>
                                                     
@@ -99,7 +101,7 @@
 
     </div>
     <!-- inizio lista recenti -->
-    <button class="btn btn-primary" id="load-btn">Vedi recenti</button>
+    <!--<button class="btn btn-primary" id="load-btn">Vedi recenti</button>-->
                         <hr>
                         <p>Ordini Precedenti</p>
                         <!-- Detail Section -->
@@ -134,33 +136,38 @@
     prev = document.getElementById("previous_page");
     prev.value = document.referrer;
 
-
-
-    $('#chem-list').on('click', 'a', function(){
+    $(function() {
+    $('#chem-list').on('click', 'button', function(){
       var prova=$(this).attr('id');
-      var idChem = $("#" + prova).val();
+      console.log("Prova: " + prova)
+      
+      let idChem=prova
+      
       console.log("IDChem: " + idChem)
       data={
         id_chemical: idChem
       }
-      
+      console.log("Data: " + data.id_chemical)
       $('#id_id_chemical').val(data.id_chemical);
       console.log("id_chemical: " + data.id_chemical);
-      /*var idChem = document.getElementById(prova)*/
-      ///var idChem = $("#" + prova).val();
-      ///console.log("IdChem: " + idChem)
-      /*document.getElementById('#id_id_chemical').innerHTML=idChem*/
+      getData()
+      $('#SearchChemModal').modal('hide');
       
-      /*document.querySelector('#id_id_chemical').value=prova;*/
-})
+      
 
+    });
+  });
+  
 
-const loadBtn = document.getElementById('load-btn')
+/*const loadBtn = document.getElementById('load-btn')*/
 const choiceProd = document.getElementById('div_id_id_chemical')
 const loadModal = document.getElementById('load-modal')
 const url = window.location.href + "data/"
 const recentBox = document.getElementById('recent-box')
 const chemList = document.getElementById('chem-list')
+const searchChemical = document.getElementById('searchChemical')
+
+
 
 
 const getData = () => {
@@ -172,7 +179,7 @@ const getData = () => {
         
         success: function(response){
             const data = response.data
-            console.log('Hello World ce l\'hai fatta')
+            console.log('You did it!!!')
             
             $(recentBox).empty()
             for (var i = 0; i < data.length; i++){
@@ -198,9 +205,9 @@ const getData = () => {
 }
 
 
-loadBtn.addEventListener('click', ()=>{  
+/*loadBtn.addEventListener('click', ()=>{  
   getData()
-})
+})*/
 
 
 choiceProd.addEventListener('change', ()=>{  
@@ -225,7 +232,10 @@ const getDataChemicals = () => {
             for (var i = 0; i < data.length; i++){
                 var row = `
                 <tr>  
-                <td class="text-center" ><a href="" id="${data[i].id_chemical}">${data[i].id_chemical}</a></td>
+                <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${data[i].pk_chem}">
+                <span class="bi bi-search"></span> 
+                </button></td>
+                <td class="text-center" >${data[i].id_chemical}</td>
                 <td class="text-center">${data[i].last_price}</td>
                 <td class="text-center">${data[i].description}</td>                
                 </tr>  
@@ -251,23 +261,55 @@ loadModal.addEventListener('click', ()=>{
 
 getDataChemicals()
 
+///provo a filtrare man mano che si digita
 
-/*$(function() {
-  $('#btnLaunch').click(function() {
-    $('#exampleModal').modal('show');
-  });
-              
-  $('#btnSave').click(function() {
-    var value = $('#txtInput').val();
-    data={
-      id_danger: value
-    }
-    
-    console.log(value);
-    $('#id_id_danger').val(data.id_danger);
-    $('#mettiqua').val(data.id_danger);
-    $('#exampleModal').modal('hide');
-  });*/
+
+
+
+const getDataChemicalsFiltered = () => {
+    let idsup=document.getElementById('supplier').innerText  
+    ///let searchTxt=document.getElementById('#searchChemical').innerText
+    let searchTxt=$('#searchChemical').val()
+    console.log("Testo: " + searchTxt)
+    $.ajax({
+        type: 'GET',        
+        url: `/chemicals/chemlist/${idsup}/${searchTxt}/`,
+        
+        
+        success: function(response){
+            const data = response.data
+            console.log('Hello World ce l\'hai fatta')
+            console.log(response)
+            $(chemList).empty()
+            for (var i = 0; i < data.length; i++){
+                var row = `
+                <tr>  
+                <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${data[i].pk_chem}">
+                <span class="bi bi-search"></span> 
+                </button></td>
+                <td class="text-center" >${data[i].id_chemical}</td>
+                <td class="text-center">${data[i].last_price}</td>
+                <td class="text-center">${data[i].description}</td>                
+                </tr>  
+                `
+            chemList.innerHTML+=row
+        }},
+        error: function(error){
+        
+        console.log(error)
+        
+        }
+        
+    })
+}
+
+searchChemical.addEventListener('change', ()=>{  
+  getDataChemicalsFiltered()
+})
+
+getDataChemicalsFiltered()
+///fine prova filtraggio
+
 </script>
 
 
