@@ -466,7 +466,11 @@ def load_chemicals_to_search(request, id_supplier):
         return JsonResponse({'data': data})
 
 def load_chemicals_to_search_filtered(request, id_supplier, search_text):
-    qs = Chemicals.objects.filter(id_supplier=id_supplier).filter(description__icontains=search_text)
+    if search_text:
+        qs = Chemicals.objects.filter(id_supplier=id_supplier).filter(description__icontains=search_text)
+    else:
+        qs = Chemicals.objects.filter(id_supplier=id_supplier)
+        print("QS1" + str(qs))
     print("QS" + str(qs))      
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data=[]
@@ -479,7 +483,8 @@ def load_chemicals_to_search_filtered(request, id_supplier, search_text):
                 'description': str(obj.cov), 
                 'pk_chem': obj.id_chemical,               
             }
-            data.append(item)        
+            data.append(item)      
+
         return JsonResponse({'data': data})
 
 
