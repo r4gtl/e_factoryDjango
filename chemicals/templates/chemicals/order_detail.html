@@ -20,8 +20,8 @@
             {% csrf_token %}
             <input type="hidden" id="previous_page" name="previous_page"
             value="/previous/page/url">
-            <input type="submit" class="btn btn-info mb-2 me-1" value="Salva ed Esci">
-            <input type="submit" class="btn btn-info mb-2 me-1" value="Salva e procedi col dettaglio">
+            <input type="submit" class="btn btn-info mb-2 me-1" name="save" value="Salva ed Esci">
+            <input type="submit" class="btn btn-info mb-2 me-1" name="save_go_ahead" value="Salva e procedi col dettaglio">
 
 
                     <div class="row mb-4">
@@ -269,17 +269,19 @@ getDataChemicals()
 const getDataChemicalsFiltered = () => {
     let idsup=document.getElementById('supplier').innerText  
     ///let searchTxt=document.getElementById('#searchChemical').innerText
-    let searchTxt=$('#searchChemical').val()
-    console.log("Testo: " + searchTxt)
+    let searchTxt=$('#searchChemical').val() 
+    if (searchTxt){
+      url_var=`/chemicals/chemlist/${idsup}/${searchTxt}/`
+    } else {
+      url_var=`/chemicals/chemlist/${idsup}/`
+    }
     $.ajax({
         type: 'GET',        
-        url: `/chemicals/chemlist/${idsup}/${searchTxt}/`,
+        url: url_var,
         
         
         success: function(response){
-            const data = response.data
-            console.log('Hello World ce l\'hai fatta')
-            console.log(response)
+            const data = response.data            
             $(chemList).empty()
             for (var i = 0; i < data.length; i++){
                 var row = `

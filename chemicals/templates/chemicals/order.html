@@ -4,7 +4,16 @@
 {% block head_title %}{{ block.super }} - Crea/Modifica Ordine{% endblock head_title %}
 
 {% block content %}
-
+<style>
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+     -webkit-appearance: none;
+     margin: 0;
+  }
+  input[type="number"] {
+     -moz-appearance: textfield;
+  }
+  </style>
     <div class="container">
       <br>
       <h5 class="text-end">Ordine {{ supplier.id_supplier }}</h5>
@@ -28,15 +37,15 @@
                       <div class="col-md-12 border rounded shadow-sm">
                         <div class="row">
                           
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                               {{ form.id_order.as_hidden }}
                               {{ form.id_dich_int.as_hidden }}
                               {{ form.n_order|as_crispy_field }}
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                               {{ form.order_date|as_crispy_field }}
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                               {{ form.id_supplier|as_crispy_field }} 
                             </div>
                             

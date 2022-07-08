@@ -368,11 +368,9 @@ class CreateOrder(CreateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        print(context)
         # Add in a QuerySet of all the books
         if self.request=='GET':
-            context['order_detail'] = ChemicalOrderDetail.objects.filter(id_order=self.kwargs['id_order'])
-            print(context['order_detail'])
+            context['order_detail'] = ChemicalOrderDetail.objects.filter(id_order=self.kwargs['id_order'])            
             context['order_instance'] = ChemicalOrder.objects.get(id_order=self.kwargs['id_order'])               
         return context
     
@@ -417,10 +415,14 @@ def create_detail(request,pk):
         form = ChemicalOrderDetailModelForm(supplier.pk, order, request.POST)
         
         if form.is_valid():
+            
             form.save(commit=False)
             form.instance.id_order = order
             form.save()
-            url_hs = reverse("chemicals:update-order", kwargs={"pk": order.id_order})
+            if 'save' in request.POST:
+                url_hs = reverse("chemicals:update-order", kwargs={"pk": order.id_order})
+            else:
+                url_hs = reverse("chemicals:add-detail", kwargs={"pk": order.id_order})
             return HttpResponseRedirect(url_hs)
         
     else:

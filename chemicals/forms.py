@@ -139,7 +139,7 @@ class ChemicalOrderModelForm(forms.ModelForm):
         )
         widget = {
             'id_order': forms.HiddenInput(),
-            'n_order': forms.TextInput(),
+            'n_order': forms.TextInput(attrs={'style': 'text-align:right;'}),
             'id_supplier': forms.ChoiceField(),
             'order_date': forms.DateInput(),
             'delivery_date': forms.DateField(),
@@ -152,9 +152,9 @@ class ChemicalOrderModelForm(forms.ModelForm):
             'id_dich_int': forms.HiddenInput()
         }
         labels = {
-            'n_order': 'Ordine N.',
+            'n_order': 'Num.',
             'id_supplier': 'Fornitore',
-            'order_date': 'Data Ordine',
+            'order_date': 'Data',
             'delivery_date': 'Data Consegna',
             'notes': 'Note',
             'user_id': 'Redatto Da',

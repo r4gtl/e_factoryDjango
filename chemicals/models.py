@@ -218,13 +218,22 @@ class PricesManager(models.Manager):
 class Prices(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE, related_name='prezzo')
     price=models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, default=0)
-    price_date=models.DateField(default=datetime.date.today)
+    price_date=models.DateField(default=datetime.date.today, blank=True, null=True)
     objects = PricesManager()  
 
 
+'''funzione per numerare automaticamente il campo numero ordine
+    Da integrare con il filtro data per anno
+'''
+def get_max_order_number() -> int:
+        max_found = ChemicalOrder.objects.aggregate(Max('n_order'))["n_order__max"]
+        if max_found is None:
+            return 1
+        return max_found + 1
+
 class ChemicalOrder(models.Model):
     id_order= models.AutoField(primary_key=True)
-    n_order = models.IntegerField()
+    n_order = models.PositiveIntegerField(default=get_max_order_number)
     id_supplier = models.ForeignKey(Suppliers, null=True, on_delete = models.CASCADE)
     order_date = models.DateField(default=datetime.date.today)
     delivery_date = models.DateField(blank=True, null=True)
@@ -240,6 +249,8 @@ class ChemicalOrder(models.Model):
     class Meta:
         verbose_name = "Order"
         verbose_name_plural = "Orders"
+    
+    
 
     def __str__(self):
         return 'Ordine n. {} del {} fornitore {}'. format(self.n_order, self.order_date, self.id_supplier)
