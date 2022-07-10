@@ -245,6 +245,10 @@ class ChemicalOrder(models.Model):
     operator = models.CharField(max_length=50, blank=True, null=True)
     id_dich_int = models.IntegerField(blank=True, null=True)
 
+    @property
+    def days_open(self):
+        days = (datetime.datetime.now().date()-self.order_date).days        
+        return (days)
     
     class Meta:
         verbose_name = "Order"
