@@ -27,11 +27,6 @@
             <input type="hidden" id="previous_page" name="previous_page"
             value="/previous/page/url">
             <input type="submit" class="btn btn-info mb-2 me-1" value="Salva ed Esci">
-            <input type="submit" class="btn btn-info mb-2 me-1" value="Salva e procedi col dettaglio">
-
-
-
-
                     <div class="row mb-4">
 
                       <div class="col-md-12 border rounded shadow-sm">
@@ -48,6 +43,14 @@
                             <div class="col-md-6">
                               {{ form.id_supplier|as_crispy_field }} 
                             </div>
+
+                            <div class="col-md-1" >
+                              <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary mt-4" id="load-modal" data-bs-toggle="modal" data-bs-target="#SearchSupplierModal">
+                              <span class="bi bi-search"></span>
+                            </button>
+                          </div>  
+                          {% include 'partials/_supplier_modal.html' %}
                             
                           
                         </div>
@@ -120,15 +123,83 @@
 
 
     </div>
-    
 
-
-
+{% endblock content %}
+{% block scripts %}
 
 
 <script>
     prev = document.getElementById("previous_page");
     prev.value = document.referrer;
-</script>
 
-{% endblock content %}
+
+
+    $(function() {
+    $('#supplier-list').on('click', 'button', function(){
+      var idbutton=$(this).attr('id');
+      let idSupplier=idbutton
+      data={
+        id_supplier: idSupplier
+      }      
+      $('#id_id_supplier').val(data.id_supplier);      
+      $('#SearchSupplierModal').modal('hide');
+    });
+  });
+  
+
+const suppList = document.getElementById('supplier-list')
+const searchSupplier = document.getElementById('searchSupplier')
+const loadModal = document.getElementById('load-modal')
+
+
+
+const getDataSuppliers = () => {    
+  let searchTxt=$('#searchSupplier').val() 
+    if (searchTxt){
+      url_var=`/chemicals/supplier_list/${searchTxt}/`
+    } else {
+      url_var=`/chemicals/supplier_list/`
+    }
+    
+    $.ajax({
+        type: 'GET',        
+        url: url_var,        
+        success: function(response){
+
+            const data = response.data            
+            $(suppList).empty()
+            for (var i = 0; i < data.length; i++){
+                var row = `
+                <tr>  
+                <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${data[i].id_supplier}">
+                <span class="bi bi-search"></span> 
+                </button></td>
+                <td class="text-center" >${data[i].company_name}</td>                
+                </tr>  
+                `
+                suppList.innerHTML+=row
+        }},
+        error: function(error){
+        
+        console.log(error)
+        
+        }
+        
+    })
+}
+
+loadModal.addEventListener('click', ()=>{
+  $('#searchSupplier').val("")
+  getDataSuppliers()
+    })
+
+
+searchSupplier.addEventListener('keyup', ()=>{  
+  getDataSuppliers()
+})
+
+
+getDataSuppliers()
+
+</script>
+{% endblock scripts %}

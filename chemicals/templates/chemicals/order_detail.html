@@ -138,23 +138,14 @@
 
     $(function() {
     $('#chem-list').on('click', 'button', function(){
-      var prova=$(this).attr('id');
-      console.log("Prova: " + prova)
-      
+      var prova=$(this).attr('id');      
       let idChem=prova
-      
-      console.log("IDChem: " + idChem)
       data={
         id_chemical: idChem
       }
-      console.log("Data: " + data.id_chemical)
       $('#id_id_chemical').val(data.id_chemical);
-      console.log("id_chemical: " + data.id_chemical);
       getData()
       $('#SearchChemModal').modal('hide');
-      
-      
-
     });
   });
   

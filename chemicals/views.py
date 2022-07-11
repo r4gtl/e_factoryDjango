@@ -471,9 +471,7 @@ def load_chemicals_to_search_filtered(request, id_supplier, search_text):
     if search_text:
         qs = Chemicals.objects.filter(id_supplier=id_supplier).filter(description__icontains=search_text)
     else:
-        qs = Chemicals.objects.filter(id_supplier=id_supplier)
-        print("QS1" + str(qs))
-    print("QS" + str(qs))      
+        qs = Chemicals.objects.filter(id_supplier=id_supplier)            
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data=[]
         for obj in qs:            
@@ -486,8 +484,34 @@ def load_chemicals_to_search_filtered(request, id_supplier, search_text):
                 'pk_chem': obj.id_chemical,               
             }
             data.append(item)      
-
         return JsonResponse({'data': data})
+
+
+def load_suppliers_to_search(request):
+    qs = Suppliers.objects.all().order_by('company_name')      
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        data=[]
+        for obj in qs:                        
+            item = {
+                'id_supplier': obj.id_supplier,
+                'company_name': obj.company_name,                             
+            }
+            data.append(item)              
+        return JsonResponse({'data': data})
+
+
+def load_suppliers_to_search_filtered(request, search_text):
+    qs = Suppliers.objects.filter(company_name__icontains=search_text).order_by('company_name')      
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        data=[]
+        for obj in qs:                        
+            item = {
+                'id_supplier': obj.id_supplier,
+                'company_name': obj.company_name,                             
+            }
+            data.append(item)              
+        return JsonResponse({'data': data})
+
 
 
 
