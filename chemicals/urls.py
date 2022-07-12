@@ -25,7 +25,7 @@ urlpatterns = [
     path('chemlist/<int:id_supplier>/<str:search_text>/', views.load_chemicals_to_search_filtered, name='load-chemicals-filtered' ),
     path('supplier_list/', views.load_suppliers_to_search, name='load-suppliers-search' ),
     path('supplier_list/<str:search_text>/', views.load_suppliers_to_search_filtered, name='load-suppliers-search-filtered'),
-    path('update_conformity/<int:pk>/', views.update_conf_order, name='update-conformity'),
+    path('<int:pk>/update_conformity/', views.update_conf_order, name='update-conformity'),
 
     
 ]

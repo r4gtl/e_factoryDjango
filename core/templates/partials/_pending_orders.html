@@ -1,5 +1,5 @@
 <!-- Tabella ordini in sospeso -->
-        
+{% load crispy_forms_tags %}      
 <div class="row row-cols-1 row-cols-md-2 g-4">
     {% for order in orders %}
     <div class="col">
@@ -7,7 +7,7 @@
         <!-- <img src="..." class="card-img-top" alt="..."> -->
         <div class="card-body">
             <h5 class="card-title">{{ order.id_supplier }}</h5>
-            <p id="idOrder">{{ order.id_order.as_hidden }}</p>
+            <p id="idOrder">{{ order.id_order }}</p>
             <p class="card-text">Ordine n. {{ order.n_order }} - del {{ order.order_date }}</p>
             <hr>
             <p class="date mb-1" id="dataordine">Consegna richiesta: {{ order.delivery_date|default_if_none:"Nessuna" }}</p>                            

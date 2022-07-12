@@ -164,7 +164,10 @@ class ChemicalOrderModelForm(forms.ModelForm):
             'operator': 'Operatore'
         }
 
-
+class OrderConformityForm(forms.ModelForm):
+    class Meta:
+        model = ChemicalOrder
+        fields = ('conformity','id_order',)
 
 class ChemicalOrderDetailModelFormOld(forms.ModelForm):
 

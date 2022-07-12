@@ -1,8 +1,8 @@
 
-const date = new Date();
-document.querySelector('.year').innerHTML = date.getFullYear();
+// const date = new Date();
+// document.querySelector('.year').innerHTML = date.getFullYear();
 
-$('select').selectpicker();
+// $('select').selectpicker();
 
 
 

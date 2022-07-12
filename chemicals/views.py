@@ -17,6 +17,7 @@ from .forms import (
     SubstanceSdsModelForm,PrecautionaryStatementSdsModelForm, 
     HazardStatementSdsModelForm, DangerSymbolsSdsModelForm, 
     ChemicalOrderModelForm, ChemicalOrderDetailModelForm,
+    OrderConformityForm
     )
 
 from .models import (
@@ -538,12 +539,12 @@ def update_conf_order(request, pk):
     order = get_object_or_404(ChemicalOrder, pk=pk)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         print("Arrivato!")
-        if request.method == 'POST': 
-            order.conformity = True
-            order.save()    
-
-            return JsonResponse({'result':'ok'})       
-        
+        new_conformity = request.POST.get('conformity')
+        order.conformity = new_conformity
+        order.save()
+        return JsonResponse({
+            'new_conformity':'new_conformity'
+        })       
         
     return redirect('core:homepage') # you should change that with the name of your view
 

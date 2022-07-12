@@ -1,4 +1,5 @@
 <!-- Modal -->
+{% load crispy_forms_tags %}
   <div class="modal fade" id="conformityModal" tabindex="-1" aria-labelledby="conformityModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -7,21 +8,60 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          L'ordine sarà considerato conforme.
+          <form id="update-form" autocomplete="off">
+            {% csrf_token %}
+            {{form.conformity|default:"True"}}
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger add-modal-close" data-bs-dismiss="modal">close</button>
+                <button type="submit" id="add-btn" class="btn btn-success">+ add</button>
+            </div>
+        </form>
         </div>
-        <div class="modal-footer">
+        <!-- <div class="modal-footer">
           
-          <button id="confirm" type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal">Conforme</button>
+          <button id="confirm" type="submit" class="btn btn-success btn-sm" data-bs-dismiss="modal">Conforme</button>
           <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Annulla</button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 
+  {% block scripts %}
   <script>
 
     
-    
+    const updateForm = document.getElementById('update-form')
+    const updateUrl = window.location.href + "update/"
+    const csrf = document.getElementsByName('csrfmiddlewaretoken')
+    const idOrd=document.getElementById('#idOrder').val()
+
+    updateForm.addEventListener('submit', e=>{
+      e.preventDefault()
+      
+      console.log("IDOrder:" + idOrd)
+      const conformity = document.getElementById('conformity')
+      $.ajax({
+        type: 'POST',
+        url: `/${idOrd}/update_conformity`,        
+        data: {
+            'csrfmiddlewaretoken': csrf[0].value,
+            'conformity': true,
+            
+        },
+        success: function(response){
+            console.log(response)
+            handleAlerts('success', 'post has been updated')
+            
+        },
+        error: function(error){
+            console.log(error)
+        }
+    })
+
+})
+
+
+    /*  
     $(function(){
     $('#confirm').on(click, function(){
         let idord=document.getElementById('idOrder').innerText
@@ -32,12 +72,13 @@
             url: `update_conformity/${idord}/`,
             success: function(result)
         {
-            /* The div contains now the updated form */
+            
             console.log(result);
         }
     });
 });
-});   
+});   */
 
 
 </script>  
+{% endblock scripts %}
