@@ -216,9 +216,7 @@ const getDataChemicals = () => {
         
         
         success: function(response){
-            const data = response.data
-            console.log('Hello World ce l\'hai fatta')
-            console.log(response)
+            const data = response.data            
             $(chemList).empty()
             for (var i = 0; i < data.length; i++){
                 var row = `

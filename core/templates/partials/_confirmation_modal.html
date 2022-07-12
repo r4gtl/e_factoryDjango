@@ -1,0 +1,43 @@
+<!-- Modal -->
+  <div class="modal fade" id="conformityModal" tabindex="-1" aria-labelledby="conformityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="conformityModalLabel">Conferma modifica</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          L'ordine sarà considerato conforme.
+        </div>
+        <div class="modal-footer">
+          
+          <button id="confirm" type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal">Conforme</button>
+          <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Annulla</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    
+    
+    $(function(){
+    $('#confirm').on(click, function(){
+        let idord=document.getElementById('idOrder').innerText
+        console.log(idord)
+        console.log("Iniziato!")
+        $.ajax({        
+            type: "POST",
+            url: `update_conformity/${idord}/`,
+            success: function(result)
+        {
+            /* The div contains now the updated form */
+            console.log(result);
+        }
+    });
+});
+});   
+
+
+</script>  

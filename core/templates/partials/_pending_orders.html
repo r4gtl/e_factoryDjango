@@ -7,13 +7,18 @@
         <!-- <img src="..." class="card-img-top" alt="..."> -->
         <div class="card-body">
             <h5 class="card-title">{{ order.id_supplier }}</h5>
+            <p id="idOrder">{{ order.id_order.as_hidden }}</p>
             <p class="card-text">Ordine n. {{ order.n_order }} - del {{ order.order_date }}</p>
             <hr>
             <p class="date mb-1" id="dataordine">Consegna richiesta: {{ order.delivery_date|default_if_none:"Nessuna" }}</p>                            
             <p>Ordine inviato <span>{{ order.days_open }}</span> giorni fa.</p>
-            
             <div class="text-end">
-                <a href="#" class="btn btn-success btn-sm">Conforme</a>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#conformityModal">
+                    Conforme
+                </button>                                
+                {% include 'partials/_confirmation_modal.html' %}
+                
                 <a href="{% url 'chemicals:update-order' pk=order.id_order %}" class="btn btn-primary btn-sm">Modifica</a>
                 
             </div>

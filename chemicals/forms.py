@@ -164,6 +164,8 @@ class ChemicalOrderModelForm(forms.ModelForm):
             'operator': 'Operatore'
         }
 
+
+
 class ChemicalOrderDetailModelFormOld(forms.ModelForm):
 
     class Meta:
