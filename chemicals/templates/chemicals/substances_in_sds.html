@@ -7,7 +7,7 @@
 
 <div class="container">
     <br>
-    <h5 class="text-end">Scheda di Sicurezza Prodotto {{ chemical.id_chemical }}</h5>
+    <h5 class="text-end">Scheda di Sicurezza Prodotto {{ chemical.id_chemical.description }}</h5>
 
     <hr>
     <br>
@@ -32,10 +32,22 @@
                             {{ form.id_sds.as_hidden }}
                             {{ form.id_chemical.as_hidden }}
                           </div>
+
+                          <div class="col-md-1" >
+                            <!-- Button trigger modal -->
+                          <button type="button" class="btn btn-primary mt-4" id="load-modal" data-bs-toggle="modal" data-bs-target="#SearchSubstancesModal">
+                            <span class="bi bi-search"></span>
+                          </button>
+                        </div>  
+                        {% include 'partials/_substances_modal.html' %}
+                          
+                        
+                      
+
                           <div class="col-md-3">
                             {{ form.concentration|as_crispy_field }}
                           </div>
-                          
+                        </div>
                         </div>
 
                     </div>

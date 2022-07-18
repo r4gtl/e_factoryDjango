@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-
+{% load static %}
 {% block head_title %}{{ block.super }} - Crea/Modifica Ordine{% endblock head_title %}
+
+
+
 
 {% block content %}
 <style>
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
-     -webkit-appearance: none;
-     margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
   }
   input[type="number"] {
      -moz-appearance: textfield;
@@ -124,82 +127,90 @@
 
     </div>
 
+
 {% endblock content %}
-{% block scripts %}
+
+{% block scripts %}{{ block.super }}
 
 
+<script src="{% static 'js/main.js' %}"></script>
 <script>
-    prev = document.getElementById("previous_page");
-    prev.value = document.referrer;
 
 
 
-    $(function() {
-    $('#supplier-list').on('click', 'button', function(){
+  console.log("Hello world")
+  prev = document.getElementById("previous_page");
+  prev.value = document.referrer;
+  
+  
+  
+  $(function() {
+  $('#supplier-list').on('click', 'button', function(){
       var idbutton=$(this).attr('id');
       let idSupplier=idbutton
       data={
-        id_supplier: idSupplier
+      id_supplier: idSupplier
       }      
       $('#id_id_supplier').val(data.id_supplier);      
       $('#SearchSupplierModal').modal('hide');
-    });
+  });
   });
   
-
-const suppList = document.getElementById('supplier-list')
-const searchSupplier = document.getElementById('searchSupplier')
-const loadModal = document.getElementById('load-modal')
-
-
-
-const getDataSuppliers = () => {    
+  
+  const suppList = document.getElementById('supplier-list')
+  const searchSupplier = document.getElementById('searchSupplier')
+  const loadModal = document.getElementById('load-modal')
+  
+  
+  
+  const getDataSuppliers = () => {    
   let searchTxt=$('#searchSupplier').val() 
-    if (searchTxt){
+  if (searchTxt){
       url_var=`/chemicals/supplier_list/${searchTxt}/`
-    } else {
+  } else {
       url_var=`/chemicals/supplier_list/`
-    }
-    
-    $.ajax({
-        type: 'GET',        
-        url: url_var,        
-        success: function(response){
-
-            const data = response.data            
-            $(suppList).empty()
-            for (var i = 0; i < data.length; i++){
-                var row = `
-                <tr>  
-                <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${data[i].id_supplier}">
-                <span class="bi bi-search"></span> 
-                </button></td>
-                <td class="text-center" >${data[i].company_name}</td>                
-                </tr>  
-                `
-                suppList.innerHTML+=row
-        }},
-        error: function(error){
-        
-        console.log(error)
-        
-        }
-        
-    })
-}
-
-loadModal.addEventListener('click', ()=>{
+  }
+  
+  $.ajax({
+      type: 'GET',        
+      url: url_var,        
+      success: function(response){
+  
+          const data = response.data            
+          $(suppList).empty()
+          for (var i = 0; i < data.length; i++){
+              var row = `
+              <tr>  
+              <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${data[i].id_supplier}">
+              <span class="bi bi-search"></span> 
+              </button></td>
+              <td class="text-center" >${data[i].company_name}</td>                
+              </tr>  
+              `
+              suppList.innerHTML+=row
+      }},
+      error: function(error){
+      
+      console.log(error)
+      
+      }
+      
+  })
+  }
+  
+  loadModal.addEventListener('click', ()=>{
   $('#searchSupplier').val("")
   getDataSuppliers()
-    })
-
-
-searchSupplier.addEventListener('keyup', ()=>{  
+  })
+  
+  
+  searchSupplier.addEventListener('keyup', ()=>{  
   getDataSuppliers()
-})
+  })
+  
+  
+  getDataSuppliers()
 
-
-getDataSuppliers()
-
-</script>
+  </script>
 {% endblock scripts %}
+

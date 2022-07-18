@@ -1,3 +1,4 @@
+{% load static %}
 {% if messages %}
     {% for message in messages %}
         <div id="message" class="container">
@@ -20,10 +21,18 @@
         </div> 
     {% endfor %}
 {% endif %}
+
+
+
+
+
+
 <script>
+    
 setTimeout(function() {
     $('#message').fadeOut('slow');
     }, 3000);
 </script>
+
 
 

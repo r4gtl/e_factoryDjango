@@ -1,0 +1,51 @@
+<!-- Modal -->
+    <div class="modal fade" id="SearchSubstancesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cerca Sostanza...</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            <div class="container">
+                <div class="modal-body" >   
+                <input type="text" id="searchSubstance" class="form-control mb-2" 
+                    placeholder="Cerca Sostanza" aria-label="Substance" 
+                    aria-describedby="basic-addon1"
+                    >
+                <input type="text" id="searchCAS" class="form-control mb-2" 
+                    placeholder="Cerca CAS number" aria-label="CAS" 
+                    aria-describedby="basic-addon1"
+                    >
+                <input type="text" id="searchEC" class="form-control mb-2" 
+                    placeholder="Cerca EC number" aria-label="EC" 
+                    aria-describedby="basic-addon1"
+                    >                                      
+                    <div class="row" >
+                        <div class="col-md-12" >                          
+                        <table class="table table-bordered table-striped">                              
+                            <thead>   
+                            <tr>
+                                <th class="text-center">Scegli</th>
+                                <th class="text-center">Sostanza</th>
+                                <th class="text-center">CAS Number</th>
+                                <th class="text-center">EC Number</th>
+                            </tr>
+                            </thead>
+                            <tbody id="substance-list" class="text-center">
+                            
+                            </tbody>
+                        </table>
+                        </div>
+                        
+
+                    </div> <!-- fine lista recenti -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Chiudi</button>
+                
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fine Modal-->
