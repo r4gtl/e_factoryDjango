@@ -67,8 +67,12 @@
 
  
 
-<script>
-    prev = document.getElementById("previous_page");
-    prev.value = document.referrer;
-</script>
+
 {% endblock content %}
+
+{% block scripts %}{{ block.super }}
+
+
+<script src="{% static 'js/chemicals/chemicals.js' %}"></script>
+
+{% endblock scripts %}
