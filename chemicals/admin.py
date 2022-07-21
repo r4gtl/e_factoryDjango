@@ -4,6 +4,7 @@ from .models import (
     PrecautionaryStatements, HazardStatements, Prices, 
     RegReach, Sds, DangerSymbols,
     ChemicalOrder, ChemicalOrderDetail,ChemicalsPackagingType,
+    Substances,
 
     )
                     
@@ -88,6 +89,17 @@ class ChemicalOrderDetailModelAdmin(admin.ModelAdmin):
         ]
     search_fields = ["id_order"]
 
+class SubstancesModelAdmin(admin.ModelAdmin):
+    model = Substances
+    list_display = [
+        "id_substance",
+        "description",
+        "cas_number",
+        "ec_number"
+    ]
+    search_fields = ["cas_number"]
+
+
 admin.site.register(Chemicals, ChemicalsModelAdmin)
 admin.site.register(Operations, OperationsModelAdmin)
 admin.site.register(Svhc, SvhcModelAdmin)
@@ -100,6 +112,7 @@ admin.site.register(DangerSymbols, DangerSymbolsModelAdmin)
 admin.site.register(ChemicalOrder, ChemicalOrderModelAdmin)
 admin.site.register(ChemicalOrderDetail, ChemicalOrderDetailModelAdmin)
 admin.site.register(ChemicalsPackagingType, ChemicalsPackagingTypeModelAdmin)
+admin.site.register(Substances, SubstancesModelAdmin)
 
 
 

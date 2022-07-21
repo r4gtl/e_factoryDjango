@@ -197,6 +197,10 @@ class Substances(models.Model):
     def __str__(self):
         return self.description
 
+    class Meta:
+        verbose_name = "Substance"
+        verbose_name_plural = "Substances"
+
 class ChemicalsSubstances(models.Model):
     '''XR substances - chemicals'''
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE)
@@ -237,11 +241,11 @@ class ChemicalOrder(models.Model):
     id_supplier = models.ForeignKey(Suppliers, null=True, on_delete = models.CASCADE)
     order_date = models.DateField(default=datetime.date.today)
     delivery_date = models.DateField(blank=True, null=True)
-    notes = models.TextField()
+    notes = models.TextField(blank=True, null=True)
     user_id = models.IntegerField()
     conformity = models.BooleanField()
     n_conformity = models.BooleanField()
-    n_conformity_reasons = models.TextField()
+    n_conformity_reasons = models.TextField(blank=True, null=True)
     operator = models.CharField(max_length=50, blank=True, null=True)
     id_dich_int = models.IntegerField(blank=True, null=True)
 

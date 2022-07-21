@@ -35,7 +35,7 @@ from master_data.mixins import StaffMixin
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=2)
+    suppliers_list = Suppliers.objects.filter(category=3)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -375,38 +375,6 @@ class CreateOrder(CreateView):
             context['order_instance'] = ChemicalOrder.objects.get(id_order=self.kwargs['id_order'])               
         return context
     
-    
-
-'''
-class CreateDetail(CreateView):
-    model = ChemicalOrderDetail
-    
-    form_class = ChemicalOrderDetailModelForm
-    template_name = "chemicals/order_detail.html"
-    #success_url="chemicals/order.html"
-
-
-    def get_object(self):
-        #Mi prendo l'istanza dell'Ordine dalla pagina che sto lasciando
-        pk = self.kwargs.get('pk')
-        order_instance = get_object_or_404(ChemicalOrder, pk=pk)        
-        return order_instance
-
-    
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        # Mi prendo l'elenco dei prodotti acquistati dal fornitore dell'ordine        
-        context['chemical_list'] = Chemicals.objects.filter(id_supplier=self.get_object().pk)        
-        print("Context: " + str(context['chemical_list']))        
-        return context
-
-    def form_valid(self, form): 
-               
-        self.success_url = self.request.POST.get('previous_page')
-        return super().form_valid(form)
-'''
 
 def create_detail(request,pk):
     order=ChemicalOrder.objects.get(id_order=pk)   
@@ -435,7 +403,11 @@ def create_detail(request,pk):
         }
     return render(request, 'chemicals/order_detail.html', context)
 
+
 def load_last_orders_view(request, id_chemical):
+    '''
+    Questa view serve per caricare gli ultimi ordini effettuati del prodotto scelto
+    '''
     qs = ChemicalOrderDetail.objects.filter(id_chemical=id_chemical)    
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data=[]
@@ -453,6 +425,9 @@ def load_last_orders_view(request, id_chemical):
         return JsonResponse({'data': data})
 
 def load_chemicals_to_search(request, id_supplier):
+    '''
+    Carica i prodotti chimici del fornitore scelto
+    '''
     qs = Chemicals.objects.filter(id_supplier=id_supplier)      
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data=[]
@@ -469,6 +444,9 @@ def load_chemicals_to_search(request, id_supplier):
         return JsonResponse({'data': data})
 
 def load_chemicals_to_search_filtered(request, id_supplier, search_text):
+    '''
+    Carica i prodotti chimici del fornitore scelto filtrandoli man mano che si digita il nome
+    '''
     if search_text:
         qs = Chemicals.objects.filter(id_supplier=id_supplier).filter(description__icontains=search_text)
     else:
@@ -489,6 +467,9 @@ def load_chemicals_to_search_filtered(request, id_supplier, search_text):
 
 
 def load_suppliers_to_search(request):
+    '''
+    Carica i fornitori da cercare
+    '''
     qs = Suppliers.objects.all().order_by('company_name')      
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data=[]
@@ -502,6 +483,9 @@ def load_suppliers_to_search(request):
 
 
 def load_suppliers_to_search_filtered(request, search_text):
+    '''
+    Carica i fornitori filtrandoli man mano che si digita la ragione sociale
+    '''
     qs = Suppliers.objects.filter(company_name__icontains=search_text).order_by('company_name')      
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data=[]
@@ -513,6 +497,39 @@ def load_suppliers_to_search_filtered(request, search_text):
             data.append(item)              
         return JsonResponse({'data': data})
 
+
+
+def load_substances_to_search_filtered(request, search_description, search_cas, search_ec):
+    '''
+    Carica le sostanze filtrandoli man mano che si digita cas, nome o ec
+    '''
+    qs = Substances.objects.filter(description__icontains=search_description).filter(cas_number__icontains=search_cas).filter(ec_number__icontains=search_ec).order_by('description')      
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        data=[]
+        for obj in qs:                        
+            item = {
+                'id_substance': obj.id_substance,
+                'description': obj.description,                             
+                'cas_number': obj.cas_number,                             
+                'ec_number': obj.ec_number,                             
+            }
+            data.append(item)              
+        return JsonResponse({'data': data})
+
+
+def load_substances_to_search(request):
+    qs = Substances.objects.all().order_by('description')      
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        data=[]
+        for obj in qs:                        
+            item = {
+                'id_substance': obj.id_substance,
+                'description': obj.description,    
+                'cas_number': obj.cas_number,                             
+                'ec_number': obj.ec_number,                          
+            }
+            data.append(item)              
+        return JsonResponse({'data': data})
 
 
 

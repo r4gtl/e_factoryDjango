@@ -35,7 +35,7 @@
 
                           <div class="col-md-1" >
                             <!-- Button trigger modal -->
-                          <button type="button" class="btn btn-primary mt-4" id="load-modal" data-bs-toggle="modal" data-bs-target="#SearchSubstancesModal">
+                          <button type="button" class="btn btn-primary mt-4" id="loadSubstanceModal" data-bs-toggle="modal" data-bs-target="#SearchSubstancesModal">
                             <span class="bi bi-search"></span>
                           </button>
                         </div>  
@@ -47,6 +47,9 @@
                           <div class="col-md-3">
                             {{ form.concentration|as_crispy_field }}
                           </div>
+                        </div>
+                        <div class="row" id="substance-features">
+
                         </div>
                         </div>
 
@@ -73,6 +76,106 @@
 {% block scripts %}{{ block.super }}
 
 
-<script src="{% static 'js/chemicals/chemicals.js' %}"></script>
+<script>
+  //====================================Cercare una sostanza
+
+
+$('#SearchSubstancesModal').on('shown.bs.modal', function () {
+    $('#searchCAS').focus();
+})  
+
+//Quando si seleziona una riga questa viene riportata nel form della pagina e si chiude il modal
+$(function() {
+$('#substance-list').on('click', 'button', function(){
+    var idbutton=$(this).attr('id');
+    let idSubstance=idbutton
+    data={
+    id_substance: idSubstance    
+    }      
+    $('#id_id_substance').val(data.id_substance);      
+    $('#SearchSupplierModal').modal('hide');
+});
+});
+
+
+const substanceList = document.getElementById('substance-list')
+const substanceFeat = document.getElementById('substance-features')
+const searchSubstance = document.getElementById('searchSubstance')
+const searchCAS = document.getElementById('searchCAS')
+const searchEC = document.getElementById('searchEC')
+const loadSubstanceModal = document.getElementById('loadSubstanceModal')
+const url = window.location.href + "substances-list/"
+
+
+const getDataSubstance = () => {    
+let search_description=$('#searchSubstance').val() 
+let search_cas=$('#searchCAS').val() 
+let search_ec=$('#searchEC').val() 
+
+
+
+if (search_cas){
+  url_var=`/chemicals/data/${search_description}/${search_cas}/${search_ec}/`
+    
+} else {
+  url_var= `/chemicals/substances-list/`
+}
+
+
+$.ajax({
+    type: 'GET',        
+    url: url_var,        
+    success: function(response){
+
+        const data = response.data            
+        $(substanceList).empty()        
+        for (var i = 0; i < data.length; i++){
+            var row = `
+            <tr>  
+            <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${data[i].id_substance}">
+            <span class="bi bi-search"></span> 
+            </button></td>
+            <td class="text-start" >${data[i].description}</td>                
+            <td class="text-start" >${data[i].cas_number}</td>                
+            <td class="text-start" >${data[i].ec_number}</td>                
+            </tr>  
+            `
+            substanceList.innerHTML+=row
+    }},
+    error: function(error){
+    
+    console.log(error)
+    
+    }
+    
+})
+}
+
+loadSubstanceModal.addEventListener('click', ()=>{
+$('#searchSubstance').val("")
+$('#searchCAS').val("")
+$('#searchEC').val("")
+
+getDataSubstance()
+})
+
+
+searchSubstance.addEventListener('keyup', ()=>{  
+getDataSubstance()
+})
+
+searchCAS.addEventListener('keyup', ()=>{  
+getDataSubstance()
+})
+
+searchEC.addEventListener('keyup', ()=>{  
+getDataSubstance()
+})
+
+
+getDataSubstance()
+
+//====================================Fine ricerca sostanza
+</script>
 
 {% endblock scripts %}
