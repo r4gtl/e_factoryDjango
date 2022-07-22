@@ -1,6 +1,6 @@
 <!-- Modal -->
     <div class="modal fade" id="SearchSubstancesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Cerca Sostanza...</h5>
@@ -21,20 +21,22 @@
                     aria-describedby="basic-addon1"
                     >                                      
                     <div class="row" >
-                        <div class="col-md-12" >                          
-                        <table class="table table-bordered table-striped">                              
-                            <thead>   
-                            <tr>
-                                <th class="text-center">Scegli</th>
-                                <th class="text-center">Sostanza</th>
-                                <th class="text-center">CAS Number</th>
-                                <th class="text-center">EC Number</th>
-                            </tr>
-                            </thead>
-                            <tbody id="substance-list" class="text-center">
-                            
-                            </tbody>
-                        </table>
+                        <div class="col-md-12" >  
+                            <div style="overflow-y: scroll; height: 400px">
+                                <table class="table table-bordered table-striped">                              
+                                    <thead>   
+                                    <tr>
+                                        <th class="text-center">Scegli</th>
+                                        <th class="text-center">Sostanza</th>
+                                        <th class="text-center">CAS Number</th>
+                                        <th class="text-center">EC Number</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="substance-list" class="text-center">
+                                    
+                                    </tbody>
+                                </table>
+                            </div>                        
                         </div>
                         
 

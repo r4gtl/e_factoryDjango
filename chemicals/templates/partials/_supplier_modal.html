@@ -1,6 +1,6 @@
 <!-- Modal -->
-<div class="modal fade" id="SearchSupplierModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
+<div class="modal fade" id="SearchSupplierModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Cerca Fornitore...</h5>
@@ -13,31 +13,33 @@
                 aria-label="Supplier" aria-describedby="basic-addon1"
                 >
             <div class="row" >
-              <div class="col-md-12" >                          
-                <table class="table table-bordered table-striped">                              
-                  <thead>   
-                    <tr>
-                      <th class="text-center">Scegli</th>
-                      <th class="text-center">Ragione Sociale</th>
-                    </tr>
-                  </thead>
-                  <tbody id="supplier-list" class="text-center">
-                    
-                  </tbody>
-                </table>
+                <div class="col-md-12" >
+                  <div style="overflow-y: scroll; height: 400px">
+                    <table class="table table-bordered table-striped">                              
+                      <thead>   
+                        <tr>
+                          <th class="text-center">Scegli</th>
+                          <th class="text-center">Ragione Sociale</th>
+                        </tr>
+                      </thead>
+                      <tbody id="supplier-list" class="text-center">
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                </div>                          
               </div>
               
 
             </div> <!-- fine lista recenti -->
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Chiudi</button>
+            
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Chiudi</button>
-          
-        </div>
+        
       </div>
     </div>
   </div>
   <!-- Fine Modal-->
-
-  
