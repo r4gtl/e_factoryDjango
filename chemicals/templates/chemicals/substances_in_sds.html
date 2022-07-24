@@ -38,7 +38,8 @@
                           <button type="button" class="btn btn-primary mt-4" id="loadSubstanceModal" data-bs-toggle="modal" data-bs-target="#SearchSubstancesModal">
                             <span class="bi bi-search"></span>
                           </button>
-                        </div>  
+                        </div>
+                          
                         {% include 'partials/_substances_modal.html' %}
                           
                         
@@ -77,10 +78,12 @@
 
 
 <script>
+
+
   //====================================Cercare una sostanza
 
 
-$('#SearchSubstancesModal').on('shown.bs.modal', function () {
+  $('#SearchSubstancesModal').on('shown.bs.modal', function () {
     $('#searchCAS').focus();
 })  
 
@@ -108,48 +111,84 @@ const url = window.location.href + "substances-list/"
 
 
 const getDataSubstance = () => {    
-let search_description=$('#searchSubstance').val() 
-let search_cas=$('#searchCAS').val() 
-let search_ec=$('#searchEC').val() 
+  let search_description=$('#searchSubstance').val() 
+  let search_cas=$('#searchCAS').val() 
+  let search_ec=$('#searchEC').val() 
 
 
 
-if (search_cas){
-  url_var=`/chemicals/data/${search_description}/${search_cas}/${search_ec}/`
-    
+  if (search_cas){
+    //url_var=`/chemicals/data/${search_description}/${search_cas}/${search_ec}/`
+    url_var=`/chemicals/substance/${search_cas}/`
+    console.log(url_var)
+  
+
+
+  $.ajax({
+      type: 'GET',        
+      url: url_var,   
+      dataType: "json",
+      
+      
+      success: function(response){
+          /*console.log("Qui")
+          const data = response.data  
+          console.log("Data:" + data)    
+          $(substanceList).empty()  
+          console.log("Svuotato lista")
+                
+          for (var i = 0; i < data.length; i++){
+            
+              var row = `
+              <tr>  
+              <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${data[i].id_substance}">
+              <span class="bi bi-search"></span> 
+              </button></td>
+              <td class="text-start" >${data[i].description}</td>                
+              <td class="text-start" >${data[i].cas_number}</td>                
+              <td class="text-start" >${data[i].ec_number}</td>                
+              </tr>  
+              `
+              substanceList.innerHTML+=row
+            
+            console.log("Caricato")*/
+            console.log(response)
+            const data = response
+            
+            var jsondata = JSON.parse(data)
+            console.log(jsondata)
+            
+            Array.from(jsondata).forEach(obj => {
+              var option = new Option(obj['fields']);
+              console.log("Fields:" + option)
+              console.log("Dati: " + Object[2][0])
+              $(substanceList).prepend(
+                  `<tr>
+                      
+                      <td>${jsondata[2].description}</td>
+                      <td>${jsondata[2].cas_number}</td>
+                      <td>${jsondata[2].ec_number}</td>
+                      
+                      </tr>`
+              )
+          });
+          
+      
+      
+    },
+      error: function(error){
+      
+      console.log(error)
+      
+      }
+      
+  })
 } else {
   url_var= `/chemicals/substances-list/`
 }
 
+  }
 
-$.ajax({
-    type: 'GET',        
-    url: url_var,        
-    success: function(response){
-
-        const data = response.data            
-        $(substanceList).empty()        
-        for (var i = 0; i < data.length; i++){
-            var row = `
-            <tr>  
-            <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${data[i].id_substance}">
-            <span class="bi bi-search"></span> 
-            </button></td>
-            <td class="text-start" >${data[i].description}</td>                
-            <td class="text-start" >${data[i].cas_number}</td>                
-            <td class="text-start" >${data[i].ec_number}</td>                
-            </tr>  
-            `
-            substanceList.innerHTML+=row
-    }},
-    error: function(error){
-    
-    console.log(error)
-    
-    }
-    
-})
-}
 
 loadSubstanceModal.addEventListener('click', ()=>{
 $('#searchSubstance').val("")
@@ -158,7 +197,6 @@ $('#searchEC').val("")
 
 getDataSubstance()
 })
-
 
 searchSubstance.addEventListener('keyup', ()=>{  
 getDataSubstance()
@@ -173,9 +211,10 @@ getDataSubstance()
 })
 
 
-getDataSubstance()
+//getDataSubstance()
 
 //====================================Fine ricerca sostanza
+
 </script>
 
 {% endblock scripts %}

@@ -33,7 +33,19 @@
                                     </tr>
                                     </thead>
                                     <tbody id="substance-list" class="text-center">
-                                    
+                                        {% for substance in substance_modal %}
+                                            <tr>        
+                                                
+                                                
+                                                <td class="text-center"><button type="button" class="btn btn-primary btn-sm" >
+                                                    <span class="bi bi-search"></span>
+                                                
+                                                <td>{{ substance.description }}</td>
+                                                <td>{{ substance.cas_number }}</td>
+                                                <td>{{ substance.ec_number }}</td>
+
+                                                
+                                            {% endfor %}
                                     </tbody>
                                 </table>
                             </div>                        

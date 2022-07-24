@@ -31,6 +31,13 @@ from .models import (
 from .filters import OrderFilter
 #from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q, F
 from master_data.mixins import StaffMixin
+from django.core.serializers.json import DjangoJSONEncoder
+from django.core import serializers
+import json
+
+
+
+
 
 # Create your views here.
 
@@ -221,7 +228,7 @@ def new_substance_sds(request,pk):
     sds = get_object_or_404(Sds, pk=pk)
     #chemical=Chemicals.objects.filter(pk=sds.id_chemical.pk)  
     chemical=Chemicals.objects.get(pk=sds.id_chemical.pk)  
-    print("Chemical: " + str(chemical))      
+    substance_modal = Substances.objects.all()    
     form = SubstanceSdsModelForm(instance=sds)
     if request.method == "POST":
         form = SubstanceSdsModelForm(request.POST)
@@ -242,7 +249,8 @@ def new_substance_sds(request,pk):
     context={
         'chemical': chemical, 
         'form': form,
-        'sds': sds        
+        'sds': sds,  
+        'substance_modal': substance_modal
         }
     return render(request, "chemicals/substances_in_sds.html", context)
 
@@ -499,27 +507,41 @@ def load_suppliers_to_search_filtered(request, search_text):
 
 
 
-def load_substances_to_search_filtered(request, search_description, search_cas, search_ec):
+
+
+def load_substances_to_search_filtered(request, search_cas):
     '''
     Carica le sostanze filtrandoli man mano che si digita cas, nome o ec
     '''
-    qs = Substances.objects.filter(description__icontains=search_description).filter(cas_number__icontains=search_cas).filter(ec_number__icontains=search_ec).order_by('description')      
+    
+    qs = Substances.objects.filter(cas_number__icontains=search_cas).order_by('description')      
+    
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        data=[]
-        for obj in qs:                        
-            item = {
-                'id_substance': obj.id_substance,
-                'description': obj.description,                             
-                'cas_number': obj.cas_number,                             
-                'ec_number': obj.ec_number,                             
-            }
-            data.append(item)              
-        return JsonResponse({'data': data})
-
+        if request.method=="GET":
+            #data=json.dumps(list(qs), cls=DjangoJSONEncoder)
+            data=serializers.serialize('json',
+                                    list(qs),
+                                    fields=('id_substance', 'description', 'cas_number', 'ec_number')
+                                    )
+            #data=json.dumps(list(qs))
+            print(data)
+            # data=[]
+            # for obj in qs:                        
+            #     item = {
+            #         'id_substance': obj.id_substance,
+            #         'description': obj.description,                             
+            #         'cas_number': obj.cas_number,                             
+            #         'ec_number': obj.ec_number,                             
+            #     }
+            #     data.append(item)
+            # return JsonResponse({'data': data})
+    return JsonResponse(data, safe=False)
+        #return data
 
 def load_substances_to_search(request):
     qs = Substances.objects.all().order_by('description')      
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        
         data=[]
         for obj in qs:                        
             item = {

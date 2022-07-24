@@ -27,5 +27,6 @@ urlpatterns = [
     path('supplier_list/<str:search_text>/', views.load_suppliers_to_search_filtered, name='load-suppliers-search-filtered'),
     path('<int:pk>/update_conformity/', views.update_conf_order, name='update-conformity'),
     path('substances-list/', views.load_substances_to_search, name='load-substances-search'),
-    path('data/<str:search_description>/<str:search_cas>/<str:search_ec>/', views.load_substances_to_search_filtered, name='load-substances-search-filtered'),
+    #path('data/<str:search_description>/<str:search_cas>/<str:search_ec>/', views.load_substances_to_search_filtered, name='load-substances-search-filtered'),
+    path('substance/<str:search_cas>/', views.load_substances_to_search_filtered, name='load-substances-search-filtered'),
 ]
