@@ -120,7 +120,7 @@ const getDataSubstance = () => {
   if (search_cas){
     //url_var=`/chemicals/data/${search_description}/${search_cas}/${search_ec}/`
     url_var=`/chemicals/substance/${search_cas}/`
-    console.log(url_var)
+    
   
 
 
@@ -133,6 +133,7 @@ const getDataSubstance = () => {
       success: function(response){
           /*console.log("Qui")
           const data = response.data  
+          
           console.log("Data:" + data)    
           $(substanceList).empty()  
           console.log("Svuotato lista")
@@ -152,27 +153,29 @@ const getDataSubstance = () => {
               substanceList.innerHTML+=row
             
             console.log("Caricato")*/
-            console.log(response)
+            
             const data = response
             
             var jsondata = JSON.parse(data)
-            console.log(jsondata)
+            
             
             Array.from(jsondata).forEach(obj => {
               var option = new Option(obj['fields']);
-              console.log("Fields:" + option)
-              console.log("Dati: " + Object[2][0])
+              
+              
+              
               $(substanceList).prepend(
                   `<tr>
-                      
-                      <td>${jsondata[2].description}</td>
-                      <td>${jsondata[2].cas_number}</td>
-                      <td>${jsondata[2].ec_number}</td>
+                      <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${obj['fields']['id_substance']}">
+                      <span class="bi bi-search"></span> 
+                      <td>${obj['fields']['description']}</td>
+                      <td>${obj['fields']['cas_number']}</td>
+                      <td>${obj['fields']['ec_number']}</td>
                       
                       </tr>`
               )
           });
-          
+        
       
       
     },

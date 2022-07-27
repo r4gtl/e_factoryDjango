@@ -42,7 +42,7 @@ import json
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=2)
+    suppliers_list = Suppliers.objects.filter(category=3)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -518,25 +518,25 @@ def load_substances_to_search_filtered(request, search_cas):
     
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         if request.method=="GET":
-            #data=json.dumps(list(qs), cls=DjangoJSONEncoder)
+            
             data=serializers.serialize('json',
                                     list(qs),
                                     fields=('id_substance', 'description', 'cas_number', 'ec_number')
                                     )
-            #data=json.dumps(list(qs))
-            print(data)
-            # data=[]
-            # for obj in qs:                        
-            #     item = {
-            #         'id_substance': obj.id_substance,
-            #         'description': obj.description,                             
-            #         'cas_number': obj.cas_number,                             
-            #         'ec_number': obj.ec_number,                             
-            #     }
-            #     data.append(item)
-            # return JsonResponse({'data': data})
+            
+            #print(data)
+            #data=[]
+            #for obj in qs:                        
+            #    item = {
+            #        'id_substance': obj.id_substance,
+            #        'description': obj.description,                             
+            #        'cas_number': obj.cas_number,                             
+            #        'ec_number': obj.ec_number,                             
+            #    }
+            #    data.append(item)
+            #return JsonResponse({'data': data})
     return JsonResponse(data, safe=False)
-        #return data
+     
 
 def load_substances_to_search(request):
     qs = Substances.objects.all().order_by('description')      
