@@ -211,7 +211,7 @@ choiceProd.addEventListener('change', ()=>{
 })
 
 
-getData()
+//getData()
 
 
 /*const getDataChemicals = () => {
@@ -254,6 +254,7 @@ let visible = 3
 
 const getDataChemicals = () => {
   let idsup=document.getElementById('supplier').innerText  
+  console.log("Supplier: " + idsup)
     $.ajax({
         type: 'GET',
         url: `/chemicals/chemlist/${idsup}/${visible}/`,
@@ -277,7 +278,7 @@ const getDataChemicals = () => {
                     `
                 });
             }, 100)
-            console.log(response.size)
+            console.log("Size:" + response.size)
             if (response.size === 0) {
                 ///endBox.textContent = 'No posts added yet...'
             }
@@ -307,7 +308,7 @@ loadModal.addEventListener('click', ()=>{
     getDataChemicals()
   })
 
-getDataChemicals()
+//getDataChemicals()
 
 ///provo a filtrare man mano che si digita
 
@@ -357,7 +358,7 @@ searchChemical.addEventListener('keyup', ()=>{
   getDataChemicalsFiltered()
 })
 
-getDataChemicalsFiltered()
+//getDataChemicalsFiltered()
 ///fine prova filtraggio
 
 </script>

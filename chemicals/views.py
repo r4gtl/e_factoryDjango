@@ -42,7 +42,7 @@ import json
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=3)
+    suppliers_list = Suppliers.objects.filter(category=2)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -461,25 +461,35 @@ def load_chemicals_to_search(request, id_supplier, num_posts):
     '''
     Carica i prodotti chimici del fornitore scelto
     '''
-    visible = 3
+    visible = 2
     upper = num_posts
-    lower = lower - visible    
+    lower = upper - visible  
+    print("Supplier: " + str(id_supplier))
+    
     qs = Chemicals.objects.filter(id_supplier=id_supplier)      
+    print("QS:" + str(qs))
     size = Chemicals.objects.filter(id_supplier=id_supplier).count
-
+    print("Size:" + str(size))
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data=[]
         for obj in qs:            
-            instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))            
-            price=instance.get_price            
+            instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical)) 
+            print("Instance:" + str(instance))
+            if instance.get_price:
+                price=instance.get_price    
+            else:
+                price=0
+            print("Price:" + str(price))        
             item = {
                 'id_chemical': obj.description,
                 'last_price': price,
                 'description': str(obj.cov), 
                 'pk_chem': obj.id_chemical,               
             }
-            data.append(item)        
-        return JsonResponse({'data': data[lower:upper], 'size': size})
+            print("Item: " + str(item))
+            data.append(item)   
+            print("Data:" + str(data))
+        return JsonResponse({'data': data[lower:upper]})
 
 
 
