@@ -432,10 +432,11 @@ def load_last_orders_view(request, id_chemical):
             data.append(item)        
         return JsonResponse({'data': data})
 
+'''
 def load_chemicals_to_search(request, id_supplier):
-    '''
-    Carica i prodotti chimici del fornitore scelto
-    '''
+    
+    #Carica i prodotti chimici del fornitore scelto
+    
     qs = Chemicals.objects.filter(id_supplier=id_supplier)      
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data=[]
@@ -450,6 +451,37 @@ def load_chemicals_to_search(request, id_supplier):
             }
             data.append(item)        
         return JsonResponse({'data': data})
+'''
+
+
+'''
+prova per caricare solo un tot alla volta
+'''
+def load_chemicals_to_search(request, id_supplier, num_posts):
+    '''
+    Carica i prodotti chimici del fornitore scelto
+    '''
+    visible = 3
+    upper = num_posts
+    lower = lower - visible    
+    qs = Chemicals.objects.filter(id_supplier=id_supplier)      
+    size = Chemicals.objects.filter(id_supplier=id_supplier).count
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        data=[]
+        for obj in qs:            
+            instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))            
+            price=instance.get_price            
+            item = {
+                'id_chemical': obj.description,
+                'last_price': price,
+                'description': str(obj.cov), 
+                'pk_chem': obj.id_chemical,               
+            }
+            data.append(item)        
+        return JsonResponse({'data': data[lower:upper], 'size': size})
+
+
 
 def load_chemicals_to_search_filtered(request, id_supplier, search_text):
     '''
