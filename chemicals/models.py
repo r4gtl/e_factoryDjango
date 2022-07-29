@@ -1,3 +1,4 @@
+from functools import partial
 from django.db import models
 from master_data.models import Suppliers
 import datetime
@@ -30,22 +31,24 @@ class Chemicals(models.Model):
         return self.description
 
     '''Recupero l'ultimo prezzo del prodotto chimico'''  
-    @property
+    # @property
     def get_price(self):
         price_object = Prices.objects.all()        
         
-        print("price_object:" + str(price_object))
+        #print("price_object:" + str(price_object))
         partial_qs=price_object.values('id_chemical').annotate(latest_price=Max('price_date'))
-    
-        for parqs in partial_qs:
-            if str(parqs['id_chemical'])==1:
-                print("parqschemical: " + str(parqs['id_chemical']))
-                print("parqschemical: " + str(parqs['latest_price']))
-
-        price_object=price_object.filter(price_date__in=partial_qs.values('latest_price').order_by('-price_date')).get(id_chemical=self.id_chemical)
+        
+        #print("partial_qs_1: " + str(partial_qs))
+        price_prezzo=price_object.get(id_chemical=1000)
+        print("Prova prezzo: " + str(price_prezzo))
+        price_object=price_object.filter(price_date__in=partial_qs.values('latest_price').order_by('-price_date')).filter(id_chemical=self.id_chemical)
+        # sds_object=sds_object.filter(rev_date__in=partial_qs.values('latest_rev').order_by('-rev_date')).get(id_chemical=self.id_chemical)             
+        print("Price_object_finale: " + str(price_object))
         #price_object=price_object.filter(price_date__in=partial_qs.values('latest_price').order_by('-price_date'))
-        for priobj in price_object:
-            print("ULTIMO:" + str(priobj["price_date"]))
+        for pri in price_object:
+            print("IDChemical: " + str(pri.id_chemical))
+            print("Latest_price: " + str(pri.price_date))
+            # print("Price: " + str(pri.price))
 
         price = price_object.price        
         return price 
@@ -234,6 +237,7 @@ class PricesManager(models.Manager):
 class Prices(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE, related_name='prezzo')
     price=models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, default=0)
+    #price=models.FloatField(blank=True, null=True)
     price_date=models.DateField(default=datetime.date.today, blank=True, null=True)
     objects = PricesManager()  
 
