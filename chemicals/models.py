@@ -33,8 +33,20 @@ class Chemicals(models.Model):
     @property
     def get_price(self):
         price_object = Prices.objects.all()        
+        
+        print("price_object:" + str(price_object))
         partial_qs=price_object.values('id_chemical').annotate(latest_price=Max('price_date'))
+    
+        for parqs in partial_qs:
+            if str(parqs['id_chemical'])==1:
+                print("parqschemical: " + str(parqs['id_chemical']))
+                print("parqschemical: " + str(parqs['latest_price']))
+
         price_object=price_object.filter(price_date__in=partial_qs.values('latest_price').order_by('-price_date')).get(id_chemical=self.id_chemical)
+        #price_object=price_object.filter(price_date__in=partial_qs.values('latest_price').order_by('-price_date'))
+        for priobj in price_object:
+            print("ULTIMO:" + str(priobj["price_date"]))
+
         price = price_object.price        
         return price 
 

@@ -42,7 +42,7 @@ import json
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=2)
+    suppliers_list = Suppliers.objects.filter(category=3)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)    
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -463,20 +463,22 @@ def load_chemicals_to_search(request, id_supplier, num_posts):
     '''
     visible = 2
     upper = num_posts
-    lower = upper - visible  
-    print("Supplier: " + str(id_supplier))
-    
+    lower = upper - visible     
     qs = Chemicals.objects.filter(id_supplier=id_supplier)      
-    print("QS:" + str(qs))
+    
     size = Chemicals.objects.filter(id_supplier=id_supplier).count
     print("Size:" + str(size))
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data=[]
         for obj in qs:            
             instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical)) 
-            print("Instance:" + str(instance))
-            if instance.get_price:
-                price=instance.get_price    
+            qs_pri = Prices.objects.filter(id_chemical=instance)
+            for pri in qs_pri:
+                print("Chemical:" + str(pri.id_chemical_id))
+                print("Prezzi: " + str(pri.price_date))
+            if instance.get_price():
+                price=instance.get_price() 
+                print("Prezzo singolo: " + str(instance.get_price()))  
             else:
                 price=0
             print("Price:" + str(price))        
