@@ -21,7 +21,7 @@ from .forms import (
     )
 
 from .models import (
-    Chemicals, Prices, PricesManager,
+    Chemicals, Prices, 
     Sds, ChemicalHazardStatements, Substances,
     ChemicalsSubstances, ChemicalsPrecautionaryStatement,
     ChemicalDangerSymbols, DangerSymbols,
@@ -31,7 +31,7 @@ from .models import (
 from .filters import OrderFilter
 #from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q, F
 from master_data.mixins import StaffMixin
-from django.core.serializers.json import DjangoJSONEncoder
+from django.core.paginator import Paginator
 from django.core import serializers
 import json
 
@@ -49,8 +49,10 @@ def home(request):
 
 def price_list(request,pk):
     supplier = get_object_or_404(Suppliers, pk=pk)
-    chemicals_list = Chemicals.objects.filter(id_supplier=pk)
-
+    chem_list = Chemicals.objects.filter(id_supplier=pk).order_by("description")    
+    paginator = Paginator(chem_list, 2000)    
+    page = request.GET.get("pagina")
+    chemicals_list=paginator.get_page(page)
     context={'supplier': supplier, 'chemicals_list': chemicals_list}
     return render(request, "chemicals/price_list.html", context)
 

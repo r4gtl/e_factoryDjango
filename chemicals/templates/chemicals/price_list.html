@@ -55,8 +55,36 @@
                             <td class="text-center" style="color: red"><a href="{% url 'chemicals:cancella_prodotto' pk=chemical.id_chemical %}"><i class="bi bi-trash"></i></a></td>                            
                           </tr>
                           {% endfor %}
+                          
+
+
+
                         </tbody>
                       </table>
+                      <div class="pagination">
+                        
+                          <span class="step-links">                          
+                              {% if chemicals_list.has_previous %}
+                                  <a href="?pagina=1">&laquo; Inizio</a>
+                                  <a href="?pagina={{ chemicals_list.previous_page_number }}">precedente</a>
+                              {% endif %}
+                              
+                              <span class="current">
+                                
+                                  Pagina {{ chemicals_list.number }} di {{ chemicals_list.paginator.num_pages }}
+                                
+                              </span>
+                        
+                              {% if chemicals_list.has_next %}
+                              <a href="?pagina={{ chemicals_list.next_page_number }}">successiva</a>
+                                <a href="?pagina={{ chemicals_list.paginator.num_pages }}">Fine &raquo;</a>
+                              {% endif %}
+                              
+                          </span>
+                      
+                      </div>
+
+
     </div>
 
     

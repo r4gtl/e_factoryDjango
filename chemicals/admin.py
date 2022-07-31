@@ -45,8 +45,16 @@ class HazardStatementsModelAdmin(admin.ModelAdmin):
 
 class PricesModelAdmin(admin.ModelAdmin):
     model = Prices
-    list_display = ["id_chemical", "price", "price_date"]
-    search_fields = ["price_date"]
+    # list_display = [
+    #     "id_chemical", 
+    #     "price", 
+    #     "price_date"
+    #     ]
+    list_display = [field.attname for field in Prices._meta.fields]
+    search_fields = [
+        "price_date"
+        ]
+    list_filter=['id_chemical']
 
 class RegReachModelAdmin(admin.ModelAdmin):
     model = RegReach

@@ -30,43 +30,31 @@ class Chemicals(models.Model):
     def __str__(self):
         return self.description
 
-    '''Recupero l'ultimo prezzo del prodotto chimico'''  
-    # @property
-    def get_price(self):
-        price_object = Prices.objects.all()        
-        
-        #print("price_object:" + str(price_object))
-        partial_qs=price_object.values('id_chemical').annotate(latest_price=Max('price_date'))
-        
-        #print("partial_qs_1: " + str(partial_qs))
-        price_prezzo=price_object.get(id_chemical=1000)
-        print("Prova prezzo: " + str(price_prezzo))
-        price_object=price_object.filter(price_date__in=partial_qs.values('latest_price').order_by('-price_date')).filter(id_chemical=self.id_chemical)
-        # sds_object=sds_object.filter(rev_date__in=partial_qs.values('latest_rev').order_by('-rev_date')).get(id_chemical=self.id_chemical)             
-        print("Price_object_finale: " + str(price_object))
-        #price_object=price_object.filter(price_date__in=partial_qs.values('latest_price').order_by('-price_date'))
-        for pri in price_object:
-            print("IDChemical: " + str(pri.id_chemical))
-            print("Latest_price: " + str(pri.price_date))
-            # print("Price: " + str(pri.price))
+    '''Recupero l'ultimo prezzo del prodotto chimico'''
+    @property
+    def get_price(self):        
+        price_object = Prices.objects.all()       
+        partial_qs=price_object.values('id_chemical').annotate(latest_price=Max('price_date')).order_by()        
+        price_object=price_object.filter(price_date__in=partial_qs.values('latest_price').filter(id_chemical=self.id_chemical).order_by('-price_date')).first()        
+        price = price_object.price
+        return price
 
-        price = price_object.price        
-        return price 
+
 
     '''Recupero l'ultima revisione della SDS'''
     def get_sds(self):
-        sds_object = Sds.objects.all()        
+        sds_object = Sds.objects.all()
         partial_qs=sds_object.values('id_chemical').annotate(latest_rev=Max('rev_date'))
-        sds_object=sds_object.filter(rev_date__in=partial_qs.values('latest_rev').order_by('-rev_date')).get(id_chemical=self.id_chemical)             
-        return sds_object 
+        sds_object=sds_object.filter(rev_date__in=partial_qs.values('latest_rev').order_by('-rev_date')).get(id_chemical=self.id_chemical)
+        return sds_object
 
-    
+
 
     class Meta:
         verbose_name = "chemical"
         verbose_name_plural = "chemicals"
 
-    
+
 
 
 
@@ -105,7 +93,7 @@ class PrecautionaryStatements(models.Model):
     ps_code = models.CharField(max_length=50, blank=False, null=False)
     description = models.CharField(max_length=255, blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         return 'Code {} precautionary Statement {}'. format(self.ps_code, self.description)
 
@@ -159,8 +147,8 @@ class Sds(models.Model):
     conformityReach = models.BooleanField(default=True)
     reg_id=models.ForeignKey(RegReach, null=False, on_delete = models.CASCADE)
 
-        
-    
+
+
 class ChemicalHazardStatements(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE)
     id_sds=models.ForeignKey(Sds, null=False, on_delete = models.CASCADE)
@@ -181,7 +169,7 @@ class ChemicalDangerSymbols(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE)
     id_sds=models.ForeignKey(Sds, null=False, on_delete = models.CASCADE)
     id_danger=models.ForeignKey(DangerSymbols, null=False, on_delete = models.CASCADE)
-    
+
     class Meta:
         unique_together=['id_sds', 'id_danger']
 
@@ -195,7 +183,7 @@ class DangersCategory(models.Model):
 
     def __str__(self):
         return self.description
-    
+
 
 class ChemicalsPrecautionaryStatement(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE)
@@ -224,22 +212,22 @@ class ChemicalsSubstances(models.Model):
     concentration=models.CharField(max_length=50, blank=False, null=False)
 
 
-class PricesManager(models.Manager):
-    '''Al momento non serve'''
-    def max_of_prices(self, idc):
-        qs=Prices.objects.all()    
-        prova=qs.values('id_chemical').annotate(latest_price=Max('price_date'))
-        qs=qs.filter(price_date__in=prova.values('latest_price').order_by('-price_date')).filter(**{'id_chemical':idc})
-        return qs
-    
-    
+# class PricesManager(models.Manager):
+#     '''Al momento non serve'''
+#     def max_of_prices(self, idc):
+#         qs=Prices.objects.all()
+#         prova=qs.values('id_chemical').annotate(latest_price=Max('price_date'))
+#         qs=qs.filter(price_date__in=prova.values('latest_price').order_by('-price_date')).filter(**{'id_chemical':idc})
+#         return qs
+
+
 
 class Prices(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE, related_name='prezzo')
     price=models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, default=0)
     #price=models.FloatField(blank=True, null=True)
     price_date=models.DateField(default=datetime.date.today, blank=True, null=True)
-    objects = PricesManager()  
+    # objects = PricesManager()
 
 
 '''funzione per numerare automaticamente il campo numero ordine
@@ -267,14 +255,14 @@ class ChemicalOrder(models.Model):
 
     @property
     def days_open(self):
-        days = (datetime.datetime.now().date()-self.order_date).days        
+        days = (datetime.datetime.now().date()-self.order_date).days
         return (days)
-    
+
     class Meta:
         verbose_name = "Order"
         verbose_name_plural = "Orders"
-    
-    
+
+
 
     def __str__(self):
         return 'Ordine n. {} del {} fornitore {}'. format(self.n_order, self.order_date, self.id_supplier)
@@ -287,6 +275,5 @@ class ChemicalOrderDetail(models.Model):
     quantity=models.FloatField()
     id_packaging_type=models.ForeignKey(ChemicalsPackagingType, on_delete = models.DO_NOTHING)
 
-    
-    
-    
+
+
