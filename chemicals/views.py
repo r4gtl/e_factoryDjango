@@ -463,31 +463,28 @@ def load_chemicals_to_search(request, id_supplier, num_posts):
     '''
     Carica i prodotti chimici del fornitore scelto
     '''
-    visible = 2
+    visible = 3
     upper = num_posts
     lower = upper - visible
-    qs = Chemicals.objects.filter(id_supplier=id_supplier)
-    size = Chemicals.objects.filter(id_supplier=id_supplier).count
+    qs = Chemicals.objects.filter(id_supplier=id_supplier).order_by('-description')    
+    size = len(qs)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data=[]
         for obj in qs:
-            instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))
-            # print("Instance:" + str(instance))
+            instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))            
             if instance.get_price:
                 price=instance.get_price
             else:
-                price=0
-            # print("Price:" + str(price))
+                price=0            
             item = {
                 'id_chemical': obj.description,
                 'last_price': price,
-                'description': str(obj.cov),
+                'cov': str(obj.cov),
                 'pk_chem': obj.id_chemical,
-            }
-            # print("Item: " + str(item))
-            data.append(item)
-            #print("Data:" + str(data))
-        return JsonResponse({'data': data[lower:upper]})
+            }            
+            data.append(item) 
+            #print("conto" + str(item))
+        return JsonResponse({'data': data[lower:upper], 'size': size})
 
 
 
