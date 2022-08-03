@@ -38,7 +38,7 @@
                             </button>
                           </div>  
                                 <!-- Modal -->
-                                <div class="modal fade" id="SearchChemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <!-- <div class="modal fade" id="SearchChemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                   <div class="modal-dialog">
                                     <div class="modal-content">
                                       <div class="modal-header">
@@ -70,8 +70,9 @@
                                             
                                             
                   
-                                          </div> <!-- fine lista recenti -->
-                                          <div id="spinner-box" class="text-center">
+                                          </div> -->
+                                           <!-- fine lista recenti -->
+                                          <!-- <div id="spinner-box" class="text-center">
                                             <div class="spinner-border" role="status"></div>
                                         </div>
                                           <div class="text-center mb-3" id="end-box" >
@@ -85,7 +86,7 @@
                                       </div>
                                     </div>
                                   </div>
-                                </div>
+                                </div> -->
                                 <!-- Fine Modal-->
                             
                             <div class="col-md-2">
@@ -136,6 +137,45 @@
                           
 
                         </div> <!-- fine lista recenti -->
+
+
+    <!-- inizio prova ajax -->
+    <div class="container">
+        
+        <input type="text" id="searchChemical" class="form-control mb-2" placeholder="Cerca prodotto" aria-label="ProdottoChimico" aria-describedby="basic-addon1">                                 
+        <div class="row" >
+          <div class="col-md-12" >                          
+            <table class="table table-bordered table-striped">                              
+              <thead>   
+                <tr>
+                  <th class="text-center">Scegli</th>
+                  <th class="text-center">Prodotto Chimico</th>
+                  <th class="text-center">Prezzo Corrente</th>
+                  <th class="text-center">Sov</th>
+                  
+                </tr>
+              </thead>
+              <tbody id="chem-list" class="text-center">
+                
+              </tbody>
+                
+            </table>
+            
+          </div>
+          
+          
+
+        </div> <!-- fine lista recenti -->
+        <div id="spinner-box" class="text-center">
+          <div class="spinner-border" role="status"></div>
+      </div>
+        <div class="text-center mb-3" id="end-box" >
+          <button class="btn btn-primary" id="load-btn">Load more</button>
+      </div>
+      
+    </div>
+
+    <!-- fine prova ajax -->
 
     </div>
     {% endblock content %}
@@ -256,18 +296,19 @@ choiceProd.addEventListener('change', ()=>{
 
 
 let visible = 3
-
-
-
 const getDataChemicals = () => {
-  let idsup=document.getElementById('supplier').innerText    
+  let idsup=document.getElementById('supplier').innerText  
+  //chemList.innerHTML =  ''
     $.ajax({
         type: 'GET',
         url: `/chemicals/chemlist/${idsup}/${visible}/`,
         success: function(response){            
             const data = response.data
+            console.log("Sono qua")
+            //spinnerBox.classList.add('not-visible')
+            
             setTimeout(()=>{
-                spinnerBox.classList.add('not-visible')                
+              spinnerBox.hidden=true    
                 data.forEach(el => {
                   
                   chemList.innerHTML += `
@@ -282,7 +323,21 @@ const getDataChemicals = () => {
                         `
                 
                 });
-            }, 1000)            
+            }, 300) 
+                /*data.map(el=>{
+                    console.log(el.id)
+                    chemList.innerHTML += `<tr>  
+                          <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${el.pk_chem}">
+                          <span class="bi bi-search"></span> 
+                          </button></td>
+                          <td class="text-center" >${el.id_chemical}</td>
+                          <td class="text-center">${el.get_price}</td>
+                          <td class="text-center">${el.cov}</td>                
+                        </tr>  
+                        `
+                })
+                
+            }, 500)*/           
             if (response.size === 0) {
                 endBox.textContent = 'No posts added yet...'
             }
@@ -297,11 +352,12 @@ const getDataChemicals = () => {
     })
 }
 
+
+
 loadBtn.addEventListener('click', ()=>{
   
-    spinnerBox.classList.remove('not-visible')
-    visible += 3
-    console.log("Valore visible: " + visible)
+    spinnerBox.hidden=false
+    visible += 3    
     getDataChemicals()
 })
 
@@ -309,12 +365,12 @@ loadBtn.addEventListener('click', ()=>{
 
 
 loadModal.addEventListener('click', ()=>{
-    
-  let idsup=document.getElementById('#supplier')
-    getDataChemicals()
+  chemList.innerHTML =  ''
+  //let idsup=document.getElementById('#supplier')
+    //getDataChemicals()
   })
 
-//getDataChemicals()
+getDataChemicals()
 
 ///provo a filtrare man mano che si digita
 

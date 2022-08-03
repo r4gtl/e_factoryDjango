@@ -1,3 +1,4 @@
+from ctypes.wintypes import SIZEL
 import errno
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db import IntegrityError
@@ -42,7 +43,7 @@ import json
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=2)
+    suppliers_list = Suppliers.objects.filter(category=3)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
@@ -50,7 +51,7 @@ def home(request):
 def price_list(request,pk):
     supplier = get_object_or_404(Suppliers, pk=pk)
     chem_list = Chemicals.objects.filter(id_supplier=pk).order_by("description")    
-    paginator = Paginator(chem_list, 2000)    
+    paginator = Paginator(chem_list, 30)    
     page = request.GET.get("pagina")
     chemicals_list=paginator.get_page(page)
     context={'supplier': supplier, 'chemicals_list': chemicals_list}
@@ -389,7 +390,7 @@ class CreateOrder(CreateView):
 def create_detail(request,pk):
     order=ChemicalOrder.objects.get(id_order=pk)
     supplier=get_object_or_404(Suppliers, pk=order.id_supplier.pk)
-    form= ChemicalOrderDetailModelForm(supplier.pk, order)
+    #form= ChemicalOrderDetailModelForm(supplier.pk, order)
     if request.method == 'POST':
         form = ChemicalOrderDetailModelForm(supplier.pk, order, request.POST)
 
@@ -466,25 +467,27 @@ def load_chemicals_to_search(request, id_supplier, num_posts):
     visible = 3
     upper = num_posts
     lower = upper - visible
-    qs = Chemicals.objects.filter(id_supplier=id_supplier).order_by('-description')    
+    qs = Chemicals.objects.filter(id_supplier=id_supplier).order_by('description').annotate(last_price=('get_price'))    
     size = len(qs)
+    
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data=[]
         for obj in qs:
-            instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))            
-            if instance.get_price:
-                price=instance.get_price
-            else:
-                price=0            
+            #instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))            
+            #if instance.get_price:
+            #price=instance.get_price
+            #else:
+            #    price=0            
             item = {
                 'id_chemical': obj.description,
-                'last_price': price,
+                'last_price': obj.last_price,
                 'cov': str(obj.cov),
                 'pk_chem': obj.id_chemical,
             }            
             data.append(item) 
-            #print("conto" + str(item))
+            
         return JsonResponse({'data': data[lower:upper], 'size': size})
+    
 
 
 
