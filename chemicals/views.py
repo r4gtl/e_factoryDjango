@@ -467,7 +467,8 @@ def load_chemicals_to_search(request, id_supplier, num_posts):
     visible = 3
     upper = num_posts
     lower = upper - visible
-    qs = Chemicals.objects.filter(id_supplier=id_supplier).order_by('description').annotate(last_price=('get_price'))    
+    
+    qs = Chemicals.objects.filter(id_supplier=id_supplier).order_by('description')#.annotate(last_price='chemicals_get_price')    
     size = len(qs)
     
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -480,7 +481,7 @@ def load_chemicals_to_search(request, id_supplier, num_posts):
             #    price=0            
             item = {
                 'id_chemical': obj.description,
-                'last_price': obj.last_price,
+                'last_price': obj.get_price,
                 'cov': str(obj.cov),
                 'pk_chem': obj.id_chemical,
             }            

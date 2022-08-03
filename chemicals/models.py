@@ -39,7 +39,13 @@ class Chemicals(models.Model):
         price = price_object.price
         return price
 
-
+    '''Recupero la lista degli ultimi prezzi'''
+    def get_price_list(self):        
+        price_object = Prices.objects.all()       
+        partial_qs=price_object.values('id_chemical').annotate(latest_price=Max('price_date')).order_by()        
+        price_object=price_object.filter(price_date__in=partial_qs.values('latest_price').filter(id_chemical=self.id_chemical).order_by('-price_date')).first()        
+        #price = price_object.price
+        return price_object
 
     '''Recupero l'ultima revisione della SDS'''
     def get_sds(self):
