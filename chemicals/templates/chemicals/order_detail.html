@@ -304,12 +304,17 @@ const getDataChemicals = () => {
         url: `/chemicals/chemlist/${idsup}/${visible}/`,
         success: function(response){            
             const data = response.data
-            console.log("Sono qua")
+            console.log(data[0].get_price)
+
             //spinnerBox.classList.add('not-visible')
             
             setTimeout(()=>{
               spinnerBox.hidden=true    
                 data.forEach(el => {
+                  console.log("elemento: " + el.id_chemical)
+                  console.log("pk_chem: " + el.pk_chem)
+                  console.log("cov: " + el.cov)
+                  console.log("prezzo: " + el.id_chemical__get_price)
                   
                   chemList.innerHTML += `
                         <tr>  
@@ -317,7 +322,7 @@ const getDataChemicals = () => {
                           <span class="bi bi-search"></span> 
                           </button></td>
                           <td class="text-center" >${el.id_chemical}</td>
-                          <td class="text-center">${el.last_price}</td>
+                          <td class="text-center">${el.pk_chem.get_price}</td>
                           <td class="text-center">${el.cov}</td>                
                         </tr>  
                         `

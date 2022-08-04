@@ -8,11 +8,14 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.urls import reverse, reverse_lazy
+from django.db.models import Max, Prefetch,Count
 from itertools import chain
 from django_filters.views import FilterView
 from master_data.models import Suppliers
 from master_data.forms import SupplierModelForm
 from master_data.filters import SupplierFilter
+from django.db import models
+
 from .forms import (
     ChemicalModelForm, SdsModelForm,
     SubstanceSdsModelForm,PrecautionaryStatementSdsModelForm,
@@ -467,8 +470,23 @@ def load_chemicals_to_search(request, id_supplier, num_posts):
     visible = 3
     upper = num_posts
     lower = upper - visible
+    #price_object = Prices.objects.all()       
+    #partial_qs=price_object.values('id_chemical').annotate(latest_price=Max('price_date')).order_by()        
+    #price_object=price_object.filter(price_date__in=partial_qs.values('latest_price').order_by('-price_date')).first() 
     
-    qs = Chemicals.objects.filter(id_supplier=id_supplier).order_by('description')#.annotate(last_price='chemicals_get_price')    
+    #a_qs = Chemicals.objects.filter(id_supplier=id_supplier).order_by('description').prefetch_related(
+    # 'get_price_list'
+    #)
+    #print("a_qs:" + str(a_qs))
+    
+    
+    
+
+    qs = Chemicals.objects.filter(id_supplier=id_supplier).order_by('description').annotate(price=Max(Chemicals.get_price, output_field=models.IntegerField()))
+    #price_list=[Chemicals.get_price for chem in partial_qs]
+    #qs=partial_qs.objects.all().annotate(price=[Chemicals.get_price for chem in Chemicals.objects.filter(id_supplier=id_supplier).order_by('description')])
+    
+    print("qs:" + str(qs))
     size = len(qs)
     
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -476,7 +494,7 @@ def load_chemicals_to_search(request, id_supplier, num_posts):
         for obj in qs:
             #instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))            
             #if instance.get_price:
-            #price=instance.get_price
+            #    price=instance.get_price
             #else:
             #    price=0            
             item = {
