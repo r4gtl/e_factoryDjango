@@ -14,7 +14,7 @@ from django_filters.views import FilterView
 from master_data.models import Suppliers
 from master_data.forms import SupplierModelForm
 from master_data.filters import SupplierFilter
-from django.db import models
+from django.db import models, connection
 
 from .forms import (
     ChemicalModelForm, SdsModelForm,
@@ -470,40 +470,35 @@ def load_chemicals_to_search(request, id_supplier, num_posts):
     visible = 3
     upper = num_posts
     lower = upper - visible
-    #price_object = Prices.objects.all()       
-    #partial_qs=price_object.values('id_chemical').annotate(latest_price=Max('price_date')).order_by()        
-    #price_object=price_object.filter(price_date__in=partial_qs.values('latest_price').order_by('-price_date')).first() 
+    print("Qui")
+    qs = Chemicals.objects.filter(id_supplier=id_supplier).order_by('description')
     
-    #a_qs = Chemicals.objects.filter(id_supplier=id_supplier).order_by('description').prefetch_related(
-    # 'get_price_list'
-    #)
-    #print("a_qs:" + str(a_qs))
-    
-    
-    
-
-    qs = Chemicals.objects.filter(id_supplier=id_supplier).order_by('description').annotate(price=Max(Chemicals.get_price, output_field=models.IntegerField()))
     #price_list=[Chemicals.get_price for chem in partial_qs]
     #qs=partial_qs.objects.all().annotate(price=[Chemicals.get_price for chem in Chemicals.objects.filter(id_supplier=id_supplier).order_by('description')])
     
-    print("qs:" + str(qs))
+    print("qs elenco:" + str(qs))
     size = len(qs)
-    
+    print("Qui_1")
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        print("Qui_2")
         data=[]
         for obj in qs:
+            #print(Prices.objects.get_max_of_price(obj.id_chemical))
+            #print("Prezzo: " + str(Prices.objects.get_max_of_price(obj.id_chemical)))
             #instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))            
             #if instance.get_price:
             #    price=instance.get_price
             #else:
             #    price=0            
+            
             item = {
                 'id_chemical': obj.description,
-                'last_price': obj.get_price,
+                'last_price': Prices.objects.get_max_of_price(obj.id_chemical),
                 'cov': str(obj.cov),
                 'pk_chem': obj.id_chemical,
             }            
             data.append(item) 
+            
             
         return JsonResponse({'data': data[lower:upper], 'size': size})
     

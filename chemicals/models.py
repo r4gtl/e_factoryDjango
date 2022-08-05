@@ -3,6 +3,8 @@ from django.db import models
 from master_data.models import Suppliers
 import datetime
 from django.db.models import Count, Max, Subquery, OuterRef
+from .managers import ChemicalManager, PriceManager
+
 # Create your models here.
 
 FLAMABILITY_STATUS = (
@@ -17,6 +19,9 @@ DEPARTMENTS = (
     (2, "Rifinizione")
 )
 
+
+
+
 class Chemicals(models.Model):
     id_chemical = models.AutoField(primary_key=True)
     id_supplier = models.ForeignKey(Suppliers, null=True, on_delete = models.CASCADE)
@@ -30,6 +35,9 @@ class Chemicals(models.Model):
     def __str__(self):
         return self.description
 
+    objects=ChemicalManager()
+    
+    
     '''Recupero l'ultimo prezzo del prodotto chimico'''
     @property
     def get_price(self):        
@@ -219,22 +227,17 @@ class ChemicalsSubstances(models.Model):
     concentration=models.CharField(max_length=50, blank=False, null=False)
 
 
-# class PricesManager(models.Manager):
-#     '''Al momento non serve'''
-#     def max_of_prices(self, idc):
-#         qs=Prices.objects.all()
-#         prova=qs.values('id_chemical').annotate(latest_price=Max('price_date'))
-#         qs=qs.filter(price_date__in=prova.values('latest_price').order_by('-price_date')).filter(**{'id_chemical':idc})
-#         return qs
-
-
 
 class Prices(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE, related_name='prezzo')
     price=models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, default=0)
     #price=models.FloatField(blank=True, null=True)
     price_date=models.DateField(default=datetime.date.today, blank=True, null=True)
-    # objects = PricesManager()
+    
+    chemicalprices= ChemicalManager() 
+    
+    objects = PriceManager()
+    
 
 
 '''funzione per numerare automaticamente il campo numero ordine
