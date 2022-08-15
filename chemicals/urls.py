@@ -21,8 +21,8 @@ urlpatterns = [
     path('single-product/<int:id>/update-sds/<int:pk>/new-ds-sds/', views.new_ds_sds, name="new-ds-sds"),
 
     path('data/<int:id_chemical>/', views.load_last_orders_view, name='last-orders' ),
-    path('chemlist/<int:id_supplier>/<int:num_posts>/', views.load_chemicals_to_search, name='load-chemicals' ),
-    path('chemlist/<int:id_supplier>/<str:search_text>/', views.load_chemicals_to_search_filtered, name='load-chemicals-filtered' ),
+    path('chemlist/<int:id_supplier>/<int:num_chems>/', views.load_chemicals_to_search, name='load-chemicals' ),
+    path('chemlist/<int:id_supplier>/<str:search_text>/<int:num_chems>/', views.load_chemicals_to_search_filtered, name='load-chemicals-filtered' ),
     path('supplier_list/', views.load_suppliers_to_search, name='load-suppliers-search' ),
     path('supplier_list/<str:search_text>/', views.load_suppliers_to_search_filtered, name='load-suppliers-search-filtered'),
     path('<int:pk>/update_conformity/', views.update_conf_order, name='update-conformity'),

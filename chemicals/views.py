@@ -8,7 +8,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.urls import reverse, reverse_lazy
-from django.db.models import Max, Prefetch,Count
+from django.db.models import Max, Prefetch,Count, Subquery,OuterRef
 from itertools import chain
 from django_filters.views import FilterView
 from master_data.models import Suppliers
@@ -463,69 +463,120 @@ def load_chemicals_to_search(request, id_supplier):
 '''
 prova per caricare solo un tot alla volta
 '''
-def load_chemicals_to_search(request, id_supplier, num_posts):
+def load_chemicals_to_search(request, id_supplier, num_chems):
     '''
     Carica i prodotti chimici del fornitore scelto
     '''
     visible = 3
-    upper = num_posts
+    upper = num_chems
     lower = upper - visible
-    print("Qui")
-    qs = Chemicals.objects.filter(id_supplier=id_supplier).order_by('description')
     
-    #price_list=[Chemicals.get_price for chem in partial_qs]
-    #qs=partial_qs.objects.all().annotate(price=[Chemicals.get_price for chem in Chemicals.objects.filter(id_supplier=id_supplier).order_by('description')])
+    latest_price=Prices.objects.filter(
+        price_date=Subquery(
+            (Prices.objects.filter
+            (id_chemical=OuterRef('id_chemical'))
+            .values('id_chemical')
+            .annotate(last_price=Max('price_date'))
+            .values('last_price')[:1]
+        )
+        )
+    )
     
-    print("qs elenco:" + str(qs))
+    qs=Chemicals.objects.filter(id_supplier=id_supplier).order_by('description').prefetch_related(
+        Prefetch('prezzo',
+                queryset=latest_price,                
+                to_attr='latest_price'
+                )
+        
+    )
+    
+    
     size = len(qs)
-    print("Qui_1")
+    
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        print("Qui_2")
+        
         data=[]
         for obj in qs:
-            #print(Prices.objects.get_max_of_price(obj.id_chemical))
-            #print("Prezzo: " + str(Prices.objects.get_max_of_price(obj.id_chemical)))
+            
             #instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))            
             #if instance.get_price:
             #    price=instance.get_price
             #else:
             #    price=0            
-            
+            if obj.id_chemical==1:
+                print('prezzo primo prodotto: ' + str(obj.latest_price[0].price))
+                
             item = {
                 'id_chemical': obj.description,
-                'last_price': Prices.objects.get_max_of_price(obj.id_chemical),
+                #'last_price': Prices.objects.get_max_of_price(obj.id_chemical),
+                'last_price': obj.latest_price[0].price,
                 'cov': str(obj.cov),
                 'pk_chem': obj.id_chemical,
             }            
             data.append(item) 
             
-            
+    
         return JsonResponse({'data': data[lower:upper], 'size': size})
     
 
 
 
-def load_chemicals_to_search_filtered(request, id_supplier, search_text):
+def load_chemicals_to_search_filtered(request, id_supplier, search_text, num_chems):
     '''
     Carica i prodotti chimici del fornitore scelto filtrandoli man mano che si digita il nome
     '''
+    
+    visible = 3
+    upper = num_chems
+    lower = upper - visible
+    
+    latest_price=Prices.objects.filter(
+        price_date=Subquery(
+            (Prices.objects.filter
+            (id_chemical=OuterRef('id_chemical'))
+            .values('id_chemical')
+            .annotate(last_price=Max('price_date'))
+            .values('last_price')[:1]
+        )
+        )
+    )
     if search_text:
-        qs = Chemicals.objects.filter(id_supplier=id_supplier).filter(description__icontains=search_text)
+        
+        qs=Chemicals.objects.filter(id_supplier=id_supplier).filter(description__icontains=search_text).order_by('description').prefetch_related(
+            Prefetch('prezzo',
+                    queryset=latest_price,
+                    to_attr='latest_price'
+                    )
+            
+        )
+        
+    #qs = Chemicals.objects.filter(id_supplier=id_supplier).filter(description__icontains=search_text)
     else:
-        qs = Chemicals.objects.filter(id_supplier=id_supplier)
+        
+        qs=Chemicals.objects.filter(id_supplier=id_supplier).order_by('description').prefetch_related(
+            Prefetch('prezzo',
+                    queryset=latest_price,
+                    to_attr='latest_price'
+                    )
+            
+        )
+        
+        #qs = Chemicals.objects.filter(id_supplier=id_supplier)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        size = len(qs)
         data=[]
         for obj in qs:
-            instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))
-            price=instance.get_price
+            # instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))
+            # price=instance.get_price
             item = {
                 'id_chemical': obj.description,
-                'last_price': price,
+                'last_price': obj.latest_price[0].price,
                 'description': str(obj.cov),
                 'pk_chem': obj.id_chemical,
             }
             data.append(item)
-        return JsonResponse({'data': data})
+        #return JsonResponse({'data': data})
+        return JsonResponse({'data': data[lower:upper], 'size': size})
 
 
 def load_suppliers_to_search(request):
