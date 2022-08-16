@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-
+{% load static %}
 
 
 {% block head_title %}{{ block.super }} - Crea/Modifica Ordine{% endblock head_title %}
@@ -11,109 +11,51 @@
       <br>
       <h5 class="text-end">Ordine {{ supplier }}</h5>
       <h5 class="text-end hidden" id="supplier">{{ supplier.id_supplier }}</h5>
-      
       <hr>
       <br>
 
-      <div class="form-group">
-        <form class="" method="POST" novalidate enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="hidden" id="previous_page" name="previous_page"
-            value="/previous/page/url">
-            <input type="submit" class="btn btn-info mb-2 me-1" name="save" value="Salva ed Esci">
-            <input type="submit" class="btn btn-info mb-2 me-1" name="save_go_ahead" value="Salva e procedi col dettaglio">
+        <div class="form-group">
+          <form class="" method="POST" novalidate enctype="multipart/form-data">
+              {% csrf_token %}
+              <input type="hidden" id="previous_page" name="previous_page"
+              value="/previous/page/url">
+              <input type="submit" class="btn btn-info mb-2 me-1" name="save" value="Salva ed Esci">
+              <input type="submit" class="btn btn-info mb-2 me-1" name="save_go_ahead" value="Salva e procedi col dettaglio">
 
 
-                    <div class="row mb-4">
-                      <div class="col-md-12 border rounded shadow-sm">
-                        <div class="row" style="align-items:center;">                          
-                            <div class="col-md-4">                              
-                              {{ form.id_order.as_hidden }}
-                              {{ form.id_chemical|as_crispy_field }}
-                            </div>
-                            <div class="col-md-1" >
-                              <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary " id="load-modal" data-bs-toggle="modal" data-bs-target="#SearchChemModal">
-                              <span class="bi bi-search"></span>
-                            </button>
-                          </div>  
-                                <!-- Modal -->
-                                <div class="modal fade" id="SearchChemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                  <div class="modal-dialog">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Cerca Prodotto Chimico...</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                      </div>
-                                      <div class="container">
-                                        <div class="modal-body" >   
-                                          <input type="text" id="searchChemical" class="form-control mb-2" placeholder="Cerca prodotto" aria-label="ProdottoChimico" aria-describedby="basic-addon1">                                 
-                                          <div class="row" >
-                                            <div class="col-md-12" >                          
-                                              <table class="table table-bordered table-striped">                              
-                                                <thead>   
-                                                  <tr>
-                                                    <th class="text-center">Scegli</th>
-                                                    <th class="text-center">Prodotto Chimico</th>
-                                                    <th class="text-center">Prezzo Corrente</th>
-                                                    <th class="text-center">Sov</th>
-                                                    
-                                                  </tr>
-                                                </thead>
-                                                <tbody id="chem-list" class="text-center">
-                                                  
-                                                </tbody>
-                                                  
-                                              </table>
-                                              
-                                            </div>
-                                            
-                                            
-                  
-                                          </div>
-                                          <!-- fine lista recenti -->
-                                          <div id="spinner-box" class="text-center">
-                                            <div class="spinner-border" role="status"></div>
-                                        </div>
-                                          <div class="text-center mb-3" id="end-box" >
-                                            <button class="btn btn-primary" id="load-btn">Load more</button>
-                                        </div>
-                                        </div>
-
-                                        
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                        
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div> 
-                                <!-- Fine Modal-->
-                            
-                            <div class="col-md-2">
-                              {{ form.um|as_crispy_field }}
-                            </div>
-                            <div class="col-md-2">
-                              {{ form.quantity|as_crispy_field }}
-                            </div>
-                            <div class="col-md-3">
-                              {{ form.id_packaging_type|as_crispy_field }}
-                            </div>
+                      <div class="row mb-4">
+                        <div class="col-md-12 border rounded shadow-sm">
+                          <div class="row" style="align-items:center;">                          
+                              <div class="col-md-4">                              
+                                {{ form.id_order.as_hidden }}
+                                {{ form.id_chemical|as_crispy_field }}
+                              </div>
+                              <div class="col-md-1" >
+                                  <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary " id="load-modal" data-bs-toggle="modal" data-bs-target="#SearchChemModal">
+                                  <span class="bi bi-search"></span>
+                              </button>
+                              </div>  
+                            {% include 'partials/_chem_search_modal.html' %}
+                              
+                              <div class="col-md-2">
+                                {{ form.um|as_crispy_field }}
+                              </div>
+                              <div class="col-md-2">
+                                {{ form.quantity|as_crispy_field }}
+                              </div>
+                              <div class="col-md-3">
+                                {{ form.id_packaging_type|as_crispy_field }}
+                              </div>
+                          </div>
                         </div>
-                        
-
-                        
-
                       </div>
-                    </div>
 
-        <!-- fine form -->
-        </form>
-
-    </div>
+          <!-- fine form -->
+          </form>
+      </div>
     <!-- inizio lista recenti -->
-    <!--<button class="btn btn-primary" id="load-btn">Vedi recenti</button>-->
+    
                         <hr>
                         <p>Ordini Precedenti</p>
                         <!-- Detail Section -->
@@ -134,315 +76,18 @@
                                 
                               </tbody>
                             </table>
-                            
                           </div>
-                          
-
                         </div> <!-- fine lista recenti -->
-
-
-    <!-- inizio prova ajax -->
-    <!-- <div class="container">
-        
-        <input type="text" id="searchChemical" class="form-control mb-2" placeholder="Cerca prodotto" aria-label="ProdottoChimico" aria-describedby="basic-addon1">                                 
-        <div class="row" >
-          <div class="col-md-12" >                          
-            <table class="table table-bordered table-striped">                              
-              <thead>   
-                <tr>
-                  <th class="text-center">Scegli</th>
-                  <th class="text-center">Prodotto Chimico</th>
-                  <th class="text-center">Prezzo Corrente</th>
-                  <th class="text-center">Sov</th>
-                  
-                </tr>
-              </thead>
-              <tbody id="chem-list" class="text-center">
-                
-              </tbody>
-                
-            </table>
-            
-          </div>
-          
-          
-
-        </div> -->
-        <!-- fine lista recenti -->
-        <!-- <div id="spinner-box" class="text-center">
-          <div class="spinner-border" role="status"></div>
-      </div>
-        <div class="text-center mb-3" id="end-box" >
-          <button class="btn btn-primary" id="load-btn">Load more</button>
-      </div>
-      
-    </div> -->
-
-    <!-- fine prova ajax -->
-
     </div>
-    {% endblock content %}
-    {% block scripts %}{{ block.super }}
     
-
-<script>
-    prev = document.getElementById("previous_page");
-    prev.value = document.referrer;
-
-    $(function() {
-    $('#chem-list').on('click', 'button', function(){
-      var prova=$(this).attr('id');      
-      let idChem=prova
-      data={
-        id_chemical: idChem
-      }
-      $('#id_id_chemical').val(data.id_chemical);
-      getData()
-      $('#SearchChemModal').modal('hide');
-    });
-  });
-  
-
-
-const choiceProd = document.getElementById('div_id_id_chemical')
-const loadModal = document.getElementById('load-modal')
-const url = window.location.href + "data/"
-const recentBox = document.getElementById('recent-box')
-const chemList = document.getElementById('chem-list')
-const searchChemical = document.getElementById('searchChemical')
-const loadBtn = document.getElementById('load-btn')
-const spinnerBox = document.getElementById('spinner-box')
-const endBox = document.getElementById('end-box')
+    {% endblock content %}
+    
+    
+    {% block scripts %}{{ block.super }}
+    <script src="{% static 'js/chemicals/search_chemicals.js' %}"></script>
+    {% endblock scripts %}
 
 
 
 
-const getData = () => {
-    let idchem=document.querySelector('#id_id_chemical').value
-    $.ajax({
-        type: 'GET',        
-        url: `/chemicals/data/${idchem}/`,
-        
-        
-        success: function(response){
-            const data = response.data
-            console.log('You did it!!!')
-            
-            $(recentBox).empty()
-            for (var i = 0; i < data.length; i++){
-                var row = `
-                <tr>  
-                <td class="text-center"><a href="">${data[i].id_order}</a></td>
-                <td class="text-center">${data[i].order_date}</td>
-                <td class="text-center">${data[i].id_chemical}</td>
-                <td class="text-center">${data[i].um}</td>
-                <td class="text-center">${data[i].quantity}</td>
-                <td class="text-center">${data[i].id_packaging_type}</td>
-                </tr>  
-                `
-            recentBox.innerHTML+=row
-        }},
-        error: function(error){
-        
-        console.log(error)
-        
-        }
-        
-    })
-}
-
-
-/*loadBtn.addEventListener('click', ()=>{  
-  getData()
-})*/
-
-
-choiceProd.addEventListener('change', ()=>{  
-  getData()
-})
-
-
-//getData()
-
-
-/*const getDataChemicals = () => {
-    let idsup=document.getElementById('supplier').innerText    
-    $.ajax({
-        type: 'GET',        
-        url: `/chemicals/chemlist/${idsup}/`,
-        
-        
-        success: function(response){
-            const data = response.data            
-            $(chemList).empty()
-            for (var i = 0; i < data.length; i++){
-                var row = `
-                <tr>  
-                <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${data[i].pk_chem}">
-                <span class="bi bi-search"></span> 
-                </button></td>
-                <td class="text-center" >${data[i].id_chemical}</td>
-                <td class="text-center">${data[i].last_price}</td>
-                <td class="text-center">${data[i].description}</td>                
-                </tr>  
-                `
-            chemList.innerHTML+=row
-        }},
-        error: function(error){
-        
-        console.log(error)
-        
-        }
-        
-    })
-}*/
-
-
-
-let visible = 3
-const getDataChemicals = () => {
-  let idsup=document.getElementById('supplier').innerText  
-  //chemList.innerHTML =  ''
-    $.ajax({
-        type: 'GET',
-        url: `/chemicals/chemlist/${idsup}/${visible}/`,
-        success: function(response){            
-            const data = response.data
-            
-
-            //spinnerBox.classList.add('not-visible')
-            
-            setTimeout(()=>{
-              spinnerBox.hidden=true    
-                data.forEach(el => {
-                  /* console.log("elemento: " + el.id_chemical)
-                  console.log("pk_chem: " + el.pk_chem)
-                  console.log("cov: " + el.cov)
-                  console.log("prezzo: " + el.last_price)*/
-                  
-                  chemList.innerHTML += `
-                        <tr>  
-                          <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${el.pk_chem}">
-                          <span class="bi bi-search"></span> 
-                          </button></td>
-                          <td class="text-center" >${el.id_chemical}</td>
-                          <td class="text-center">${el.last_price}</td>
-                          <td class="text-center">${el.cov}</td>                
-                        </tr>  
-                        `
-                
-                });
-            }, 300) 
-                /*data.map(el=>{
-                    console.log(el.id)
-                    chemList.innerHTML += `<tr>  
-                          <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${el.pk_chem}">
-                          <span class="bi bi-search"></span> 
-                          </button></td>
-                          <td class="text-center" >${el.id_chemical}</td>
-                          <td class="text-center">${el.get_price}</td>
-                          <td class="text-center">${el.cov}</td>                
-                        </tr>  
-                        `
-                })
-                
-            }, 500)*/           
-            if (response.size === 0) {
-                endBox.textContent = 'No posts added yet...'
-            }
-            else if (response.size <= visible) {
-                loadBtn.classList.add('not-visible')
-                endBox.textContent = 'No more posts to load...'
-            }
-        },
-        error: function(error){
-            console.log(error)
-        }
-    })
-}
-
-
-
-loadBtn.addEventListener('click', ()=>{
-  
-    spinnerBox.hidden=false
-    visible += 3    
-    getDataChemicalsFiltered()
-})
-
-
-
-
-loadModal.addEventListener('click', ()=>{
-  chemList.innerHTML =  ''
-  //let idsup=document.getElementById('#supplier')
-  getDataChemicalsFiltered()
-  })
-
-//getDataChemicals()
-
-///provo a filtrare man mano che si digita
-
-
-
-
-const getDataChemicalsFiltered = () => {
-    let idsup=document.getElementById('supplier').innerText  
-    ///let searchTxt=document.getElementById('#searchChemical').innerText
-    let searchTxt=$('#searchChemical').val() 
-    if (searchTxt){
-      url_var=`/chemicals/chemlist/${idsup}/${searchTxt}/${visible}/`
-    } else {
-      url_var=`/chemicals/chemlist/${idsup}/${visible}/`
-    }
-    $.ajax({
-        type: 'GET',        
-        url: url_var,
-        
-        
-        success: function(response){
-            const data = response.data            
-            $(chemList).empty()
-            spinnerBox.hidden=true
-            for (var i = 0; i < data.length; i++){
-                var row = `
-                <tr>  
-                <td class="text-center"><button type="button" class="btn btn-primary btn-sm" id="${data[i].pk_chem}">
-                <span class="bi bi-search"></span> 
-                </button></td>
-                <td class="text-center" >${data[i].id_chemical}</td>
-                <td class="text-center">${data[i].last_price}</td>
-                <td class="text-center">${data[i].description}</td>                
-                </tr>  
-                `
-            chemList.innerHTML+=row
-        }
-        if (response.size === 0) {
-          endBox.textContent = 'Nessun prodotto ancora aggiunto...'
-      }
-      else if (response.size <= visible) {
-          loadBtn.classList.add('not-visible')
-          endBox.textContent = 'Non ci sono altri prodotti da caricare...'
-      }
-      },
-        error: function(error){
-        
-        console.log(error)
-        
-        }
-        
-    })
-}
-
-searchChemical.addEventListener('keyup', ()=>{  
-  getDataChemicalsFiltered()
-})
-
-//getDataChemicalsFiltered()
-///fine prova filtraggio
-
-</script>
-
-
-{% endblock scripts %}
 

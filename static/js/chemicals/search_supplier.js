@@ -1,4 +1,4 @@
-
+const loadModal = document.getElementById('load-modal')
 
 //====================================Cercare un fornitore
 $('#SearchSupplierModal').on('shown.bs.modal', function () {
@@ -20,7 +20,7 @@ $('#supplier-list').on('click', 'button', function(){
 
 const suppList = document.getElementById('supplier-list')
 const searchSupplier = document.getElementById('searchSupplier')
-const loadModal = document.getElementById('load-modal')
+
 
 
 
@@ -73,3 +73,4 @@ getDataSuppliers()
 getDataSuppliers()
 
 //====================================Fine ricerca fornitore
+
