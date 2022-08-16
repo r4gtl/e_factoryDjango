@@ -14,8 +14,7 @@ const endBox = document.getElementById('end-box')
 
 
 $('#SearchChemModal').on('shown.bs.modal', function () {
-    $('#searchChemical').focus();
-    
+    $('#searchChemical').focus();    
 })  
 
 prev = document.getElementById("previous_page");
@@ -78,7 +77,7 @@ choiceProd.addEventListener('change', ()=>{
 let visible = 3
 const getDataChemicals = () => {
     let idsup=document.getElementById('supplier').innerText  
-    $(chemList).empty()
+    //$(chemList).empty()
     $.ajax({
         type: 'GET',
         url: `/chemicals/chemlist/${idsup}/${visible}/`,
@@ -107,7 +106,7 @@ const getDataChemicals = () => {
                 endBox.textContent = 'No posts added yet...'
             }
             else if (response.size <= visible) {
-                //loadBtn.classList.add('not-visible')
+                loadBtn.classList.add('not-visible')
                 //loadBtn.hidden=true
                 endBox.textContent = 'No more posts to load...'
             }
@@ -132,9 +131,9 @@ loadBtn.addEventListener('click', ()=>{
 loadModalChemicals.addEventListener('click', ()=>{    
     searchChemical.value = ''
     $(chemList).empty()
-    $(loadBtn).hidden=false
-    endBox.textContent = ''
-  //let idsup=document.getElementById('#supplier')
+    $(loadBtn).show()    
+    $(endBox).show()
+    
     getDataChemicalsFiltered()
 })
 
@@ -176,9 +175,12 @@ const getDataChemicalsFiltered = () => {
             endBox.textContent = 'Nessun prodotto ancora aggiunto...'
     }
     else if (response.size <= visible) {
-        //loadBtn.classList.add('not-visible')
-        //loadBtn.hidden=true
+        $(loadBtn).hide()
         endBox.textContent = 'Non ci sono altri prodotti da caricare...'
+    } 
+    else if (response.size > visible) {        
+        $(loadBtn).show()
+        endBox.textContent = ''
     }
     },
         error: function(error){

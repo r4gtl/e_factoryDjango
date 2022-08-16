@@ -471,16 +471,19 @@ def load_chemicals_to_search(request, id_supplier, num_chems):
     upper = num_chems
     lower = upper - visible
     
-    latest_price=Prices.objects.filter(
-        price_date=Subquery(
-            (Prices.objects.filter
-            (id_chemical=OuterRef('id_chemical'))
-            .values('id_chemical')
-            .annotate(last_price=Max('price_date'))
-            .values('last_price')[:1]
-        )
-        )
-    )
+    # latest_price=Prices.objects.filter(
+    #     price_date=Subquery(
+    #         (Prices.objects.filter
+    #         (id_chemical=OuterRef('id_chemical'))
+    #         .values('id_chemical')
+    #         .annotate(last_price=Max('price_date'))
+    #         .values('last_price')[:1]
+    #     )
+    #     )
+    # )
+    
+    latest_price= Prices.objects.get_max_of_price()
+    
     
     qs=Chemicals.objects.filter(id_supplier=id_supplier).order_by('description').prefetch_related(
         Prefetch('prezzo',
@@ -497,12 +500,6 @@ def load_chemicals_to_search(request, id_supplier, num_chems):
         
         data=[]
         for obj in qs:
-            
-            #instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))            
-            #if instance.get_price:
-            #    price=instance.get_price
-            #else:
-            #    price=0            
             if obj.id_chemical==1:
                 print('prezzo primo prodotto: ' + str(obj.latest_price[0].price))
                 
@@ -530,16 +527,19 @@ def load_chemicals_to_search_filtered(request, id_supplier, search_text, num_che
     upper = num_chems
     lower = upper - visible
     
-    latest_price=Prices.objects.filter(
-        price_date=Subquery(
-            (Prices.objects.filter
-            (id_chemical=OuterRef('id_chemical'))
-            .values('id_chemical')
-            .annotate(last_price=Max('price_date'))
-            .values('last_price')[:1]
-        )
-        )
-    )
+    # latest_price=Prices.objects.filter(
+    #     price_date=Subquery(
+    #         (Prices.objects.filter
+    #         (id_chemical=OuterRef('id_chemical'))
+    #         .values('id_chemical')
+    #         .annotate(last_price=Max('price_date'))
+    #         .values('last_price')[:1]
+    #     )
+    #     )
+    # )
+    
+    latest_price= Prices.objects.get_max_of_price()
+    
     if search_text:
         
         qs=Chemicals.objects.filter(id_supplier=id_supplier).filter(description__icontains=search_text).order_by('description').prefetch_related(
