@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-
-{% block head_title %}{{ block.super }} - Crea nuovo Fornitore{% endblock head_title %}
+{% load widget_tweaks %}
+{% block head_title %}{{ block.super }} - Prodotti Chimici{% endblock head_title %}
 
 {% block content %}
 
@@ -32,6 +32,25 @@
 
     <input type="hidden" id="previous_page" name="previous_page" 
     value="/previous/page/url">
+    <!-- filter -->
+    <form method="get">
+      
+        <h4 style="margin-top: 0">Cerca Prodotto</h4>
+        <div class="row">
+          <div class="form-group col-sm-4 col-md-3">
+            {{ filter.form.description.label_tag }} 
+            {% render_field filter.form.description class="form-control" %}
+          </div>          
+        <button type="submit" class="btn btn-primary btn-sm mt-2 mb-4">
+          <span class="bi bi-search"></span> Cerca
+        </button>
+        
+      </div>
+    </form>
+
+    <!-- fine filtro -->
+
+
     <a class="btn btn-sm btn-success mt-2 mb-4" href="{% url 'chemicals:create-product' pk=supplier.pk %}"><span class="bi bi-person-plus-fill"></span> Aggiungi</a>
         <table class="table table-bordered table-striped">
                         <thead>

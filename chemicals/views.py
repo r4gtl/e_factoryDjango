@@ -32,7 +32,7 @@ from .models import (
     ChemicalOrder, ChemicalOrderDetail,
     )
 
-from .filters import OrderFilter
+from .filters import OrderFilter, ChemicalFilter
 #from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q, F
 from master_data.mixins import StaffMixin
 from django.core.paginator import Paginator
@@ -46,19 +46,26 @@ import json
 # Create your views here.
 
 def home(request):
-    suppliers_list = Suppliers.objects.filter(category=3)
+    suppliers_list = Suppliers.objects.filter(category=2)
     suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
 
 def price_list(request,pk):
     supplier = get_object_or_404(Suppliers, pk=pk)
-    chem_list = Chemicals.objects.filter(id_supplier=pk).order_by("description")    
+    chem_list = Chemicals.objects.filter(id_supplier=pk).order_by("description") 
+    chem_filter = ChemicalFilter(request.GET, queryset=chem_list)   
     paginator = Paginator(chem_list, 30)    
     page = request.GET.get("pagina")
     chemicals_list=paginator.get_page(page)
-    context={'supplier': supplier, 'chemicals_list': chemicals_list}
+    context={'supplier': supplier, 'chemicals_list': chemicals_list, 'filter': chem_filter}
     return render(request, "chemicals/price_list.html", context)
+
+# def searchChemical(request):
+#     chemicals_list = Chemicals.objects.all()
+#     chemicals_filter = ChemicalFilter(request.GET, queryset=chemicals_list)
+    
+#     return render(request, 'master_data/suppliers_list.html', {'filter': chemicals_filter})
 
 
 def update_product(request, pk):
@@ -437,54 +444,16 @@ def load_last_orders_view(request, id_chemical):
             }
             data.append(item)
         return JsonResponse({'data': data})
-
-'''
-def load_chemicals_to_search(request, id_supplier):
-
-    #Carica i prodotti chimici del fornitore scelto
-
-    qs = Chemicals.objects.filter(id_supplier=id_supplier)
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        data=[]
-        for obj in qs:
-            instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))
-            price=instance.get_price
-            item = {
-                'id_chemical': obj.description,
-                'last_price': price,
-                'description': str(obj.cov),
-                'pk_chem': obj.id_chemical,
-            }
-            data.append(item)
-        return JsonResponse({'data': data})
-'''
-
-
-'''
-prova per caricare solo un tot alla volta
-'''
+    
 def load_chemicals_to_search(request, id_supplier, num_chems):
     '''
     Carica i prodotti chimici del fornitore scelto
     '''
     visible = 3
     upper = num_chems
-    lower = upper - visible
-    
-    # latest_price=Prices.objects.filter(
-    #     price_date=Subquery(
-    #         (Prices.objects.filter
-    #         (id_chemical=OuterRef('id_chemical'))
-    #         .values('id_chemical')
-    #         .annotate(last_price=Max('price_date'))
-    #         .values('last_price')[:1]
-    #     )
-    #     )
-    # )
-    
-    latest_price= Prices.objects.get_max_of_price()
-    
-    
+    lower = upper - visible 
+    # Utilizzata la query nel manager dei prezzi   
+    latest_price= Prices.objects.get_max_of_price()    
     qs=Chemicals.objects.filter(id_supplier=id_supplier).order_by('description').prefetch_related(
         Prefetch('prezzo',
                 queryset=latest_price,                
@@ -493,20 +462,21 @@ def load_chemicals_to_search(request, id_supplier, num_chems):
         
     )
     
-    
+    print("qs: " +str(qs))
     size = len(qs)
     
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         
         data=[]
-        for obj in qs:
-            if obj.id_chemical==1:
-                print('prezzo primo prodotto: ' + str(obj.latest_price[0].price))
-                
+        for obj in qs:            
+            if obj.latest_price:
+                last_price=obj.latest_price[0].price,
+            else:                
+                last_price='Manca'
+                    
             item = {
-                'id_chemical': obj.description,
-                #'last_price': Prices.objects.get_max_of_price(obj.id_chemical),
-                'last_price': obj.latest_price[0].price,
+                'id_chemical': obj.description,                
+                'last_price': last_price,   
                 'cov': str(obj.cov),
                 'pk_chem': obj.id_chemical,
             }            
@@ -527,17 +497,7 @@ def load_chemicals_to_search_filtered(request, id_supplier, search_text, num_che
     upper = num_chems
     lower = upper - visible
     
-    # latest_price=Prices.objects.filter(
-    #     price_date=Subquery(
-    #         (Prices.objects.filter
-    #         (id_chemical=OuterRef('id_chemical'))
-    #         .values('id_chemical')
-    #         .annotate(last_price=Max('price_date'))
-    #         .values('last_price')[:1]
-    #     )
-    #     )
-    # )
-    
+    # Utilizzata la query nel manager dei prezzi
     latest_price= Prices.objects.get_max_of_price()
     
     if search_text:
@@ -548,9 +508,7 @@ def load_chemicals_to_search_filtered(request, id_supplier, search_text, num_che
                     to_attr='latest_price'
                     )
             
-        )
-        
-    #qs = Chemicals.objects.filter(id_supplier=id_supplier).filter(description__icontains=search_text)
+        )   
     else:
         
         qs=Chemicals.objects.filter(id_supplier=id_supplier).order_by('description').prefetch_related(
@@ -566,16 +524,19 @@ def load_chemicals_to_search_filtered(request, id_supplier, search_text, num_che
         size = len(qs)
         data=[]
         for obj in qs:
-            # instance = Chemicals.objects.get(id_chemical=str(obj.id_chemical))
-            # price=instance.get_price
+            if obj.latest_price:
+                last_price=obj.latest_price[0].price,
+            else:                
+                last_price='Manca'     
+            
             item = {
                 'id_chemical': obj.description,
-                'last_price': obj.latest_price[0].price,
+                
+                'last_price': last_price,
                 'description': str(obj.cov),
                 'pk_chem': obj.id_chemical,
             }
-            data.append(item)
-        #return JsonResponse({'data': data})
+            data.append(item)        
         return JsonResponse({'data': data[lower:upper], 'size': size})
 
 
@@ -691,6 +652,9 @@ def update_conf_order(request, pk):
         })
 
     return redirect('core:homepage') # you should change that with the name of your view
+
+
+
 
 '''Fine Sezione Ordini'''
 

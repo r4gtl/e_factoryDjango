@@ -1,10 +1,11 @@
 from django.db.models.fields import BooleanField
 import django_filters
+from django_filters import CharFilter
 from django import forms
 from django.db import models
 from django_filters import DateFilter
 from django_filters.filters import BooleanFilter
-from .models import ChemicalOrder, Substances
+from .models import ChemicalOrder, Substances, Chemicals
 from crispy_forms.bootstrap import InlineRadios
 
 
@@ -27,10 +28,7 @@ class OrderFilter(django_filters.FilterSet):
                     },
                 },               
             }
-            
-            
         
-        #exclude = ['id_dett_ord', 'idcliente', 'idcollegamento']
         
 class SubstancesFilter(django_filters.FilterSet):
         descrizione=django_filters.CharFilter(field_name='description', lookup_expr='icontains', widget=forms.TextInput(attrs={'style': 'width: 90%; margin-left: 5%'}), label="")
@@ -51,3 +49,11 @@ class SubstancesFilter(django_filters.FilterSet):
                     },
                 },               
             }
+
+
+        
+class ChemicalFilter(django_filters.FilterSet):
+    description=django_filters.CharFilter(field_name='description', lookup_expr='icontains', label="Descrizione")
+    class Meta:
+        model = Chemicals
+        fields = ['description'] 
