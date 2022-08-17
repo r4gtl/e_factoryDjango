@@ -3,7 +3,7 @@ from django.db import models
 from master_data.models import Suppliers
 import datetime
 from django.db.models import Count, Max, Subquery, OuterRef
-from .managers import ChemicalManager, PriceManager
+from .managers import ChemicalManager, PriceManager, SDSManager
 
 # Create your models here.
 
@@ -156,12 +156,13 @@ class RegReach(models.Model):
 
 class Sds(models.Model):
     id_sds = models.AutoField(primary_key=True)
-    id_chemical=models.ForeignKey(Chemicals, blank=False, null=False, on_delete = models.CASCADE)
+    id_chemical=models.ForeignKey(Chemicals, blank=False, null=False, on_delete = models.CASCADE,related_name='sds')
     sds = models.FileField(upload_to='sds')
     rev_date = models.DateField(blank=True, null=True)
     conformityReach = models.BooleanField(default=True)
     reg_id=models.ForeignKey(RegReach, null=False, on_delete = models.CASCADE)
 
+    objects = SDSManager()
 
 
 class ChemicalHazardStatements(models.Model):
@@ -232,10 +233,8 @@ class Prices(models.Model):
     id_chemical=models.ForeignKey(Chemicals, null=False, on_delete = models.CASCADE, related_name='prezzo')
     price=models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, default=0)
     #price=models.FloatField(blank=True, null=True)
-    price_date=models.DateField(default=datetime.date.today, blank=True, null=True)
-    
+    price_date=models.DateField(default=datetime.date.today, blank=True, null=True)    
     chemicalprices= ChemicalManager() 
-    
     objects = PriceManager()
     
 

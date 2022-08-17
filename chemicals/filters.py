@@ -53,7 +53,7 @@ class SubstancesFilter(django_filters.FilterSet):
 
         
 class ChemicalFilter(django_filters.FilterSet):
-    description=django_filters.CharFilter(field_name='description', lookup_expr='icontains', label="Descrizione")
+    description=django_filters.CharFilter(field_name='description', lookup_expr='icontains', label='Descrizione')
     class Meta:
         model = Chemicals
         fields = ['description'] 

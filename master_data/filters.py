@@ -7,6 +7,7 @@ from .models import Suppliers, VatCodes
 #         fields = ['username', 'first_name', 'last_name', ]
         
 class SupplierFilter(django_filters.FilterSet):
+    company_name=django_filters.CharFilter(lookup_expr='icontains')
     class Meta:
         model = Suppliers
         fields = ['company_name', 'vat_number', 'cf_number'] 

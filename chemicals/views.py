@@ -30,6 +30,7 @@ from .models import (
     ChemicalsSubstances, ChemicalsPrecautionaryStatement,
     ChemicalDangerSymbols, DangerSymbols,
     ChemicalOrder, ChemicalOrderDetail,
+    
     )
 
 from .filters import OrderFilter, ChemicalFilter
@@ -51,21 +52,32 @@ def home(request):
     return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
 
 
-def price_list(request,pk):
-    supplier = get_object_or_404(Suppliers, pk=pk)
-    chem_list = Chemicals.objects.filter(id_supplier=pk).order_by("description") 
-    chem_filter = ChemicalFilter(request.GET, queryset=chem_list)   
-    paginator = Paginator(chem_list, 30)    
-    page = request.GET.get("pagina")
-    chemicals_list=paginator.get_page(page)
-    context={'supplier': supplier, 'chemicals_list': chemicals_list, 'filter': chem_filter}
-    return render(request, "chemicals/price_list.html", context)
-
-# def searchChemical(request):
-#     chemicals_list = Chemicals.objects.all()
-#     chemicals_filter = ChemicalFilter(request.GET, queryset=chemicals_list)
+def price_list(request,pk):    
+    latest_price= Prices.objects.get_max_of_price()
+    latest_rev=Sds.objects.get_max_of_sds()    
+    supplier = get_object_or_404(Suppliers, pk=pk)        
+    chem_list=Chemicals.objects.filter(id_supplier=pk).order_by('description').prefetch_related(
+            Prefetch('prezzo',
+                    queryset=latest_price,
+                    to_attr='latest_price'
+                    )            
+        ).prefetch_related(
+            Prefetch('sds',
+                    queryset=latest_rev,
+                    to_attr='latest_rev'
+                    )            
+        )  
     
-#     return render(request, 'master_data/suppliers_list.html', {'filter': chemicals_filter})
+    chem_filter = ChemicalFilter(request.GET, queryset=chem_list)
+    
+    # for filter in chem_filter:
+    #     print("chem_filter: " + str(chem_filter.description))
+    
+    # paginator = Paginator(chem_filter, 30)    
+    # page = request.GET.get("pagina")
+    # chem_filter=paginator.get_page(page)
+    context={'supplier': supplier, 'chemicals_list': chem_list, 'filter': chem_filter}
+    return render(request, "chemicals/price_list.html", context)
 
 
 def update_product(request, pk):
