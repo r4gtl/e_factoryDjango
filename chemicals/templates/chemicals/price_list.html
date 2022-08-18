@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-{% block head_title %}{{ block.super }} - Prodotti Chimici{% endblock head_title %}
+{% load static %}
 
+{% block head %}{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+{% block head_title %}{{ block.super }} - Prodotti Chimici{% endblock head_title %}
+{% endblock head %}
 {% block content %}
 
     <!-- Breadcrumb -->
@@ -40,7 +44,7 @@
           <div class="col-8">
           <div class="form-group">
             {{ filter.form.description.label_tag }} 
-            {% render_field filter.form.description class="form-control" %}
+            {% render_field filter.form.description class="form-control" id="toClear" %}
           </div>
             
           </div>   
@@ -48,13 +52,15 @@
             <button type="submit" class="btn btn-primary btn-sm mt-4 ">
               <span class="bi bi-search"></span> Cerca
             </button>
+            <button class="btn btn-success btn-sm mt-4 clearText"><span class="bi bi-arrow-repeat"></span> Pulisci filtro</button>
+
           </div>       
         
         
       
     </div>
     </form>
-
+    
     <!-- fine filtro -->
 
 
@@ -128,9 +134,10 @@
 
 </div>
 
-<script>
-    prev = document.getElementById("previous_page");
-    prev.value = document.referrer;
-</script>
+
 
 {% endblock content %}
+
+{% block scripts %}{{ block.super }}
+
+{% endblock scripts %}

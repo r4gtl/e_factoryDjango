@@ -70,12 +70,23 @@ def price_list(request,pk):
     
     chem_filter = ChemicalFilter(request.GET, queryset=chem_list)
     
-    # for filter in chem_filter:
-    #     print("chem_filter: " + str(chem_filter.description))
-    
-    # paginator = Paginator(chem_filter, 30)    
+    # discussione = get_object_or_404(Discussione, pk=pk)
+    # posts_discussione = Post.objects.filter(discussione=discussione)
+
+    # paginator = Paginator(posts_discussione, 5)
     # page = request.GET.get("pagina")
-    # chem_filter=paginator.get_page(page)
+    # posts = paginator.get_page(page)
+
+    # form_risposta = PostModelForm()
+    # context = {
+    #     "discussione": discussione,
+    #     "posts_discussione": posts,
+    #     "form_risposta": form_risposta,
+    # }
+    
+    # paginator = Paginator(chem_filter.qs, 30)    
+    # page = request.GET.get("pagina")
+    # chem_page=paginator.get_page(page)
     context={'supplier': supplier, 'chemicals_list': chem_list, 'filter': chem_filter}
     return render(request, "chemicals/price_list.html", context)
 

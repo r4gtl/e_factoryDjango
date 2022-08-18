@@ -2,6 +2,10 @@ prev = document.getElementById("previous_page");
 prev.value = document.referrer;
 
 
+//funzione per pulire i campi dei filtri
+$('.clearText').click(function(){    
+    $("#toClear").val('');
+});
 
 
 
