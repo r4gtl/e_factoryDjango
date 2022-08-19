@@ -407,13 +407,15 @@ class CreateOrder(CreateView):
     context_object_name = 'order'
 
     def form_valid(self, form):
-        self.success_url = self.request.POST.get('previous_page')
-        return super().form_valid(form)
+        # self.success_url = self.request.POST.get('previous_page')
+        # return super().form_valid(form)
+        pass
+    
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
+        # Add in a QuerySet of all the orders
         if self.request=='GET':
             context['order_detail'] = ChemicalOrderDetail.objects.filter(id_order=self.kwargs['id_order'])
             context['order_instance'] = ChemicalOrder.objects.get(id_order=self.kwargs['id_order'])
@@ -662,6 +664,7 @@ class UpdateOrder(UpdateView):
         self.success_url = self.request.POST.get('previous_page')
 
         return super().form_valid(form)
+        
 
 def update_conf_order(request, pk):
     order = get_object_or_404(ChemicalOrder, pk=pk)

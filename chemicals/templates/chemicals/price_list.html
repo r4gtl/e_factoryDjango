@@ -3,10 +3,10 @@
 {% load widget_tweaks %}
 {% load static %}
 
-{% block head %}{{ block.super }}
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+
 {% block head_title %}{{ block.super }} - Prodotti Chimici{% endblock head_title %}
-{% endblock head %}
+
 {% block content %}
 
     <!-- Breadcrumb -->
@@ -29,7 +29,7 @@
 
 <div class="container">
     <br>
-    <h5 class="text-end">Listino Prezzi Fornitore: {{ supplier.company_name }}</h5>
+    <h6 class="text-end">Listino Prezzi Fornitore: {{ supplier.company_name }}</h6>
 
     <hr>
     <br>
@@ -38,7 +38,7 @@
     value="/previous/page/url">
     <!-- filter -->
     <form method="get">      
-        <h5 style="margin-top: 0">Cerca Prodotto</h5>
+        <h6 style="margin-top: 0">Cerca Prodotto</h6>
         
         <div class="row align-middle">
           <div class="col-8">
