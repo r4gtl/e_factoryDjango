@@ -201,13 +201,16 @@ def new_sds(request,pk):
 
 class UpdateSds(UpdateView):
     model = Sds
+    
     form_class = SdsModelForm
     template_name = "chemicals/safety_data_sheet.html"
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)        
         # Add in a QuerySet of all the books
+        # chemical aggiunto per attivare il pulsante "annulla"
+        context['chemical'] = get_object_or_404(Chemicals, id_chemical=self.object.id_chemical.id_chemical)
         context['substances'] = ChemicalsSubstances.objects.filter(id_sds=self.kwargs['pk'])
         context['danger_symbols'] = ChemicalDangerSymbols.objects.filter(id_sds=self.kwargs['pk'])
         context['precautionary_statements'] = ChemicalsPrecautionaryStatement.objects.filter(id_sds=self.kwargs['pk'])

@@ -46,6 +46,18 @@ thead {
     color: white;   
 }
 
+td {
+    font-size: var(--normal-font-size);
+}
+
+.form-control {
+    font-size: var(--normal-font-size);
+}
+
+.form-select {
+    font-size: var(--normal-font-size);
+}
+
 
 .tabhgreen {
     background-color: #2a9d8f;

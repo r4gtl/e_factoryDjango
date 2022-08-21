@@ -13,7 +13,9 @@ class SupplierModelForm(forms.ModelForm):
                 )
         
         widget = {
-            'company_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'company_name': forms.TextInput(attrs={'class': 'form-control',
+                                                'style': 'font-size: 5px'
+                                                }),
             'vat_number': forms.TextInput(attrs={'class': 'form-control'}),
             'cf_number': forms.TextInput(attrs={'class': 'form-control'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),
