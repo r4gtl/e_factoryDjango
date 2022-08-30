@@ -271,8 +271,6 @@ class ChemicalOrder(models.Model):
         verbose_name = "Order"
         verbose_name_plural = "Orders"
 
-
-
     def __str__(self):
         return 'Ordine n. {} del {} fornitore {}'. format(self.n_order, self.order_date, self.id_supplier)
 
@@ -283,6 +281,30 @@ class ChemicalOrderDetail(models.Model):
     um=models.CharField(max_length=3)
     quantity=models.FloatField()
     id_packaging_type=models.ForeignKey(ChemicalsPackagingType, on_delete = models.DO_NOTHING)
+
+'''
+I prossimi due modelli servono a gestire gli acquisti di prodotti chimici
+'''
+class ChemicalPurchase(models.Model):
+    id_purchase = models.AutoField(primary_key=True)
+    n_document = models.CharField(max_length=15)
+    date_doc = models.DateField(blank=True, null=True)
+    id_supplier = models.ForeignKey(Suppliers, null=True, on_delete = models.CASCADE)
+
+    class Meta:
+        verbose_name = "Chemicals Purchase"
+        verbose_name_plural = "Chemicals Purchases"
+
+    def __str__(self):
+        return 'Documento n. {} del {} fornitore {}'. format(self.n_document, self.date_doc, self.id_supplier)
+
+class ChemicalPurchaseDetail(models.Model):
+    id_detail = models.AutoField(primary_key=True)
+    id_purchase = models.ForeignKey(ChemicalPurchase, null=True, on_delete = models.CASCADE)
+    id_chemical=models.ForeignKey(Chemicals, on_delete = models.CASCADE)
+    quantity=models.FloatField()
+    price=models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, default=0)
+    cov = models.DecimalField(max_digits=6, decimal_places=2,blank=False, null=False, default=0)
 
 
 
