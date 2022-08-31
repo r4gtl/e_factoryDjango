@@ -33,7 +33,7 @@ from .models import (
     ChemicalPurchase, ChemicalPurchaseDetail,
     )
 
-from .filters import OrderFilter, ChemicalFilter
+from .filters import OrderFilter, ChemicalFilter, PurchaseFilter
 #from django.db.models import Max, Prefetch, Subquery, OuterRef, FilteredRelation,Q, F
 from master_data.mixins import StaffMixin
 from django.core.paginator import Paginator
@@ -676,9 +676,9 @@ def update_conf_order(request, pk):
 '''Fine Sezione Ordini'''
 '''Sezione Documenti di Acquisto'''
 def purchaselist(request):
-    suppliers_list = ChemicalPurchase.objects.filter(category=2)
-    suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)
-    return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
+    purchase_list = ChemicalPurchase.objects.all()
+    purchase_filter = PurchaseFilter(request.GET, queryset=purchase_list)
+    return render(request, 'chemicals/purchase_list.html', {'filter': purchase_filter})
 
 '''Fine Sezione Documenti di Acquisto'''
 

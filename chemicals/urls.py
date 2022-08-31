@@ -29,4 +29,6 @@ urlpatterns = [
     path('substances-list/', views.load_substances_to_search, name='load-substances-search'),
     #path('data/<str:search_description>/<str:search_cas>/<str:search_ec>/', views.load_substances_to_search_filtered, name='load-substances-search-filtered'),
     path('substance/<str:search_cas>/', views.load_substances_to_search_filtered, name='load-substances-search-filtered'),
+    
+    path('purchase-list/', views.purchaselist, name="search-purchase"),
 ]

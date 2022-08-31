@@ -59,20 +59,23 @@ class ChemicalFilter(django_filters.FilterSet):
         fields = ['description'] 
 
 class PurchaseFilter(django_filters.FilterSet):
-        n_document=django_filters.CharFilter(field_name='n_document', lookup_expr='icontains', widget=forms.TextInput(attrs={'style': 'width: 90%; margin-left: 5%'}), label="")
-        supplier=django_filters.CharFilter(field_name='id_supplier__company_name', lookup_expr='icontains', widget=forms.TextInput(attrs={'style': 'width: 90%; margin-left: 7%'}), label="")
+        n_document=django_filters.CharFilter(field_name='n_document', lookup_expr='icontains', widget=forms.TextInput(attrs={'style': 'width: 90%; margin-left: 5%'}), label="Numero Documento")
+        supplier=django_filters.CharFilter(field_name='id_supplier__company_name', lookup_expr='icontains', widget=forms.TextInput(attrs={'style': 'width: 90%; margin-left: 7%'}), label="Ragione Sociale")
+        from_date=django_filters.DateFilter(field_name='date_doc', lookup_expr='gt', widget=forms.DateInput(attrs={'type': 'date'}), label="Da data documento")
+        to_date=django_filters.DateFilter(field_name='date_doc', lookup_expr='lt', widget=forms.DateInput(attrs={'type': 'date'}), label="A data documento")
+        date_range = django_filters.DateRangeFilter(field_name='date_doc')
         
         class Meta:
             model = ChemicalPurchase
-            fields = ['n_document', 'supplier']
+            fields = ['n_document', 'id_supplier', 'date_doc']
                 
-            filter_overrides = {
-                models.CharField: {
-                    'filter_class': django_filters.CharFilter,
-                    'extra': lambda f: {
-                        'lookup_expr': 'icontains',
-                        'widget' : forms.TextInput(attrs={'style': 'width: 90%; margin-left: 5%'})
+            # filter_overrides = {
+            #     models.CharField: {
+            #         'filter_class': django_filters.CharFilter,
+            #         'extra': lambda f: {
+            #             'lookup_expr': 'icontains',
+            #             'widget' : forms.TextInput(attrs={'style': 'width: 90%; margin-left: 5%'})
                         
-                    },
-                },               
-            }
+            #         },
+            #     },               
+            # }

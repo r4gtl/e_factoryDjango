@@ -1,0 +1,61 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% load crispy_forms_tags %} 
+{% load widget_tweaks %}
+{% block head_title %}{{ block.super }} - Acquisti Prodotti Chimici{% endblock head_title %} 
+{% block content %}
+
+<div class="container">
+    <form method="get">
+    <div class="well">
+        <h5 style="margin-top: 0">Cerca Acquisto Prodotti Chimici</h5>
+        <div class="row">
+        <div class="form-group col-sm-4 col-md-3">
+            {{ filter.form.n_document.label_tag }} 
+            {% render_field filter.form.n_document class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+            {{ filter.form.supplier.label_tag }} 
+            {% render_field filter.form.supplier class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+            {{ filter.form.from_date.label_tag }} 
+            {% render_field filter.form.from_date class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+            {{ filter.form.to_date.label_tag }} 
+            {% render_field filter.form.to_date class="form-control" %}
+        </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm mt-2 mb-4">
+        <span class="bi bi-search"></span> Cerca
+        </button>
+        <!-- <a class="btn btn-sm btn-success mt-2 mb-4" href="{% url 'master_data:create-supplier' %}"><span class="bi bi-person-plus-fill"></span> Aggiungi</a> -->
+        <!--<button type="submit" class="btn btn-success btn-sm mt-2 mb-4">
+        <span class="bi bi-person-plus-fill"></span> Aggiungi
+        </button>-->
+    </div>
+    </form>
+
+    <table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+        <th>Numero Documento</th>
+        <th>Fornitore</th>
+        <th>Data</th>
+        
+        </tr>
+    </thead>
+    <tbody>
+        {% for purchase in filter.qs %}
+        <tr>           
+        <td><a href="">{{ purchase.n_document }}</a></td>        
+        <td>{{ purchase.id_supplier }}</td>
+        <td>{{ purchase.date_doc }}</td>        
+        {% endfor %}
+        
+    </tbody>
+    </table>
+</div>
+
+{% endblock content %}
