@@ -30,7 +30,7 @@ from .models import (
     ChemicalsSubstances, ChemicalsPrecautionaryStatement,
     ChemicalDangerSymbols, DangerSymbols,
     ChemicalOrder, ChemicalOrderDetail,
-    
+    ChemicalPurchase, ChemicalPurchaseDetail,
     )
 
 from .filters import OrderFilter, ChemicalFilter
@@ -390,7 +390,7 @@ def new_ds_sds(request, id, pk):
 '''Fine Sezione Schede di sicurezza'''
 
 
-
+'''SEZIONE ACQUISTI'''
 '''Sezione Ordini'''
 '''In questa sezione ci sono tutte le views per gestire gli ordini di prodotti chimici'''
 
@@ -616,19 +616,7 @@ def load_substances_to_search_filtered(request, search_cas):
             data=serializers.serialize('json',
                                     list(qs),
                                     fields=('id_substance', 'description', 'cas_number', 'ec_number')
-                                    )
-
-            #print(data)
-            #data=[]
-            #for obj in qs:
-            #    item = {
-            #        'id_substance': obj.id_substance,
-            #        'description': obj.description,
-            #        'cas_number': obj.cas_number,
-            #        'ec_number': obj.ec_number,
-            #    }
-            #    data.append(item)
-            #return JsonResponse({'data': data})
+                                    )            
     return JsonResponse(data, safe=False)
 
 
@@ -686,4 +674,13 @@ def update_conf_order(request, pk):
 
 
 '''Fine Sezione Ordini'''
+'''Sezione Documenti di Acquisto'''
+def purchaselist(request):
+    suppliers_list = ChemicalPurchase.objects.filter(category=2)
+    suppliers_filter = SupplierFilter(request.GET, queryset=suppliers_list)
+    return render(request, 'chemicals/suppliers_list.html', {'filter': suppliers_filter})
+
+'''Fine Sezione Documenti di Acquisto'''
+
+'''FINE SEZIONE ACQUISTI'''
 

@@ -294,6 +294,7 @@ class ChemicalPurchase(models.Model):
     class Meta:
         verbose_name = "Chemicals Purchase"
         verbose_name_plural = "Chemicals Purchases"
+        ordering = ['-date_doc']
 
     def __str__(self):
         return 'Documento n. {} del {} fornitore {}'. format(self.n_document, self.date_doc, self.id_supplier)
