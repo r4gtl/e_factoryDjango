@@ -27,6 +27,7 @@ urlpatterns = [
     path('master_data/', include('master_data.urls')),
     path('chemicals/', include('chemicals.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
+    path('human_resources/', include('human_resources.urls')),
     
 ]
 

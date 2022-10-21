@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'core',
     'master_data',
     'chemicals',
+    'human_resources',
     'debug_toolbar',
 ]
 
