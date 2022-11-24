@@ -30,6 +30,7 @@ def human_resources_home(request):
 def add_new_operator(request):    
     context ={}    
     form = HumanResourceModelForm(request.POST or None)
+    
     if form.is_valid():
         form.save()
           
@@ -47,6 +48,7 @@ def update_human_resource(request, pk):
  
     # add form dictionary to context
     context["form"] = form
+    context["obj"] = obj
  
     return render(request, "update_view.html", context)
 
